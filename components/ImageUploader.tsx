@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useCallback } from 'react';
 import { UploadIcon } from './icons/UploadIcon';
 import { CameraIcon } from './icons/CameraIcon';
@@ -85,14 +84,14 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageReady }) => {
 
   return (
     <div className="flex flex-col items-center space-y-4">
-      <div className="w-full h-64 bg-gray-900 rounded-lg border-2 border-dashed border-gray-600 flex items-center justify-center overflow-hidden">
+      <div className="w-full h-64 bg-white dark:bg-slate-800 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 flex items-center justify-center overflow-hidden">
         {preview && <img src={preview} alt="Preview" className="h-full w-full object-contain" />}
         {isCameraOpen && <video ref={videoRef} autoPlay playsInline className="h-full w-full object-cover"></video>}
-        {!preview && !isCameraOpen && <span className="text-gray-500">Image Preview</span>}
+        {!preview && !isCameraOpen && <span className="text-slate-500">Image Preview</span>}
       </div>
        <canvas ref={canvasRef} style={{ display: 'none' }} />
 
-      {error && <p className="text-red-400 text-sm">{error}</p>}
+      {error && <p className="text-red-500 text-sm">{error}</p>}
 
       {isCameraOpen ? (
          <button onClick={takePicture} className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2">
@@ -102,7 +101,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageReady }) => {
       ) : (
         <div className="grid grid-cols-2 gap-4 w-full">
             <input type="file" accept="image/png, image/jpeg, image/webp" ref={fileInputRef} onChange={handleFileChange} className="hidden" />
-            <button onClick={triggerFileSelect} className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2">
+            <button onClick={triggerFileSelect} className="bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2">
                 <UploadIcon />
                 <span>Upload</span>
             </button>

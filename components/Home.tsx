@@ -30,8 +30,8 @@ const Home: React.FC = () => {
   return (
     <div className="animate-fade-in">
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-extrabold mb-2 text-white">Inspiration Gallery</h1>
-        <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+        <h1 className="text-4xl font-extrabold mb-2 text-slate-900 dark:text-white">Inspiration Gallery</h1>
+        <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
           Discover unique designs to spark your next tattoo idea.
         </p>
       </div>
@@ -43,7 +43,7 @@ const Home: React.FC = () => {
       )}
 
       {error && (
-        <div className="text-center text-red-400 bg-red-900/20 p-4 rounded-lg">
+        <div className="text-center text-red-500 bg-red-500/10 p-4 rounded-lg">
           <p>{error}</p>
         </div>
       )}

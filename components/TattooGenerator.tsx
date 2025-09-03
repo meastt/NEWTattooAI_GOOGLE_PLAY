@@ -53,52 +53,52 @@ const TattooGenerator: React.FC<TattooGeneratorProps> = ({ onNavigate }) => {
     <div className="max-w-4xl mx-auto">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold">Tattoo Idea Generator</h2>
-        <p className="text-gray-400 mt-2">Bring your imagination to life. Describe any concept and get a unique design.</p>
+        <p className="text-slate-600 dark:text-slate-400 mt-2">Bring your imagination to life. Describe any concept and get a unique design.</p>
       </div>
 
-      <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+      <div className="bg-slate-100 dark:bg-slate-900 p-6 rounded-lg border border-slate-200 dark:border-slate-800">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="subject" className="block text-sm font-medium text-gray-300 mb-1">Main Subject *</label>
+            <label htmlFor="subject" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Main Subject *</label>
             <input
               type="text"
               id="subject"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               placeholder="e.g., A celestial wolf howling at a geometric moon"
-              className="w-full bg-gray-900 border border-gray-600 rounded-md p-2 focus:ring-emerald-500 focus:border-emerald-500"
+              className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md p-2 focus:ring-rose-500 focus:border-rose-500 transition"
               required
             />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="style" className="block text-sm font-medium text-gray-300 mb-1">Style</label>
-              <select id="style" value={style} onChange={(e) => setStyle(e.target.value as TattooStyle)} className="w-full bg-gray-900 border border-gray-600 rounded-md p-2 focus:ring-emerald-500 focus:border-emerald-500">
+              <label htmlFor="style" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Style</label>
+              <select id="style" value={style} onChange={(e) => setStyle(e.target.value as TattooStyle)} className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md p-2 focus:ring-rose-500 focus:border-rose-500 transition">
                 {TATTOO_STYLES.map(s => <option key={s} value={s}>{s}</option>)}
               </select>
             </div>
             <div>
-              <label htmlFor="color" className="block text-sm font-medium text-gray-300 mb-1">Color</label>
-              <select id="color" value={color} onChange={(e) => setColor(e.target.value as TattooColor)} className="w-full bg-gray-900 border border-gray-600 rounded-md p-2 focus:ring-emerald-500 focus:border-emerald-500">
+              <label htmlFor="color" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Color</label>
+              <select id="color" value={color} onChange={(e) => setColor(e.target.value as TattooColor)} className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md p-2 focus:ring-rose-500 focus:border-rose-500 transition">
                 {TATTOO_COLORS.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
           </div>
           <div>
-            <label htmlFor="details" className="block text-sm font-medium text-gray-300 mb-1">Additional Details</label>
+            <label htmlFor="details" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Additional Details</label>
             <textarea
               id="details"
               value={details}
               onChange={(e) => setDetails(e.target.value)}
               placeholder="e.g., with swirling galaxy patterns in its fur, surrounded by constellations"
-              className="w-full bg-gray-900 border border-gray-600 rounded-md p-2 focus:ring-emerald-500 focus:border-emerald-500"
+              className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md p-2 focus:ring-rose-500 focus:border-rose-500 transition"
               rows={3}
             />
           </div>
           <button 
             type="submit" 
             disabled={isLoading}
-            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-lg transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed flex items-center justify-center"
+            className="w-full bg-gradient-to-r from-rose-500 to-indigo-600 hover:from-rose-600 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 disabled:bg-slate-600 disabled:cursor-not-allowed flex items-center justify-center"
           >
             {isLoading ? <LoadingSpinner /> : 'Generate Design'}
           </button>
@@ -119,7 +119,7 @@ const TattooGenerator: React.FC<TattooGeneratorProps> = ({ onNavigate }) => {
         <div className="mt-6 text-center">
           <button 
             onClick={() => onNavigate('create')}
-            className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+            className="bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-6 rounded-lg transition-colors"
           >
             Back to Create Hub
           </button>

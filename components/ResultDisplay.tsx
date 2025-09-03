@@ -54,16 +54,16 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
   return (
     <div className="mt-8">
       <h3 className="text-2xl font-bold text-center mb-4">Result</h3>
-      <div className="w-full min-h-[30rem] bg-gray-800 border-2 border-dashed border-gray-700 rounded-lg flex flex-col items-center justify-center p-4">
+      <div className="w-full min-h-[30rem] bg-slate-100 dark:bg-slate-900 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-lg flex flex-col items-center justify-center p-4">
         {isLoading && (
           <div className="text-center">
             <div className="flex justify-center mb-4">
               <LoadingSpinner />
             </div>
-            <p className="text-lg text-gray-300">{loadingText}</p>
+            <p className="text-lg text-slate-600 dark:text-slate-300">{loadingText}</p>
           </div>
         )}
-        {error && <p className="text-red-400 text-lg">{error}</p>}
+        {error && <p className="text-red-500 text-lg">{error}</p>}
         {!isLoading && !error && resultImage && (
           <div className="flex flex-col items-center gap-4">
             <img src={resultImage} alt="Generated tattoo result" className="max-w-full max-h-[40rem] rounded-lg object-contain" />
@@ -71,14 +71,14 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
               <button
                 onClick={handleSaveClick}
                 disabled={isSaving || isSaved}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center gap-2 disabled:bg-gray-600 disabled:cursor-not-allowed"
+                className="bg-gradient-to-r from-rose-500 to-indigo-600 hover:from-rose-600 hover:to-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 flex items-center gap-2 disabled:bg-slate-600 disabled:cursor-not-allowed"
               >
                 {isSaving ? <LoadingSpinner /> : <SaveIcon />}
                 {isSaved ? 'Saved!' : isSaving ? 'Saving...' : 'Save Idea'}
               </button>
               <button
                 onClick={handleExportClick}
-                className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center gap-2"
+                className="bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center gap-2"
               >
                 <ExportIcon />
                 Export Image
@@ -87,7 +87,7 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
           </div>
         )}
         {!isLoading && !error && !resultImage && (
-          <p className="text-gray-500">{initialText}</p>
+          <p className="text-slate-500">{initialText}</p>
         )}
       </div>
     </div>

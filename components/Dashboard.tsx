@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { View } from '../types';
 import { SparklesIcon } from './icons/SparklesIcon';
@@ -17,11 +16,14 @@ const DashboardCard: React.FC<{
 }> = ({ icon, title, description, onClick }) => (
   <button
     onClick={onClick}
-    className="bg-gray-800 p-6 rounded-xl border border-gray-700 hover:border-emerald-500 hover:bg-gray-700/50 transition-all duration-300 text-left w-full h-full flex flex-col"
+    className="bg-slate-100 dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-rose-500 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all duration-300 text-left w-full h-full flex flex-col group"
   >
-    <div className="mb-4 text-emerald-400">{icon}</div>
-    <h3 className="text-xl font-semibold text-gray-100 mb-2">{title}</h3>
-    <p className="text-gray-400 flex-grow">{description}</p>
+    <div className="mb-4 text-rose-500">{icon}</div>
+    <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">{title}</h3>
+    <p className="text-slate-600 dark:text-slate-400 flex-grow">{description}</p>
+    <div className="mt-4 text-sm font-semibold text-rose-500 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-rose-500 group-hover:to-indigo-600 transition-colors">
+      Get Started &rarr;
+    </div>
   </button>
 );
 
@@ -30,8 +32,8 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
   return (
     <div className="flex flex-col items-center">
       <div className="text-center mb-12">
-        <h2 className="text-4xl font-extrabold mb-2 text-white">Unleash Your Inner Ink</h2>
-        <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+        <h2 className="text-4xl font-extrabold mb-2 text-slate-900 dark:text-white">Unleash Your Inner Ink</h2>
+        <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
           Visualize your next tattoo like never before. Use AI to try on designs, create new concepts, or even see what you'd look like without old ink.
         </p>
       </div>

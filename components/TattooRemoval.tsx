@@ -61,26 +61,26 @@ const TattooRemoval: React.FC<TattooRemovalProps> = ({ onNavigate }) => {
     <div className="max-w-4xl mx-auto">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold">Tattoo Removal Visualizer</h2>
-        <p className="text-gray-400 mt-2">Curious what a cover-up might look like? See a preview of your skin without a specific tattoo.</p>
+        <p className="text-slate-600 dark:text-slate-400 mt-2">Curious what a cover-up might look like? See a preview of your skin without a specific tattoo.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-          <h3 className="text-xl font-semibold mb-4 border-b border-gray-600 pb-2">1. Your Photo with Tattoo</h3>
+        <div className="bg-slate-100 dark:bg-slate-900 p-6 rounded-lg border border-slate-200 dark:border-slate-800">
+          <h3 className="text-xl font-semibold mb-4 border-b border-slate-300 dark:border-slate-700 pb-2">1. Your Photo with Tattoo</h3>
           <ImageUploader onImageReady={handleImageReady} />
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-          <h3 className="text-xl font-semibold mb-4 border-b border-gray-600 pb-2">2. Tattoo to Remove</h3>
+        <form onSubmit={handleSubmit} className="bg-slate-100 dark:bg-slate-900 p-6 rounded-lg border border-slate-200 dark:border-slate-800">
+          <h3 className="text-xl font-semibold mb-4 border-b border-slate-300 dark:border-slate-700 pb-2">2. Tattoo to Remove</h3>
           <div className="space-y-4">
             <div>
-              <label htmlFor="removalDescription" className="block text-sm font-medium text-gray-300 mb-1">Describe the tattoo and its location *</label>
+              <label htmlFor="removalDescription" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Describe the tattoo and its location *</label>
               <textarea
                 id="removalDescription"
                 value={removalDescription}
                 onChange={(e) => setRemovalDescription(e.target.value)}
                 placeholder="e.g., The small rose tattoo on my right wrist"
-                className="w-full bg-gray-900 border border-gray-600 rounded-md p-2 focus:ring-emerald-500 focus:border-emerald-500"
+                className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md p-2 focus:ring-rose-500 focus:border-rose-500 transition"
                 rows={5}
                 required
               />
@@ -88,7 +88,7 @@ const TattooRemoval: React.FC<TattooRemovalProps> = ({ onNavigate }) => {
             <button 
               type="submit" 
               disabled={isLoading || !userImage}
-              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-lg transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed flex items-center justify-center"
+              className="w-full bg-gradient-to-r from-rose-500 to-indigo-600 hover:from-rose-600 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 disabled:bg-slate-600 disabled:cursor-not-allowed flex items-center justify-center"
             >
               {isLoading ? <LoadingSpinner /> : 'Visualize Removal'}
             </button>
@@ -110,7 +110,7 @@ const TattooRemoval: React.FC<TattooRemovalProps> = ({ onNavigate }) => {
         <div className="mt-6 text-center">
           <button 
             onClick={() => onNavigate('create')}
-            className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+            className="bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-6 rounded-lg transition-colors"
           >
             Back to Create Hub
           </button>

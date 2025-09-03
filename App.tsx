@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import type { View } from './types';
 import Header from './components/Header';
 import Dashboard from './components/Dashboard';
@@ -12,8 +12,28 @@ import BottomNav from './components/BottomNav';
 import Home from './components/Home';
 import SavedIdeas from './components/SavedIdeas';
 
+type Theme = 'light' | 'dark';
+
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('home');
+  const [theme, setTheme] = useState<Theme>(() => {
+    if (typeof window === 'undefined') {
+      return 'dark';
+    }
+    const savedTheme = localStorage.getItem('theme') as Theme;
+    if (savedTheme) {
+      return savedTheme;
+    }
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
+  };
 
   const navigateTo = useCallback((view: View) => {
     setCurrentView(view);
@@ -62,11 +82,21 @@ const App: React.FC = () => {
   const showHeader = !['home', 'create', 'saved'].includes(currentView);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-200 font-sans flex flex-col">
+    <div className={`min-h-screen font-sans flex flex-col bg-white dark:bg-slate-950 text-slate-800 dark:text-slate-200 transition-colors duration-300 ${theme}`}>
       {showHeader && (
         <Header
           showBackButton={true}
           onBack={() => navigateTo(getBackButtonTarget())}
+          theme={theme}
+          toggleTheme={toggleTheme}
+        />
+      )}
+       {!showHeader && (
+        <Header
+          showBackButton={false}
+          onBack={() => {}}
+          theme={theme}
+          toggleTheme={toggleTheme}
         />
       )}
       <main className="flex-grow container mx-auto px-4 py-8 pb-24">

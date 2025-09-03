@@ -1,11 +1,10 @@
-
 import React from 'react';
 
 const PrivacyPolicy: React.FC = () => {
   return (
-    <div className="max-w-3xl mx-auto bg-gray-800 p-8 rounded-lg">
+    <div className="max-w-3xl mx-auto bg-slate-100 dark:bg-slate-900 p-8 rounded-lg border border-slate-200 dark:border-slate-800">
       <h2 className="text-3xl font-bold mb-6">Privacy Policy</h2>
-      <div className="space-y-4 text-gray-300">
+      <div className="space-y-4 text-slate-700 dark:text-slate-300 prose dark:prose-invert">
         <p><strong>Last Updated:</strong> {new Date().toLocaleDateString()}</p>
         
         <p>
@@ -29,7 +28,7 @@ const PrivacyPolicy: React.FC = () => {
 
         <h3 className="text-xl font-semibold mt-4">4. Third-Party Services</h3>
         <p>
-          Our service relies on the Google Gemini API to function. Your interactions with our AI features mean that the data you input (images and text) is processed by Google. We recommend you review <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:underline">Google's Privacy Policy</a> to understand how they handle data.
+          Our service relies on the Google Gemini API to function. Your interactions with our AI features mean that the data you input (images and text) is processed by Google. We recommend you review <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-rose-500 hover:underline">Google's Privacy Policy</a> to understand how they handle data.
         </p>
 
         <h3 className="text-xl font-semibold mt-4">5. Changes to this Privacy Policy</h3>

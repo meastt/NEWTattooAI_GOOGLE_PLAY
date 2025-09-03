@@ -1,11 +1,10 @@
-
 import React from 'react';
 
 const Disclaimer: React.FC = () => {
   return (
-    <div className="max-w-3xl mx-auto bg-gray-800 p-8 rounded-lg">
+    <div className="max-w-3xl mx-auto bg-slate-100 dark:bg-slate-900 p-8 rounded-lg border border-slate-200 dark:border-slate-800">
       <h2 className="text-3xl font-bold mb-6">Disclaimer & Terms of Use</h2>
-      <div className="space-y-4 text-gray-300">
+      <div className="space-y-4 text-slate-700 dark:text-slate-300 prose dark:prose-invert">
         <p><strong>Last Updated:</strong> {new Date().toLocaleDateString()}</p>
         
         <p>
