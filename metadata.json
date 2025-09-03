@@ -1,0 +1,7 @@
+{
+  "name": "AI Tattoo Artist",
+  "description": "An AI-powered tattoo application that allows users to try on virtual tattoos using their own photos, generate new tattoo designs, and visualize tattoo removal.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
