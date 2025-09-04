@@ -11,11 +11,14 @@ import Footer from './components/Footer';
 import BottomNav from './components/BottomNav';
 import Home from './components/Home';
 import SavedIdeas from './components/SavedIdeas';
+import UpgradeModal from './components/UpgradeModal';
+import { initializeCreditService } from './services/creditService';
 
 type Theme = 'light' | 'dark';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('home');
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window === 'undefined') {
       return 'dark';
@@ -29,6 +32,8 @@ const App: React.FC = () => {
 
   useEffect(() => {
     localStorage.setItem('theme', theme);
+    // Initialize credit service on app start
+    initializeCreditService();
   }, [theme]);
 
   const toggleTheme = () => {
@@ -58,11 +63,11 @@ const App: React.FC = () => {
       case 'saved':
         return <SavedIdeas onNavigate={navigateTo} />;
       case 'tryOn':
-        return <TattooTryOn onNavigate={navigateTo} />;
+        return <TattooTryOn onNavigate={navigateTo} onUpgradeClick={() => setShowUpgradeModal(true)} />;
       case 'generator':
-        return <TattooGenerator onNavigate={navigateTo} />;
+        return <TattooGenerator onNavigate={navigateTo} onUpgradeClick={() => setShowUpgradeModal(true)} />;
       case 'removal':
-        return <TattooRemoval onNavigate={navigateTo} />;
+        return <TattooRemoval onNavigate={navigateTo} onUpgradeClick={() => setShowUpgradeModal(true)} />;
       case 'privacy':
         return <PrivacyPolicy />;
       case 'disclaimer':
@@ -116,6 +121,7 @@ const App: React.FC = () => {
           onBack={() => navigateTo(getBackButtonTarget())}
           theme={theme}
           toggleTheme={toggleTheme}
+          onUpgradeClick={() => setShowUpgradeModal(true)}
         />
       )}
        {!showHeader && (
@@ -124,6 +130,7 @@ const App: React.FC = () => {
           onBack={() => {}}
           theme={theme}
           toggleTheme={toggleTheme}
+          onUpgradeClick={() => setShowUpgradeModal(true)}
         />
       )}
       <main className="flex-grow container mx-auto px-4 py-8 pb-24 relative z-10">
@@ -133,6 +140,13 @@ const App: React.FC = () => {
         <BottomNav activeView={getActiveTab()} onNavigate={navigateTo} />
       </div>
       <Footer onNavigate={navigateTo} />
+      
+      {/* Upgrade Modal */}
+      <UpgradeModal 
+        isOpen={showUpgradeModal}
+        onClose={() => setShowUpgradeModal(false)}
+        theme={theme}
+      />
     </div>
   );
 };

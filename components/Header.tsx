@@ -1,6 +1,7 @@
 import React from 'react';
 import { BackArrowIcon } from './icons/BackArrowIcon';
 import ThemeToggle from './ThemeToggle';
+import CreditDisplay from './CreditDisplay';
 
 type Theme = 'light' | 'dark';
 
@@ -9,9 +10,10 @@ interface HeaderProps {
   onBack: () => void;
   theme: Theme;
   toggleTheme: () => void;
+  onUpgradeClick?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ showBackButton, onBack, theme, toggleTheme }) => {
+const Header: React.FC<HeaderProps> = ({ showBackButton, onBack, theme, toggleTheme, onUpgradeClick }) => {
   return (
     <header className="sticky top-0 z-50">
       <div className={`backdrop-blur-md border-b transition-all duration-300 ${
@@ -48,7 +50,8 @@ const Header: React.FC<HeaderProps> = ({ showBackButton, onBack, theme, toggleTh
                </p>
              </div>
           </div>
-          <div className="flex items-center justify-end">
+          <div className="flex items-center justify-end space-x-4">
+            <CreditDisplay theme={theme} onUpgradeClick={onUpgradeClick} />
             <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
           </div>
         </div>

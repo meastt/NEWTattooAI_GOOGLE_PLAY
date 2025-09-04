@@ -8,9 +8,10 @@ import ResultDisplay from './ResultDisplay';
 
 interface TattooRemovalProps {
   onNavigate: (view: View) => void;
+  onUpgradeClick?: () => void;
 }
 
-const TattooRemoval: React.FC<TattooRemovalProps> = ({ onNavigate }) => {
+const TattooRemoval: React.FC<TattooRemovalProps> = ({ onNavigate, onUpgradeClick }) => {
   const [userImage, setUserImage] = useState<{ base64: string; mimeType: string } | null>(null);
   const [removalDescription, setRemovalDescription] = useState('');
   const [prompt, setPrompt] = useState('');
@@ -127,6 +128,7 @@ const TattooRemoval: React.FC<TattooRemovalProps> = ({ onNavigate }) => {
         resultImage={resultImage}
         prompt={prompt}
         onSave={handleSave}
+        onUpgradeClick={onUpgradeClick}
         loadingText="Digitally removing your tattoo... This can take a moment."
         initialText="Your tattoo removal preview will appear here."
       />

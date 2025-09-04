@@ -9,9 +9,10 @@ import ResultDisplay from './ResultDisplay';
 
 interface TattooTryOnProps {
   onNavigate: (view: View) => void;
+  onUpgradeClick?: () => void;
 }
 
-const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate }) => {
+const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick }) => {
   const [userImage, setUserImage] = useState<{ base64: string; mimeType: string } | null>(null);
   const [subject, setSubject] = useState('');
   const [style, setStyle] = useState<TattooStyle>(TATTOO_STYLES[0]);
@@ -153,6 +154,7 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate }) => {
         resultImage={resultImage}
         prompt={prompt}
         onSave={handleSave}
+        onUpgradeClick={onUpgradeClick}
         loadingText="Applying your virtual tattoo... This can take a moment."
         initialText="Your virtual tattoo preview will appear here."
       />

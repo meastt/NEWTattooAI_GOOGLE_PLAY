@@ -8,9 +8,10 @@ import ResultDisplay from './ResultDisplay';
 
 interface TattooGeneratorProps {
   onNavigate: (view: View) => void;
+  onUpgradeClick?: () => void;
 }
 
-const TattooGenerator: React.FC<TattooGeneratorProps> = ({ onNavigate }) => {
+const TattooGenerator: React.FC<TattooGeneratorProps> = ({ onNavigate, onUpgradeClick }) => {
   const [subject, setSubject] = useState('');
   const [style, setStyle] = useState<TattooStyle>(TATTOO_STYLES[0]);
   const [color, setColor] = useState<TattooColor>(TATTOO_COLORS[1]);
@@ -162,6 +163,7 @@ const TattooGenerator: React.FC<TattooGeneratorProps> = ({ onNavigate }) => {
         resultImage={resultImage}
         prompt={prompt}
         onSave={handleSave}
+        onUpgradeClick={onUpgradeClick}
         loadingText="Generating your unique tattoo design... This may take a few moments."
         initialText="Your generated tattoo design will appear here."
       />

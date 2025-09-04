@@ -5,16 +5,7 @@
 // --- USER ACTION REQUIRED ---
 // Replace with your actual Supabase project URL and public anon key.
 // You can find these in your Supabase project's API settings.
-const SUPABASE_URL = "YOUR_SUPABASE_URL"; // e.g., "https://xyz.supabase.co"
-const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY"; // e.g., "ey..."
+const SUPABASE_URL = "https://zflkdyuswpegqabkwlgw.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmbGtkeXVzd3BlZ3FhYmt3bGd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY5MzAyNDEsImV4cCI6MjA3MjUwNjI0MX0.VyAjSGVjKRWtraecEAFe2kJ3OfGyIRmlN5j_9e7ImBM";
 
-// Initialize the client only if the placeholder values have been changed.
-// The app will function without these, but database features (saving, gallery) will be disabled.
-export const supabase = (SUPABASE_URL !== "YOUR_SUPABASE_URL" && SUPABASE_ANON_KEY !== "YOUR_SUPABASE_ANON_KEY")
-  ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-  : null;
-
-// Add a console warning if the placeholders are still being used.
-if (!supabase) {
-    console.warn("Supabase credentials are not set in services/supabaseClient.ts. Database features will be disabled. Please add your project URL and anon key.");
-}
+export const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);

@@ -1,5 +1,6 @@
 
 import { GoogleGenAI, Modality, GenerateContentResponse } from "@google/genai";
+import { consumeCredit, canGenerate } from "./creditService";
 
 if (!process.env.API_KEY) {
   throw new Error("API_KEY environment variable not set");
@@ -17,6 +18,17 @@ export const editImage = async (
   mimeType: string,
   prompt: string
 ): Promise<EditImageResult> => {
+  // Check if user has credits
+  if (!canGenerate()) {
+    throw new Error("Insufficient credits. Please upgrade to continue generating images.");
+  }
+
+  // Consume a credit before generation
+  const creditResult = await consumeCredit();
+  if (!creditResult.success) {
+    throw new Error("Unable to consume credit. Please try again.");
+  }
+
   try {
     const response: GenerateContentResponse = await ai.models.generateContent({
       model: 'gemini-2.5-flash-image-preview',
@@ -62,6 +74,17 @@ export const editImage = async (
 };
 
 export const generateImage = async (prompt: string): Promise<string> => {
+  // Check if user has credits
+  if (!canGenerate()) {
+    throw new Error("Insufficient credits. Please upgrade to continue generating images.");
+  }
+
+  // Consume a credit before generation
+  const creditResult = await consumeCredit();
+  if (!creditResult.success) {
+    throw new Error("Unable to consume credit. Please try again.");
+  }
+
   try {
     const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash-image-preview',
