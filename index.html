@@ -4,8 +4,96 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Tattoo Artist</title>
+    <title>InkVision AI - Your Personal Tattoo Studio</title>
+    <meta name="description" content="Transform your tattoo ideas into reality with AI-powered design generation, virtual try-ons, and removal previews." />
+    
+    <!-- Custom Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              'sans': ['Inter', 'system-ui', 'sans-serif'],
+              'display': ['Space Grotesk', 'system-ui', 'sans-serif'],
+            },
+            colors: {
+              'ink': {
+                50: '#fef7f0',
+                100: '#fdeee0',
+                200: '#fbd9c1',
+                300: '#f8c19e',
+                400: '#f4a570',
+                500: '#f0884a',
+                600: '#e16d2a',
+                700: '#ba5420',
+                800: '#944420',
+                900: '#773a1c',
+                950: '#411c0e',
+              },
+              'skin': {
+                50: '#fdf4f0',
+                100: '#fce7e0',
+                200: '#f8d0c1',
+                300: '#f2b19e',
+                400: '#ea8a70',
+                500: '#e16d4a',
+                600: '#d24f2a',
+                700: '#b03d20',
+                800: '#913420',
+                900: '#762e1c',
+                950: '#40150e',
+              },
+              'neon': {
+                50: '#f0f9ff',
+                100: '#e0f2fe',
+                200: '#bae6fd',
+                300: '#7dd3fc',
+                400: '#38bdf8',
+                500: '#0ea5e9',
+                600: '#0284c7',
+                700: '#0369a1',
+                800: '#075985',
+                900: '#0c4a6e',
+                950: '#082f49',
+              }
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.6s ease-out',
+              'slide-up': 'slideUp 0.6s ease-out',
+              'scale-in': 'scaleIn 0.4s ease-out',
+              'float': 'float 6s ease-in-out infinite',
+              'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            },
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              slideUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              scaleIn: {
+                '0%': { opacity: '0', transform: 'scale(0.9)' },
+                '100%': { opacity: '1', transform: 'scale(1)' },
+              },
+              float: {
+                '0%, 100%': { transform: 'translateY(0px)' },
+                '50%': { transform: 'translateY(-10px)' },
+              },
+            },
+            backdropBlur: {
+              xs: '2px',
+            }
+          }
+        }
+      }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script type="importmap">
 {

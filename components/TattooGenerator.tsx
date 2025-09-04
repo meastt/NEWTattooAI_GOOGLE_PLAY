@@ -50,57 +50,108 @@ const TattooGenerator: React.FC<TattooGeneratorProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold">Tattoo Idea Generator</h2>
-        <p className="text-slate-600 dark:text-slate-400 mt-2">Bring your imagination to life. Describe any concept and get a unique design.</p>
+    <div className="max-w-4xl mx-auto animate-fade-in">
+      {/* Header */}
+      <div className="text-center mb-12 relative">
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-ink-500/10 to-neon-500/10 rounded-full blur-3xl" />
+        </div>
+        
+        <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-ink-600 via-ink-500 to-neon-500">
+            Tattoo Idea
+          </span>
+          <br />
+          <span className="text-slate-900 dark:text-white">Generator</span>
+        </h2>
+        <p className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+          Bring your imagination to life. Describe any concept and get a unique design crafted by AI.
+        </p>
       </div>
 
-      <div className="bg-slate-100 dark:bg-slate-900 p-6 rounded-lg border border-slate-200 dark:border-slate-800">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="subject" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Main Subject *</label>
+      {/* Form Container */}
+      <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-8 rounded-3xl border border-slate-200/50 dark:border-slate-700/50 shadow-xl">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Main Subject */}
+          <div className="space-y-2">
+            <label htmlFor="subject" className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
+              Main Subject *
+            </label>
             <input
               type="text"
               id="subject"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               placeholder="e.g., A celestial wolf howling at a geometric moon"
-              className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md p-2 focus:ring-rose-500 focus:border-rose-500 transition"
+              className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600"
               required
             />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="style" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Style</label>
-              <select id="style" value={style} onChange={(e) => setStyle(e.target.value as TattooStyle)} className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md p-2 focus:ring-rose-500 focus:border-rose-500 transition">
+
+          {/* Style and Color */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label htmlFor="style" className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
+                Style
+              </label>
+              <select 
+                id="style" 
+                value={style} 
+                onChange={(e) => setStyle(e.target.value as TattooStyle)} 
+                className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600"
+              >
                 {TATTOO_STYLES.map(s => <option key={s} value={s}>{s}</option>)}
               </select>
             </div>
-            <div>
-              <label htmlFor="color" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Color</label>
-              <select id="color" value={color} onChange={(e) => setColor(e.target.value as TattooColor)} className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md p-2 focus:ring-rose-500 focus:border-rose-500 transition">
+            <div className="space-y-2">
+              <label htmlFor="color" className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
+                Color
+              </label>
+              <select 
+                id="color" 
+                value={color} 
+                onChange={(e) => setColor(e.target.value as TattooColor)} 
+                className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600"
+              >
                 {TATTOO_COLORS.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
           </div>
-          <div>
-            <label htmlFor="details" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Additional Details</label>
+
+          {/* Additional Details */}
+          <div className="space-y-2">
+            <label htmlFor="details" className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
+              Additional Details
+            </label>
             <textarea
               id="details"
               value={details}
               onChange={(e) => setDetails(e.target.value)}
               placeholder="e.g., with swirling galaxy patterns in its fur, surrounded by constellations"
-              className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md p-2 focus:ring-rose-500 focus:border-rose-500 transition"
-              rows={3}
+              className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600 resize-none"
+              rows={4}
             />
           </div>
+
+          {/* Submit Button */}
           <button 
             type="submit" 
             disabled={isLoading}
-            className="w-full bg-gradient-to-r from-rose-500 to-indigo-600 hover:from-rose-600 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 disabled:bg-slate-600 disabled:cursor-not-allowed flex items-center justify-center"
+            className="w-full bg-gradient-to-r from-ink-600 via-ink-500 to-neon-500 hover:from-ink-700 hover:via-ink-600 hover:to-neon-600 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-300 disabled:bg-slate-400 disabled:cursor-not-allowed flex items-center justify-center group shadow-lg hover:shadow-xl hover:shadow-ink-500/25 disabled:shadow-none"
           >
-            {isLoading ? <LoadingSpinner /> : 'Generate Design'}
+            {isLoading ? (
+              <div className="flex items-center space-x-3">
+                <div className="w-5 h-5 border-2 border-white/30 rounded-full animate-spin border-t-white" />
+                <span>Generating Design...</span>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-2">
+                <span>Generate Design</span>
+                <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </div>
+            )}
           </button>
         </form>
       </div>

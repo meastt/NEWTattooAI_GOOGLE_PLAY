@@ -82,7 +82,34 @@ const App: React.FC = () => {
   const showHeader = !['home', 'create', 'saved'].includes(currentView);
 
   return (
-    <div className={`min-h-screen font-sans flex flex-col bg-white dark:bg-slate-950 text-slate-800 dark:text-slate-200 transition-colors duration-300 ${theme}`}>
+    <div className={`min-h-screen font-sans flex flex-col relative overflow-hidden ${theme}`}>
+      {/* Dynamic Background */}
+      <div className="fixed inset-0 -z-10">
+        <div className={`absolute inset-0 transition-all duration-1000 ${
+          theme === 'dark' 
+            ? 'bg-gradient-to-br from-slate-950 via-slate-900 to-ink-950' 
+            : 'bg-gradient-to-br from-slate-50 via-white to-ink-50'
+        }`} />
+        
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className={`absolute -top-40 -right-40 w-80 h-80 rounded-full opacity-20 animate-float ${
+            theme === 'dark' ? 'bg-ink-500' : 'bg-ink-300'
+          }`} />
+          <div className={`absolute top-1/2 -left-20 w-60 h-60 rounded-full opacity-15 animate-float ${
+            theme === 'dark' ? 'bg-neon-500' : 'bg-neon-300'
+          }`} style={{ animationDelay: '2s' }} />
+          <div className={`absolute bottom-20 right-1/4 w-40 h-40 rounded-full opacity-10 animate-float ${
+            theme === 'dark' ? 'bg-skin-500' : 'bg-skin-300'
+          }`} style={{ animationDelay: '4s' }} />
+        </div>
+        
+        {/* Subtle Pattern Overlay */}
+        <div className={`absolute inset-0 opacity-5 ${
+          theme === 'dark' ? 'bg-[radial-gradient(circle_at_1px_1px,_white_1px,_transparent_0)]' : 'bg-[radial-gradient(circle_at_1px_1px,_black_1px,_transparent_0)]'
+        }`} style={{ backgroundSize: '20px 20px' }} />
+      </div>
+
       {showHeader && (
         <Header
           showBackButton={true}
@@ -99,7 +126,7 @@ const App: React.FC = () => {
           toggleTheme={toggleTheme}
         />
       )}
-      <main className="flex-grow container mx-auto px-4 py-8 pb-24">
+      <main className="flex-grow container mx-auto px-4 py-8 pb-24 relative z-10">
         {renderContent()}
       </main>
       <div className="md:hidden">
