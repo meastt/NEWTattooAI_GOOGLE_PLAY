@@ -7,6 +7,7 @@ import TattooGenerator from './components/TattooGenerator';
 import TattooRemoval from './components/TattooRemoval';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import Disclaimer from './components/Disclaimer';
+import Settings from './components/Settings';
 import Footer from './components/Footer';
 import BottomNav from './components/BottomNav';
 import Home from './components/Home';
@@ -48,7 +49,7 @@ const App: React.FC = () => {
     if (['tryOn', 'generator', 'removal'].includes(currentView)) {
       return 'create';
     }
-    if (['home', 'privacy', 'disclaimer'].includes(currentView)) {
+    if (['home', 'privacy', 'disclaimer', 'settings'].includes(currentView)) {
         return 'home';
     }
     return currentView as View;
@@ -72,6 +73,8 @@ const App: React.FC = () => {
         return <PrivacyPolicy />;
       case 'disclaimer':
         return <Disclaimer />;
+      case 'settings':
+        return <Settings onNavigate={navigateTo} />;
       default:
         return <Home />;
     }
@@ -122,6 +125,7 @@ const App: React.FC = () => {
           theme={theme}
           toggleTheme={toggleTheme}
           onUpgradeClick={() => setShowUpgradeModal(true)}
+          onSettingsClick={() => navigateTo('settings')}
         />
       )}
        {!showHeader && (
@@ -131,6 +135,7 @@ const App: React.FC = () => {
           theme={theme}
           toggleTheme={toggleTheme}
           onUpgradeClick={() => setShowUpgradeModal(true)}
+          onSettingsClick={() => navigateTo('settings')}
         />
       )}
       <main className="flex-grow container mx-auto px-4 py-8 pb-24 relative z-10">

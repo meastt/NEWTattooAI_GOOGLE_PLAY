@@ -22,6 +22,15 @@ const PrivacyPolicy: React.FC = () => {
           <p className="text-lg leading-relaxed">
             We do not collect or store any personal information or images you upload. All images and data processed are handled transiently. They are sent to the Google Gemini API for processing and are not stored on our servers. Your images and prompts are subject to Google's API data usage policies.
           </p>
+          
+          <div className="bg-ink-50 dark:bg-ink-950/30 p-6 rounded-2xl border border-ink-200 dark:border-ink-800 mt-6">
+            <h4 className="text-lg font-semibold text-ink-800 dark:text-ink-200 mb-3">Data Storage Policy:</h4>
+            <ul className="text-ink-700 dark:text-ink-300 space-y-2">
+              <li>• <strong>Uploaded Images:</strong> Processed transiently and never stored on our servers</li>
+              <li>• <strong>Saved Designs:</strong> Stored until you delete them or after 90 days of inactivity</li>
+              <li>• <strong>User Preferences:</strong> Stored locally on your device only</li>
+            </ul>
+          </div>
 
           <h3 className="text-2xl font-display font-bold mt-8 mb-4 text-slate-900 dark:text-white">2. Use of Your Information</h3>
           <p className="text-lg leading-relaxed">
@@ -38,12 +47,27 @@ const PrivacyPolicy: React.FC = () => {
             Our service relies on the Google Gemini API to function. Your interactions with our AI features mean that the data you input (images and text) is processed by Google. We recommend you review <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-ink-600 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-300 hover:underline transition-colors duration-300">Google's Privacy Policy</a> to understand how they handle data.
           </p>
 
-          <h3 className="text-2xl font-display font-bold mt-8 mb-4 text-slate-900 dark:text-white">5. Changes to this Privacy Policy</h3>
+          <h3 className="text-2xl font-display font-bold mt-8 mb-4 text-slate-900 dark:text-white">5. Your Data Rights & Deletion</h3>
+          <p className="text-lg leading-relaxed">
+            You have complete control over your data. You can delete all your saved tattoo ideas and clear your local data at any time through the Settings page in the app.
+          </p>
+          
+          <div className="bg-neon-50 dark:bg-neon-950/30 p-6 rounded-2xl border border-neon-200 dark:border-neon-800 mt-6">
+            <h4 className="text-lg font-semibold text-neon-800 dark:text-neon-200 mb-3">Instant Data Deletion:</h4>
+            <ul className="text-neon-700 dark:text-neon-300 space-y-2">
+              <li>• Access the Settings page from the header menu</li>
+              <li>• Click "Delete My Data" to remove all saved designs</li>
+              <li>• All data is permanently deleted immediately</li>
+              <li>• No waiting period or manual processing required</li>
+            </ul>
+          </div>
+
+          <h3 className="text-2xl font-display font-bold mt-8 mb-4 text-slate-900 dark:text-white">6. Changes to this Privacy Policy</h3>
           <p className="text-lg leading-relaxed">
             We may update Our Privacy Policy from time to time. We will notify You of any changes by posting the new Privacy Policy on this page.
           </p>
 
-          <h3 className="text-2xl font-display font-bold mt-8 mb-4 text-slate-900 dark:text-white">6. Contact Us</h3>
+          <h3 className="text-2xl font-display font-bold mt-8 mb-4 text-slate-900 dark:text-white">7. Contact Us</h3>
           <p className="text-lg leading-relaxed">
             If you have any questions about this Privacy Policy, You can contact us by email at: privacy@example.com
           </p>

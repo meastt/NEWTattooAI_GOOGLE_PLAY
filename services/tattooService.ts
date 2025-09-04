@@ -69,3 +69,33 @@ export const saveIdea = async ({ prompt, imageDataUrl }: { prompt: string; image
         throw new Error('Failed to save your idea. Please try again.');
     }
 };
+
+/**
+ * Deletes all saved ideas for the current user and clears localStorage.
+ * This function ensures complete data deletion for App Store compliance.
+ */
+export const deleteUserData = async (): Promise<void> => {
+    if (!supabase) {
+        throw new Error('Database not configured. Could not delete data.');
+    }
+    
+    const userId = getUserId();
+    
+    try {
+        // Delete all saved ideas for the current user
+        const { error } = await supabase
+            .from('saved_ideas')
+            .delete()
+            .eq('user_id', userId);
+
+        if (error) throw error;
+        
+        // Clear localStorage (this will also clear the user ID)
+        localStorage.clear();
+        
+        console.log('User data successfully deleted');
+    } catch (error) {
+        console.error('Error deleting user data:', error);
+        throw new Error('Failed to delete your data. Please try again.');
+    }
+};

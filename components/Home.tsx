@@ -7,6 +7,7 @@ const Home: React.FC = () => {
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [duplicatedIdeas, setDuplicatedIdeas] = useState<Idea[]>([]);
 
   useEffect(() => {
     const fetchIdeas = async () => {
@@ -17,6 +18,15 @@ const Home: React.FC = () => {
             setError('Could not load inspiration gallery. The database may be offline or empty.');
         } else {
             setIdeas(galleryIdeas);
+            // Create multiple copies for continuous scrolling
+            const multipliedIdeas = [];
+            for (let i = 0; i < 3; i++) {
+              multipliedIdeas.push(...galleryIdeas.map((idea, index) => ({ 
+                ...idea, 
+                id: `${idea.id}_${i}_${index}` 
+              })));
+            }
+            setDuplicatedIdeas(multipliedIdeas);
         }
       } catch (err) {
         setError('Failed to fetch gallery ideas.');
@@ -77,59 +87,216 @@ const Home: React.FC = () => {
       )}
 
       {!isLoading && !error && (
-        <div className="masonry-container">
-          {ideas.map((idea, index) => (
-            <div 
-              key={idea.id} 
-              className="masonry-item mb-6 group cursor-pointer"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <div className="relative overflow-hidden rounded-2xl bg-white dark:bg-slate-800 shadow-lg hover:shadow-2xl transition-all duration-500 group-hover:scale-105">
-                <img 
-                  src={idea.image_url} 
-                  alt={idea.prompt} 
-                  className="w-full h-auto block transition-transform duration-500 group-hover:scale-110"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                  <p className="text-white text-sm font-medium line-clamp-2">{idea.prompt}</p>
+        <div className="waterfall-container overflow-hidden">
+          {/* Column 1 */}
+          <div className="waterfall-column waterfall-column-1">
+            <div className="waterfall-scroll">
+              {duplicatedIdeas.filter((_, index) => index % 3 === 0).map((idea, index) => (
+                <div 
+                  key={`col1-${idea.id}`} 
+                  className="waterfall-item"
+                >
+                  <div className="relative overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm shadow-lg mb-4">
+                    <img 
+                      src={idea.image_url} 
+                      alt={idea.prompt} 
+                      className="w-full h-auto block object-cover"
+                      loading="lazy"
+                      style={{ maxHeight: '200px', minHeight: '120px' }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-3">
+                      <p className="text-white text-xs font-medium line-clamp-2 drop-shadow-sm">
+                        {idea.prompt.substring(0, 60)}...
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
-          ))}
+          </div>
+
+          {/* Column 2 */}
+          <div className="waterfall-column waterfall-column-2">
+            <div className="waterfall-scroll">
+              {duplicatedIdeas.filter((_, index) => index % 3 === 1).map((idea, index) => (
+                <div 
+                  key={`col2-${idea.id}`} 
+                  className="waterfall-item"
+                >
+                  <div className="relative overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm shadow-lg mb-4">
+                    <img 
+                      src={idea.image_url} 
+                      alt={idea.prompt} 
+                      className="w-full h-auto block object-cover"
+                      loading="lazy"
+                      style={{ maxHeight: '180px', minHeight: '140px' }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-3">
+                      <p className="text-white text-xs font-medium line-clamp-2 drop-shadow-sm">
+                        {idea.prompt.substring(0, 60)}...
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Column 3 */}
+          <div className="waterfall-column waterfall-column-3">
+            <div className="waterfall-scroll">
+              {duplicatedIdeas.filter((_, index) => index % 3 === 2).map((idea, index) => (
+                <div 
+                  key={`col3-${idea.id}`} 
+                  className="waterfall-item"
+                >
+                  <div className="relative overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm shadow-lg mb-4">
+                    <img 
+                      src={idea.image_url} 
+                      alt={idea.prompt} 
+                      className="w-full h-auto block object-cover"
+                      loading="lazy"
+                      style={{ maxHeight: '220px', minHeight: '100px' }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-3">
+                      <p className="text-white text-xs font-medium line-clamp-2 drop-shadow-sm">
+                        {idea.prompt.substring(0, 60)}...
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       )}
       
       <style>{`
-        .masonry-container {
-          column-count: 1;
-          column-gap: 1.5rem;
+        .waterfall-container {
+          display: flex;
+          gap: 1rem;
+          height: 70vh;
+          mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+          -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
         }
-        @media (min-width: 640px) {
-          .masonry-container {
-            column-count: 2;
+
+        .waterfall-column {
+          flex: 1;
+          overflow: hidden;
+          position: relative;
+        }
+
+        .waterfall-scroll {
+          animation-iteration-count: infinite;
+          animation-timing-function: linear;
+          animation-fill-mode: none;
+        }
+
+        .waterfall-column-1 .waterfall-scroll {
+          animation-name: scrollUp;
+          animation-duration: 180s;
+        }
+
+        .waterfall-column-2 .waterfall-scroll {
+          animation-name: scrollUp;
+          animation-duration: 150s;
+          animation-delay: -40s;
+        }
+
+        .waterfall-column-3 .waterfall-scroll {
+          animation-name: scrollUp;
+          animation-duration: 200s;
+          animation-delay: -100s;
+        }
+
+        @keyframes scrollUp {
+          0% {
+            transform: translateY(100%);
+          }
+          100% {
+            transform: translateY(-100%);
           }
         }
-        @media (min-width: 768px) {
-          .masonry-container {
-            column-count: 3;
+
+        .waterfall-item {
+          margin-bottom: 1rem;
+          animation: fadeInScale 0.6s ease-out both;
+        }
+
+        @keyframes fadeInScale {
+          0% {
+            opacity: 0;
+            transform: scale(0.9) translateY(20px);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1) translateY(0);
           }
         }
-        @media (min-width: 1024px) {
-          .masonry-container {
-            column-count: 4;
-          }
-        }
-        .masonry-item {
-          break-inside: avoid;
-          animation: slideUp 0.6s ease-out both;
-        }
+
         .line-clamp-2 {
           display: -webkit-box;
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
           overflow: hidden;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+          .waterfall-container {
+            height: 60vh;
+            gap: 0.75rem;
+          }
+          .waterfall-column-1 .waterfall-scroll {
+            animation-duration: 160s;
+          }
+          .waterfall-column-2 .waterfall-scroll {
+            animation-duration: 130s;
+          }
+          .waterfall-column-3 .waterfall-scroll {
+            animation-duration: 180s;
+          }
+        }
+
+        /* Hover pause effect */
+        .waterfall-container:hover .waterfall-scroll {
+          animation-play-state: paused;
+        }
+
+        /* Smooth gradient masks for better visual flow */
+        .waterfall-column::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 60px;
+          background: linear-gradient(to bottom, rgba(255,255,255,0.8) 0%, transparent 100%);
+          z-index: 10;
+          pointer-events: none;
+        }
+
+        .dark .waterfall-column::before {
+          background: linear-gradient(to bottom, rgba(15,23,42,0.8) 0%, transparent 100%);
+        }
+
+        .waterfall-column::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 60px;
+          background: linear-gradient(to top, rgba(255,255,255,0.8) 0%, transparent 100%);
+          z-index: 10;
+          pointer-events: none;
+        }
+
+        .dark .waterfall-column::after {
+          background: linear-gradient(to top, rgba(15,23,42,0.8) 0%, transparent 100%);
         }
       `}</style>
     </div>
