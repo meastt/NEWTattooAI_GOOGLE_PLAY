@@ -1,5 +1,7 @@
 import React from 'react';
-import { upgradeToPremium, getUserCredits } from '../services/creditService';
+import { initiateAppleIAP } from '../services/subscriptionService';
+import { SUBSCRIPTION_PLANS } from '../services/subscriptionService';
+import { getSubscriptionInfo } from '../services/creditService';
 
 interface UpgradeModalProps {
   isOpen: boolean;
@@ -10,31 +12,35 @@ interface UpgradeModalProps {
 const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose, theme }) => {
   const [isProcessing, setIsProcessing] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [selectedPlan, setSelectedPlan] = React.useState<string | null>(null);
 
   if (!isOpen) return null;
 
-  const handleUpgrade = async () => {
+  const handleUpgrade = async (productId: string) => {
     setIsProcessing(true);
     setError(null);
+    setSelectedPlan(productId);
 
     try {
-      // Simulate Apple In-App Purchase flow
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate processing time
+      // Initiate Apple In-App Purchase
+      const result = await initiateAppleIAP(productId);
       
-      // In a real app, this would be called after successful Apple IAP
-      await upgradeToPremium();
-      
-      // Trigger a storage event to update credit display
-      window.dispatchEvent(new StorageEvent('storage', {
-        key: 'tattoo_app_credits',
-        newValue: JSON.stringify(getUserCredits())
-      }));
-      
-      onClose();
+      if (result.success) {
+        // Trigger a storage event to update credit display
+        window.dispatchEvent(new StorageEvent('storage', {
+          key: 'tattoo_app_subscription',
+          newValue: JSON.stringify(getSubscriptionInfo())
+        }));
+        
+        onClose();
+      } else {
+        setError(result.error || 'Purchase failed. Please try again.');
+      }
     } catch (err) {
       setError('Purchase failed. Please try again.');
     } finally {
       setIsProcessing(false);
+      setSelectedPlan(null);
     }
   };
 
@@ -77,47 +83,11 @@ const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose, theme }) =
               </svg>
             </div>
             <h2 className="text-2xl font-display font-bold text-slate-900 dark:text-white mb-2">
-              Upgrade to Pro
+              Choose Your Plan
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
-              Unlock unlimited generations and exports
+              Unlock more AI generations and premium features
             </p>
-          </div>
-
-          {/* Features */}
-          <div className="space-y-4 mb-8">
-            <div className="flex items-center space-x-3">
-              <div className="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-                <svg className="w-3 h-3 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <span className="text-slate-700 dark:text-slate-300 font-medium">Unlimited AI generations</span>
-            </div>
-            <div className="flex items-center space-x-3">
-              <div className="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-                <svg className="w-3 h-3 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <span className="text-slate-700 dark:text-slate-300 font-medium">Unlimited exports & downloads</span>
-            </div>
-            <div className="flex items-center space-x-3">
-              <div className="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-                <svg className="w-3 h-3 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <span className="text-slate-700 dark:text-slate-300 font-medium">Priority support</span>
-            </div>
-            <div className="flex items-center space-x-3">
-              <div className="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-                <svg className="w-3 h-3 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <span className="text-slate-700 dark:text-slate-300 font-medium">Advanced AI models</span>
-            </div>
           </div>
 
           {/* Error Message */}
@@ -127,43 +97,85 @@ const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose, theme }) =
             </div>
           )}
 
-          {/* Pricing */}
-          <div className={`mb-6 p-6 rounded-2xl border-2 border-dashed transition-colors ${
-            theme === 'dark' 
-              ? 'border-ink-600 bg-ink-950/20' 
-              : 'border-ink-300 bg-ink-50/50'
-          }`}>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-slate-900 dark:text-white mb-1">
-                $4.99
-                <span className="text-lg font-normal text-slate-600 dark:text-slate-400">/month</span>
+          {/* Subscription Plans */}
+          <div className="space-y-4 mb-6">
+            {SUBSCRIPTION_PLANS.map((plan) => (
+              <div
+                key={plan.id}
+                className={`p-6 rounded-2xl border-2 transition-all duration-300 ${
+                  theme === 'dark'
+                    ? 'border-slate-700 bg-slate-800/50 hover:border-ink-500'
+                    : 'border-slate-200 bg-slate-50/50 hover:border-ink-400'
+                }`}
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1">
+                      {plan.name}
+                    </h3>
+                    <p className="text-slate-600 dark:text-slate-400 text-sm mb-2">
+                      {plan.description}
+                    </p>
+                    <div className="flex items-baseline">
+                      <span className="text-3xl font-bold text-slate-900 dark:text-white">
+                        ${plan.price}
+                      </span>
+                      <span className="text-slate-600 dark:text-slate-400 ml-1">
+                        /{plan.period}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-ink-500 dark:text-ink-400">
+                      {plan.credits}
+                    </div>
+                    <div className="text-sm text-slate-600 dark:text-slate-400">
+                      generations
+                    </div>
+                  </div>
+                </div>
+
+                {/* Features */}
+                <div className="space-y-2 mb-4">
+                  {plan.features.map((feature, index) => (
+                    <div key={index} className="flex items-center space-x-2">
+                      <div className="w-4 h-4 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                        <svg className="w-2 h-2 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <span className="text-sm text-slate-700 dark:text-slate-300">
+                        {feature}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Subscribe Button */}
+                <button
+                  onClick={() => handleUpgrade(plan.productId)}
+                  disabled={isProcessing}
+                  className={`w-full py-3 px-4 rounded-xl font-bold text-white transition-all duration-300 ${
+                    isProcessing && selectedPlan === plan.productId
+                      ? 'bg-slate-400 cursor-not-allowed'
+                      : 'bg-gradient-to-r from-ink-500 to-neon-500 hover:from-ink-600 hover:to-neon-600 transform hover:scale-105 shadow-lg hover:shadow-xl'
+                  }`}
+                >
+                  {isProcessing && selectedPlan === plan.productId ? (
+                    <div className="flex items-center justify-center space-x-2">
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      <span>Processing...</span>
+                    </div>
+                  ) : (
+                    `Subscribe to ${plan.name}`
+                  )}
+                </button>
               </div>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Cancel anytime</p>
-            </div>
+            ))}
           </div>
 
-          {/* Action Button */}
-          <button
-            onClick={handleUpgrade}
-            disabled={isProcessing}
-            className={`w-full py-4 px-6 rounded-2xl font-bold text-white transition-all duration-300 ${
-              isProcessing
-                ? 'bg-slate-400 cursor-not-allowed'
-                : 'bg-gradient-to-r from-ink-500 to-neon-500 hover:from-ink-600 hover:to-neon-600 transform hover:scale-105 shadow-lg hover:shadow-xl'
-            }`}
-          >
-            {isProcessing ? (
-              <div className="flex items-center justify-center space-x-2">
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                <span>Processing...</span>
-              </div>
-            ) : (
-              'Subscribe Now'
-            )}
-          </button>
-
           {/* Disclaimer */}
-          <p className="text-xs text-slate-500 dark:text-slate-400 text-center mt-4">
+          <p className="text-xs text-slate-500 dark:text-slate-400 text-center">
             This is a demo purchase flow. In production, this would integrate with Apple In-App Purchase.
           </p>
         </div>

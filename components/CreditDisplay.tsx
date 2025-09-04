@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getUserCredits, getRemainingExports, type UserCredits } from '../services/creditService';
+import { getSubscriptionInfo, getRemainingExports } from '../services/creditService';
 
 interface CreditDisplayProps {
   theme: 'light' | 'dark';
@@ -7,12 +7,12 @@ interface CreditDisplayProps {
 }
 
 const CreditDisplay: React.FC<CreditDisplayProps> = ({ theme, onUpgradeClick }) => {
-  const [credits, setCredits] = useState<UserCredits | null>(null);
+  const [subscriptionInfo, setSubscriptionInfo] = useState<any>(null);
   const [remainingExports, setRemainingExports] = useState<number>(0);
 
   const refreshCredits = () => {
-    const userCredits = getUserCredits();
-    setCredits(userCredits);
+    const info = getSubscriptionInfo();
+    setSubscriptionInfo(info);
     setRemainingExports(getRemainingExports());
   };
 
@@ -21,7 +21,7 @@ const CreditDisplay: React.FC<CreditDisplayProps> = ({ theme, onUpgradeClick }) 
     
     // Listen for credit updates
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'tattoo_app_credits') {
+      if (e.key === 'tattoo_app_subscription' || e.key === 'tattoo_app_credits') {
         refreshCredits();
       }
     };
@@ -37,9 +37,9 @@ const CreditDisplay: React.FC<CreditDisplayProps> = ({ theme, onUpgradeClick }) 
     };
   }, []);
 
-  if (!credits) return null;
+  if (!subscriptionInfo) return null;
 
-  if (credits.isPremium) {
+  if (subscriptionInfo.hasSubscription) {
     return (
       <div className={`flex items-center space-x-3 px-4 py-2 rounded-2xl transition-all duration-300 ${
         theme === 'dark' 
@@ -51,12 +51,16 @@ const CreditDisplay: React.FC<CreditDisplayProps> = ({ theme, onUpgradeClick }) 
           <span className={`text-sm font-bold ${
             theme === 'dark' ? 'text-ink-300' : 'text-ink-700'
           }`}>
-            PRO
+            {subscriptionInfo.plan?.name || 'PRO'}
           </span>
         </div>
         <div className="w-px h-4 bg-slate-300 dark:bg-slate-600"></div>
         <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-          ∞ Unlimited
+          {subscriptionInfo.isUnlimited ? '∞ Unlimited' : `${subscriptionInfo.totalCredits} credits`}
+        </span>
+        <div className="w-px h-4 bg-slate-300 dark:bg-slate-600"></div>
+        <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+          ∞ exports
         </span>
       </div>
     );
@@ -71,14 +75,14 @@ const CreditDisplay: React.FC<CreditDisplayProps> = ({ theme, onUpgradeClick }) 
       {/* Generation Credits */}
       <div className="flex items-center space-x-2">
         <div className={`w-2 h-2 rounded-full ${
-          credits.credits > 2 
+          subscriptionInfo.totalCredits > 2 
             ? 'bg-green-500' 
-            : credits.credits > 0 
+            : subscriptionInfo.totalCredits > 0 
               ? 'bg-yellow-500' 
               : 'bg-red-500'
         }`}></div>
         <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-          {credits.credits} credits
+          {subscriptionInfo.totalCredits} credits
         </span>
       </div>
 
@@ -96,7 +100,7 @@ const CreditDisplay: React.FC<CreditDisplayProps> = ({ theme, onUpgradeClick }) 
       </div>
 
       {/* Upgrade Button */}
-      {(credits.credits <= 1 || remainingExports <= 1) && onUpgradeClick && (
+      {(subscriptionInfo.totalCredits <= 1 || remainingExports <= 1) && onUpgradeClick && (
         <>
           <div className="w-px h-4 bg-slate-300 dark:bg-slate-600"></div>
           <button

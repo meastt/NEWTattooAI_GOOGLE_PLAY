@@ -1,4 +1,11 @@
 import { supabase } from './supabaseClient';
+import { 
+  getUserRemainingCredits, 
+  canGenerate as subscriptionCanGenerate, 
+  consumeCredit as subscriptionConsumeCredit,
+  hasActiveSubscription,
+  getCurrentSubscriptionPlan
+} from './subscriptionService';
 
 export interface UserCredits {
   userId: string;
@@ -125,39 +132,29 @@ export const syncCreditsFromSupabase = async (): Promise<UserCredits> => {
   }
 };
 
-// Check if user can generate (has credits)
+// Check if user can generate (has credits) - now uses subscription system
 export const canGenerate = (): boolean => {
-  const credits = getUserCredits();
-  return credits.isPremium || credits.credits > 0;
+  return subscriptionCanGenerate();
 };
 
 // Check if user can export/download
 export const canExport = (): boolean => {
   const credits = getUserCredits();
-  return credits.isPremium || credits.exportsUsed < MAX_FREE_EXPORTS;
+  const hasSubscription = hasActiveSubscription();
+  return hasSubscription || credits.exportsUsed < MAX_FREE_EXPORTS;
 };
 
-// Consume a credit for generation
+// Consume a credit for generation - now uses subscription system
 export const consumeCredit = async (): Promise<{ success: boolean; remainingCredits: number }> => {
-  const current = getUserCredits();
-  
-  if (current.isPremium) {
-    return { success: true, remainingCredits: -1 }; // -1 indicates unlimited
-  }
-  
-  if (current.credits <= 0) {
-    return { success: false, remainingCredits: 0 };
-  }
-  
-  const updated = await updateUserCredits({ credits: current.credits - 1 });
-  return { success: true, remainingCredits: updated.credits };
+  return await subscriptionConsumeCredit();
 };
 
 // Consume an export
 export const consumeExport = async (): Promise<{ success: boolean; remainingExports: number }> => {
   const current = getUserCredits();
+  const hasSubscription = hasActiveSubscription();
   
-  if (current.isPremium) {
+  if (hasSubscription) {
     return { success: true, remainingExports: -1 }; // -1 indicates unlimited
   }
   
@@ -170,7 +167,7 @@ export const consumeExport = async (): Promise<{ success: boolean; remainingExpo
   return { success: true, remainingExports };
 };
 
-// Upgrade to premium
+// Upgrade to premium (legacy function - now handled by subscription system)
 export const upgradeToPremium = async (): Promise<UserCredits> => {
   return await updateUserCredits({ isPremium: true });
 };
@@ -178,8 +175,28 @@ export const upgradeToPremium = async (): Promise<UserCredits> => {
 // Get remaining exports count
 export const getRemainingExports = (): number => {
   const credits = getUserCredits();
-  if (credits.isPremium) return -1; // Unlimited
+  const hasSubscription = hasActiveSubscription();
+  if (hasSubscription) return -1; // Unlimited
   return Math.max(0, MAX_FREE_EXPORTS - credits.exportsUsed);
+};
+
+// Get total remaining credits (now uses subscription system)
+export const getTotalRemainingCredits = (): number => {
+  return getUserRemainingCredits();
+};
+
+// Get subscription info for display
+export const getSubscriptionInfo = () => {
+  const hasSubscription = hasActiveSubscription();
+  const plan = getCurrentSubscriptionPlan();
+  const totalCredits = getUserRemainingCredits();
+  
+  return {
+    hasSubscription,
+    plan,
+    totalCredits,
+    isUnlimited: hasSubscription && plan?.credits === -1
+  };
 };
 
 // Initialize credits on app start

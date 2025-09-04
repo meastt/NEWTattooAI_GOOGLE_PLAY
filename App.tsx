@@ -14,6 +14,7 @@ import Home from './components/Home';
 import SavedIdeas from './components/SavedIdeas';
 import UpgradeModal from './components/UpgradeModal';
 import { initializeCreditService } from './services/creditService';
+import { initializeSubscriptionService } from './services/subscriptionService';
 
 type Theme = 'light' | 'dark';
 
@@ -33,8 +34,9 @@ const App: React.FC = () => {
 
   useEffect(() => {
     localStorage.setItem('theme', theme);
-    // Initialize credit service on app start
+    // Initialize services on app start
     initializeCreditService();
+    initializeSubscriptionService();
   }, [theme]);
 
   const toggleTheme = () => {
@@ -125,7 +127,6 @@ const App: React.FC = () => {
           theme={theme}
           toggleTheme={toggleTheme}
           onUpgradeClick={() => setShowUpgradeModal(true)}
-          onSettingsClick={() => navigateTo('settings')}
         />
       )}
        {!showHeader && (
@@ -135,7 +136,6 @@ const App: React.FC = () => {
           theme={theme}
           toggleTheme={toggleTheme}
           onUpgradeClick={() => setShowUpgradeModal(true)}
-          onSettingsClick={() => navigateTo('settings')}
         />
       )}
       <main className="flex-grow container mx-auto px-4 py-8 pb-24 relative z-10">

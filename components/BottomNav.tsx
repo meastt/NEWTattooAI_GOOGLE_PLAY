@@ -3,6 +3,7 @@ import type { View } from '../types';
 import { HomeIcon } from './icons/HomeIcon';
 import { CreateIcon } from './icons/CreateIcon';
 import { SavedIcon } from './icons/SavedIcon';
+import { SettingsIcon } from './icons/SettingsIcon';
 
 interface BottomNavProps {
   activeView: View;
@@ -63,7 +64,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ activeView, onNavigate }) => {
         <div className="absolute inset-0 bg-gradient-to-r from-ink-50/30 via-transparent to-neon-50/30 dark:from-ink-950/30 dark:via-transparent dark:to-neon-950/30" />
         
         {/* Navigation items */}
-        <div className="relative flex justify-around items-center px-4 py-2">
+        <div className="relative flex justify-around items-center px-2 py-2">
           <NavItem
             label="Home"
             icon={<HomeIcon />}
@@ -81,6 +82,12 @@ const BottomNav: React.FC<BottomNavProps> = ({ activeView, onNavigate }) => {
             icon={<SavedIcon />}
             isActive={activeView === 'saved'}
             onClick={() => onNavigate('saved')}
+          />
+          <NavItem
+            label="Settings"
+            icon={<SettingsIcon />}
+            isActive={activeView === 'settings'}
+            onClick={() => onNavigate('settings')}
           />
         </div>
       </div>
