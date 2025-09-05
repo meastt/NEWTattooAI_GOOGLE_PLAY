@@ -10,14 +10,12 @@ import {
 export interface UserCredits {
   userId: string;
   credits: number;
-  exportsUsed: number;
   isPremium: boolean;
   lastUpdated: string;
 }
 
 const CREDITS_STORAGE_KEY = 'tattoo_app_credits';
-const DEFAULT_CREDITS = 5;
-const MAX_FREE_EXPORTS = 3;
+const DEFAULT_CREDITS = 3;
 
 // Generate anonymous user ID
 const getOrCreateUserId = (): string => {
@@ -35,7 +33,6 @@ const initializeUserCredits = (): UserCredits => {
   const defaultCredits: UserCredits = {
     userId,
     credits: DEFAULT_CREDITS,
-    exportsUsed: 0,
     isPremium: false,
     lastUpdated: new Date().toISOString()
   };
@@ -78,7 +75,6 @@ export const updateUserCredits = async (updates: Partial<UserCredits>): Promise<
         .upsert({
           user_id: updated.userId,
           credits: updated.credits,
-          exports_used: updated.exportsUsed,
           is_premium: updated.isPremium,
           last_updated: updated.lastUpdated
         });
@@ -115,7 +111,6 @@ export const syncCreditsFromSupabase = async (): Promise<UserCredits> => {
     const supabaseCredits: UserCredits = {
       userId: data.user_id,
       credits: data.credits,
-      exportsUsed: data.exports_used,
       isPremium: data.is_premium,
       lastUpdated: data.last_updated
     };
@@ -137,34 +132,9 @@ export const canGenerate = (): boolean => {
   return subscriptionCanGenerate();
 };
 
-// Check if user can export/download
-export const canExport = (): boolean => {
-  const credits = getUserCredits();
-  const hasSubscription = hasActiveSubscription();
-  return hasSubscription || credits.exportsUsed < MAX_FREE_EXPORTS;
-};
-
 // Consume a credit for generation - now uses subscription system
 export const consumeCredit = async (): Promise<{ success: boolean; remainingCredits: number }> => {
   return await subscriptionConsumeCredit();
-};
-
-// Consume an export
-export const consumeExport = async (): Promise<{ success: boolean; remainingExports: number }> => {
-  const current = getUserCredits();
-  const hasSubscription = hasActiveSubscription();
-  
-  if (hasSubscription) {
-    return { success: true, remainingExports: -1 }; // -1 indicates unlimited
-  }
-  
-  if (current.exportsUsed >= MAX_FREE_EXPORTS) {
-    return { success: false, remainingExports: 0 };
-  }
-  
-  const updated = await updateUserCredits({ exportsUsed: current.exportsUsed + 1 });
-  const remainingExports = MAX_FREE_EXPORTS - updated.exportsUsed;
-  return { success: true, remainingExports };
 };
 
 // Upgrade to premium (legacy function - now handled by subscription system)
@@ -172,13 +142,6 @@ export const upgradeToPremium = async (): Promise<UserCredits> => {
   return await updateUserCredits({ isPremium: true });
 };
 
-// Get remaining exports count
-export const getRemainingExports = (): number => {
-  const credits = getUserCredits();
-  const hasSubscription = hasActiveSubscription();
-  if (hasSubscription) return -1; // Unlimited
-  return Math.max(0, MAX_FREE_EXPORTS - credits.exportsUsed);
-};
 
 // Get total remaining credits (now uses subscription system)
 export const getTotalRemainingCredits = (): number => {

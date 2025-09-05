@@ -57,7 +57,7 @@ const NavItem: React.FC<{
 
 const BottomNav: React.FC<BottomNavProps> = ({ activeView, onNavigate }) => {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50">
+    <nav className="fixed bottom-0 left-0 right-0 z-50" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
       {/* Background with blur effect */}
       <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-t border-slate-200/50 dark:border-slate-700/50">
         {/* Gradient overlay */}

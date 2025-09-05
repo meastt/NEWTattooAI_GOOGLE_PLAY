@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import LoadingSpinner from './LoadingSpinner';
 import { SaveIcon } from './icons/SaveIcon';
-import { ExportIcon } from './icons/ExportIcon';
-import { consumeExport, canExport, getRemainingExports } from '../services/creditService';
 
 interface ResultDisplayProps {
   isLoading: boolean;
@@ -41,48 +39,6 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
     } finally {
       setIsSaving(false);
     }
-  };
-
-  const handleExportClick = async () => {
-    if (!resultImage) return;
-    
-    // Check if user can export
-    if (!canExport()) {
-      if (onUpgradeClick) {
-        onUpgradeClick();
-      } else {
-        alert('Export limit reached. Please upgrade to continue exporting images.');
-      }
-      return;
-    }
-
-    // Consume an export
-    const exportResult = await consumeExport();
-    if (!exportResult.success) {
-      if (onUpgradeClick) {
-        onUpgradeClick();
-      } else {
-        alert('Export limit reached. Please upgrade to continue exporting images.');
-      }
-      return;
-    }
-
-    // Perform the download
-    const link = document.createElement('a');
-    link.href = resultImage;
-    const fileName = prompt.substring(0, 30).replace(/\s+/g, '_').toLowerCase() || 'tattoo-idea';
-    link.download = `${fileName}.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    // Trigger storage event to update credit display
-    import('../services/creditService').then(({ getUserCredits }) => {
-      window.dispatchEvent(new StorageEvent('storage', {
-        key: 'tattoo_app_credits',
-        newValue: JSON.stringify(getUserCredits())
-      }));
-    });
   };
 
   return (
@@ -138,23 +94,6 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
                   <SaveIcon />
                 )}
                 <span>{isSaved ? 'Saved!' : isSaving ? 'Saving...' : 'Save Idea'}</span>
-              </button>
-              
-              <button
-                onClick={handleExportClick}
-                className={`font-bold py-3 px-6 rounded-2xl transition-all duration-300 flex items-center gap-3 shadow-lg hover:shadow-xl group ${
-                  canExport() 
-                    ? 'bg-slate-700 hover:bg-slate-600 text-white' 
-                    : 'bg-gradient-to-r from-ink-500 to-neon-500 hover:from-ink-600 hover:to-neon-600 text-white'
-                }`}
-              >
-                <ExportIcon />
-                <span>
-                  {canExport() 
-                    ? `Export Image (${getRemainingExports() === -1 ? '∞' : getRemainingExports()} left)` 
-                    : 'Upgrade to Export'
-                  }
-                </span>
               </button>
             </div>
           </div>

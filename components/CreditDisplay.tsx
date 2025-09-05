@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getSubscriptionInfo, getRemainingExports } from '../services/creditService';
+import { getSubscriptionInfo } from '../services/creditService';
 
 interface CreditDisplayProps {
   theme: 'light' | 'dark';
@@ -8,12 +8,10 @@ interface CreditDisplayProps {
 
 const CreditDisplay: React.FC<CreditDisplayProps> = ({ theme, onUpgradeClick }) => {
   const [subscriptionInfo, setSubscriptionInfo] = useState<any>(null);
-  const [remainingExports, setRemainingExports] = useState<number>(0);
 
   const refreshCredits = () => {
     const info = getSubscriptionInfo();
     setSubscriptionInfo(info);
-    setRemainingExports(getRemainingExports());
   };
 
   useEffect(() => {
@@ -58,10 +56,6 @@ const CreditDisplay: React.FC<CreditDisplayProps> = ({ theme, onUpgradeClick }) 
         <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
           {subscriptionInfo.isUnlimited ? '∞ Unlimited' : `${subscriptionInfo.totalCredits} credits`}
         </span>
-        <div className="w-px h-4 bg-slate-300 dark:bg-slate-600"></div>
-        <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-          ∞ exports
-        </span>
       </div>
     );
   }
@@ -72,7 +66,7 @@ const CreditDisplay: React.FC<CreditDisplayProps> = ({ theme, onUpgradeClick }) 
         ? 'bg-slate-800/50 border border-slate-700/50' 
         : 'bg-white/50 border border-slate-200/50'
     }`}>
-      {/* Generation Credits */}
+      {/* Credits */}
       <div className="flex items-center space-x-2">
         <div className={`w-2 h-2 rounded-full ${
           subscriptionInfo.totalCredits > 2 
@@ -86,21 +80,8 @@ const CreditDisplay: React.FC<CreditDisplayProps> = ({ theme, onUpgradeClick }) 
         </span>
       </div>
 
-      {/* Separator */}
-      <div className="w-px h-4 bg-slate-300 dark:bg-slate-600"></div>
-
-      {/* Export Credits */}
-      <div className="flex items-center space-x-2">
-        <svg className="w-3 h-3 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-        </svg>
-        <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-          {remainingExports} exports
-        </span>
-      </div>
-
       {/* Upgrade Button */}
-      {(subscriptionInfo.totalCredits <= 1 || remainingExports <= 1) && onUpgradeClick && (
+      {subscriptionInfo.totalCredits <= 1 && onUpgradeClick && (
         <>
           <div className="w-px h-4 bg-slate-300 dark:bg-slate-600"></div>
           <button
