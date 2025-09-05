@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import type { View } from '../types';
 import { deleteUserData } from '../services/tattooService';
 import LoadingSpinner from './LoadingSpinner';
+import ThemeToggle from './ThemeToggle';
+import Version from './Version';
 
 interface SettingsProps {
   onNavigate: (view: View) => void;
+  theme: 'light' | 'dark';
+  toggleTheme: () => void;
 }
 
-const Settings: React.FC<SettingsProps> = ({ onNavigate }) => {
+const Settings: React.FC<SettingsProps> = ({ onNavigate, theme, toggleTheme }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [deleteStatus, setDeleteStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -63,6 +67,34 @@ const Settings: React.FC<SettingsProps> = ({ onNavigate }) => {
 
       {/* Settings Cards */}
       <div className="space-y-8">
+        {/* Theme Settings Card */}
+        <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-8 rounded-3xl border border-slate-200/50 dark:border-slate-700/50 shadow-xl">
+          <div className="flex items-center mb-6">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-ink-100 to-neon-100 dark:from-ink-900 dark:to-neon-900 flex items-center justify-center mr-4">
+              <svg className="w-6 h-6 text-ink-600 dark:text-ink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-display font-bold text-slate-900 dark:text-white">Appearance</h2>
+          </div>
+          
+          <div className="space-y-4">
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              Choose your preferred theme for the app interface.
+            </p>
+            
+            <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-700">
+              <div>
+                <h3 className="font-semibold text-slate-900 dark:text-white">Theme</h3>
+                <p className="text-sm text-slate-600 dark:text-slate-300">
+                  Currently using {theme === 'light' ? 'Light' : 'Dark'} mode
+                </p>
+              </div>
+              <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
+            </div>
+          </div>
+        </div>
+
         {/* Data Management Card */}
         <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-8 rounded-3xl border border-slate-200/50 dark:border-slate-700/50 shadow-xl">
           <div className="flex items-center mb-6">
@@ -238,6 +270,11 @@ const Settings: React.FC<SettingsProps> = ({ onNavigate }) => {
           </div>
         </div>
       )}
+      
+      {/* Version Info */}
+      <div className="mt-8 text-center">
+        <Version theme={theme} />
+      </div>
     </div>
   );
 };

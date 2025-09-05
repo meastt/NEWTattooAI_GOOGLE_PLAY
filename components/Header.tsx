@@ -1,6 +1,5 @@
 import React from 'react';
 import { BackArrowIcon } from './icons/BackArrowIcon';
-import ThemeToggle from './ThemeToggle';
 import CreditDisplay from './CreditDisplay';
 
 type Theme = 'light' | 'dark';
@@ -9,11 +8,10 @@ interface HeaderProps {
   showBackButton: boolean;
   onBack: () => void;
   theme: Theme;
-  toggleTheme: () => void;
   onUpgradeClick?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ showBackButton, onBack, theme, toggleTheme, onUpgradeClick }) => {
+const Header: React.FC<HeaderProps> = ({ showBackButton, onBack, theme, onUpgradeClick }) => {
   return (
     <header className="sticky top-0 z-50 header-safe" style={{ 
       paddingTop: 'max(env(safe-area-inset-top, 0px), 60px)',
@@ -46,20 +44,16 @@ const Header: React.FC<HeaderProps> = ({ showBackButton, onBack, theme, toggleTh
              <div className="flex-grow-0">
                <h1 className="text-xl md:text-2xl font-display font-bold tracking-tight">
                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-ink-600 via-ink-500 to-neon-500">
-                   InkVision
-                 </span>
-                 <span className={`ml-2 ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'}`}>
-                   AI
+                   InkSync
                  </span>
                </h1>
                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium tracking-wide">
-                 Your Personal Tattoo Studio
+                 Sync Before You Ink
                  </p>
              </div>
           </div>
-          <div className="flex items-center justify-end space-x-4">
+          <div className="flex items-center justify-end">
             <CreditDisplay theme={theme} onUpgradeClick={onUpgradeClick} />
-            <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
           </div>
         </div>
       </div>

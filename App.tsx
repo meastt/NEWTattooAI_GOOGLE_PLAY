@@ -8,7 +8,6 @@ import TattooRemoval from './components/TattooRemoval';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import Disclaimer from './components/Disclaimer';
 import Settings from './components/Settings';
-import Footer from './components/Footer';
 import BottomNav from './components/BottomNav';
 import Home from './components/Home';
 import SavedIdeas from './components/SavedIdeas';
@@ -34,6 +33,8 @@ const App: React.FC = () => {
 
   useEffect(() => {
     localStorage.setItem('theme', theme);
+    // Apply theme class to document element for Tailwind dark mode
+    document.documentElement.classList.toggle('dark', theme === 'dark');
     // Initialize services on app start
     initializeCreditService();
     initializeSubscriptionService();
@@ -76,7 +77,7 @@ const App: React.FC = () => {
       case 'disclaimer':
         return <Disclaimer />;
       case 'settings':
-        return <Settings onNavigate={navigateTo} />;
+        return <Settings onNavigate={navigateTo} theme={theme} toggleTheme={toggleTheme} />;
       default:
         return <Home />;
     }
@@ -125,7 +126,6 @@ const App: React.FC = () => {
           showBackButton={true}
           onBack={() => navigateTo(getBackButtonTarget())}
           theme={theme}
-          toggleTheme={toggleTheme}
           onUpgradeClick={() => setShowUpgradeModal(true)}
         />
       )}
@@ -134,17 +134,18 @@ const App: React.FC = () => {
           showBackButton={false}
           onBack={() => {}}
           theme={theme}
-          toggleTheme={toggleTheme}
           onUpgradeClick={() => setShowUpgradeModal(true)}
         />
       )}
       <main className="flex-grow container mx-auto px-4 py-8 pb-24 relative z-10" style={{ paddingBottom: 'calc(6rem + env(safe-area-inset-bottom))' }}>
         {renderContent()}
       </main>
-      <div className="md:hidden">
-        <BottomNav activeView={getActiveTab()} onNavigate={navigateTo} />
+      <div 
+        className="md:hidden" 
+        style={{ backgroundColor: theme === 'dark' ? 'rgba(15, 23, 42, 0.9)' : 'rgba(255, 255, 255, 0.9)' }}
+      >
+        <BottomNav activeView={getActiveTab()} onNavigate={navigateTo} theme={theme} />
       </div>
-      <Footer onNavigate={navigateTo} />
       
       {/* Upgrade Modal */}
       <UpgradeModal 

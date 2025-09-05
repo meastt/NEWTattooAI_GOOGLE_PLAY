@@ -8,6 +8,7 @@ import { SettingsIcon } from './icons/SettingsIcon';
 interface BottomNavProps {
   activeView: View;
   onNavigate: (view: View) => void;
+  theme: 'light' | 'dark';
 }
 
 const NavItem: React.FC<{
@@ -55,13 +56,30 @@ const NavItem: React.FC<{
 };
 
 
-const BottomNav: React.FC<BottomNavProps> = ({ activeView, onNavigate }) => {
+const BottomNav: React.FC<BottomNavProps> = ({ activeView, onNavigate, theme }) => {
+  console.log('BottomNav theme:', theme);
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+    <nav 
+      className="fixed bottom-0 left-0 right-0 z-50" 
+      style={{ 
+        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+        backgroundColor: theme === 'dark' ? 'rgba(15, 23, 42, 0.9)' : 'rgba(255, 255, 255, 0.9)'
+      }}
+    >
       {/* Background with blur effect */}
-      <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-t border-slate-200/50 dark:border-slate-700/50">
+      <div 
+        className="backdrop-blur-md border-t"
+        style={{
+          backgroundColor: theme === 'dark' ? 'rgba(15, 23, 42, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+          borderColor: theme === 'dark' ? 'rgba(51, 65, 85, 0.5)' : 'rgba(226, 232, 240, 0.5)'
+        }}
+      >
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-ink-50/30 via-transparent to-neon-50/30 dark:from-ink-950/30 dark:via-transparent dark:to-neon-950/30" />
+        <div className={`absolute inset-0 bg-gradient-to-r via-transparent ${
+          theme === 'dark' 
+            ? 'from-ink-950/30 to-neon-950/30' 
+            : 'from-ink-50/30 to-neon-50/30'
+        }`} />
         
         {/* Navigation items */}
         <div className="relative flex justify-around items-center px-2 py-2">

@@ -15,7 +15,7 @@ const Disclaimer: React.FC = () => {
           </p>
           
           <p className="text-lg leading-relaxed">
-            Welcome to InkVision AI. By using this application, you agree to the following terms and conditions.
+            Welcome to InkSync. By using this application, you agree to the following terms and conditions.
           </p>
 
           <h3 className="text-2xl font-display font-bold mt-8 mb-4 text-slate-900 dark:text-white">1. For Entertainment & Conceptual Purposes Only</h3>

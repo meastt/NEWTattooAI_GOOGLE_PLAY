@@ -3,30 +3,38 @@ import type { View } from '../types';
 
 interface FooterProps {
   onNavigate: (view: View) => void;
+  theme: 'light' | 'dark';
 }
 
-const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
+const Footer: React.FC<FooterProps> = ({ onNavigate, theme }) => {
   return (
-    <footer className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-t border-slate-200/50 dark:border-slate-700/50 mt-12">
-      <div className="container mx-auto px-4 py-8 text-center text-slate-500 dark:text-slate-400 text-sm">
-        <div className="flex justify-center space-x-8 mb-6">
+    <footer style={{ 
+      backgroundColor: theme === 'dark' ? 'purple' : 'orange', 
+      height: '300px',
+      marginTop: '48px'
+    }}>
+      <div className="container mx-auto px-4 py-6 text-center text-sm" style={{ color: 'white', fontSize: '20px' }}>
+        <div className="flex justify-center space-x-8 mb-4">
           <button 
             onClick={() => onNavigate('privacy')} 
-            className="hover:text-ink-600 dark:hover:text-ink-400 transition-colors duration-300 font-medium"
+            className={`hover:text-ink-600 transition-colors duration-300 font-medium ${theme === 'dark' ? 'text-slate-400 hover:text-ink-400' : 'text-slate-600 hover:text-ink-600'}`}
           >
             Privacy Policy
           </button>
           <button 
             onClick={() => onNavigate('disclaimer')} 
-            className="hover:text-ink-600 dark:hover:text-ink-400 transition-colors duration-300 font-medium"
+            className={`hover:text-ink-600 transition-colors duration-300 font-medium ${theme === 'dark' ? 'text-slate-400 hover:text-ink-400' : 'text-slate-600 hover:text-ink-600'}`}
           >
             Disclaimer
           </button>
         </div>
-        <p className="text-slate-600 dark:text-slate-300 font-medium">
-          &copy; {new Date().getFullYear()} InkVision AI. All rights reserved.
+        <p style={{ color: 'white', fontSize: '24px', fontWeight: 'bold' }}>
+          THEME: {theme.toUpperCase()} - FOOTER TEST
         </p>
-        <p className="mt-2 text-slate-500 dark:text-slate-400">
+        <p style={{ color: 'white', fontSize: '18px' }}>
+          &copy; {new Date().getFullYear()} InkSync. All rights reserved.
+        </p>
+        <p style={{ color: 'white', fontSize: '16px' }}>
           Generated images are for conceptual purposes only. Consult a professional tattoo artist.
         </p>
       </div>

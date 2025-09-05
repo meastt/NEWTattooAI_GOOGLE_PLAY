@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>InkVision AI - Your Personal Tattoo Studio</title>
+    <title>InkSync - Sync Before You Ink</title>
     <meta name="description" content="Transform your tattoo ideas into reality with AI-powered design generation, virtual try-ons, and removal previews." />
     
     <!-- Custom Fonts -->
@@ -15,6 +15,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
+        darkMode: 'class',
         theme: {
           extend: {
             fontFamily: {
@@ -140,6 +141,44 @@
       /* Override any Capacitor safe area handling */
       .capacitor-app {
         padding-top: env(safe-area-inset-top, 0px) !important;
+      }
+
+      /* iOS-specific nav background fixes - maximum specificity */
+      html.dark nav.fixed.bottom-0,
+      html nav.fixed.bottom-0,
+      body.dark nav.fixed.bottom-0,
+      body nav.fixed.bottom-0,
+      div.dark nav.fixed.bottom-0,
+      div nav.fixed.bottom-0 {
+        background-color: rgba(15, 23, 42, 0.95) !important;
+        background: rgba(15, 23, 42, 0.95) !important;
+      }
+      
+      html.dark nav.fixed.bottom-0 > div,
+      html nav.fixed.bottom-0 > div,
+      body.dark nav.fixed.bottom-0 > div, 
+      body nav.fixed.bottom-0 > div,
+      div.dark nav.fixed.bottom-0 > div,
+      div nav.fixed.bottom-0 > div {
+        background-color: rgba(15, 23, 42, 0.95) !important;
+        background: rgba(15, 23, 42, 0.95) !important;
+      }
+      
+      /* Force all elements in bottom nav to have dark background */
+      nav[class*="bottom-0"] *,
+      nav[class*="bottom-0"] *::before,
+      nav[class*="bottom-0"] *::after {
+        background-color: transparent !important;
+      }
+      
+      nav[class*="bottom-0"] {
+        background-color: rgba(15, 23, 42, 0.95) !important;
+        background: rgba(15, 23, 42, 0.95) !important;
+      }
+      
+      nav[class*="bottom-0"] > div:first-child {
+        background-color: rgba(15, 23, 42, 0.95) !important;
+        background: rgba(15, 23, 42, 0.95) !important;
       }
     </style>
   <script type="importmap">

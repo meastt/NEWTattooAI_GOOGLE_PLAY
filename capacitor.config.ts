@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.inkvisionai.app',
-  appName: 'InkVision AI',
+  appId: 'com.inksync.app',
+  appName: 'InkSync',
   webDir: 'dist',
   server: {
     androidScheme: 'https'
