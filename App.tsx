@@ -146,7 +146,7 @@ const App: React.FC = () => {
           onUpgradeClick={() => setShowUpgradeModal(true)}
         />
       )}
-      <main className="flex-grow container mx-auto px-4 py-8 relative z-10" style={{ paddingBottom: 'calc(9rem + env(safe-area-inset-bottom, 0px))' }}>
+      <main className="flex-grow container mx-auto px-4 py-8 relative z-10" style={{ paddingTop: 'calc(6rem + env(safe-area-inset-top, 0px))', paddingBottom: 'calc(8rem + env(safe-area-inset-bottom, 0px))' }}>
         {renderContent()}
       </main>
       <div className="md:hidden">

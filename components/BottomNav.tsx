@@ -51,12 +51,12 @@ const BottomNav: React.FC<BottomNavProps> = ({ activeView, onNavigate, theme }) 
       className="z-50" 
       style={{ 
         position: 'fixed',
-        bottom: 0,
+        bottom: '-15px',
         left: 0,
         right: 0,
-        paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 34px)',
-        paddingTop: '12px',
-        minHeight: 'calc(80px + env(safe-area-inset-bottom, 0px))',
+        paddingBottom: 'max(env(safe-area-inset-bottom, 25px), 25px)',
+        paddingTop: '8px',
+        minHeight: 'calc(70px + env(safe-area-inset-bottom, 0px))',
         backgroundColor: theme === 'dark' ? 'rgba(15, 23, 42, 1)' : 'rgba(255, 255, 255, 1)',
         transform: 'translateZ(0)',
         WebkitTransform: 'translateZ(0)',

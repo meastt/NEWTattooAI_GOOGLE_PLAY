@@ -13,8 +13,9 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ showBackButton, onBack, theme, onUpgradeClick }) => {
   return (
-    <header className="sticky top-0 z-50 header-safe" style={{ 
-      paddingTop: 'max(env(safe-area-inset-top, 0px), 60px)',
+    <header className="fixed top-0 left-0 right-0 z-50 header-safe" style={{ 
+      transform: 'translateY(-20px)',
+      paddingTop: 'max(env(safe-area-inset-top, 20px), 55px)',
       backgroundColor: 'rgba(0,0,0,0.1)'
     }}>
       <div className={`backdrop-blur-md border-b transition-all duration-300 ${
@@ -22,9 +23,9 @@ const Header: React.FC<HeaderProps> = ({ showBackButton, onBack, theme, onUpgrad
           ? 'bg-slate-900/70 border-slate-800/50' 
           : 'bg-white/70 border-slate-200/50'
       }`} style={{ 
-        minHeight: '80px',
-        paddingTop: '20px',
-        paddingBottom: '20px'
+        minHeight: '75px',
+        paddingTop: '15px',
+        paddingBottom: '15px'
       }}>
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center flex-1">
