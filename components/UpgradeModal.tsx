@@ -52,21 +52,22 @@ const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose, theme }) =
 
   return (
     <div 
-      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto"
       onClick={handleBackdropClick}
+      style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 1rem)', paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 1rem)' }}
     >
-      <div className={`relative w-full max-w-md rounded-3xl overflow-hidden shadow-2xl transform transition-all ${
+      <div className={`relative w-full max-w-md max-h-[90vh] rounded-3xl overflow-hidden shadow-2xl transform transition-all my-auto flex flex-col ${
         theme === 'dark' 
           ? 'bg-slate-900 border border-slate-700' 
           : 'bg-white border border-slate-200'
       }`}>
-        {/* Close Button */}
+        {/* Close Button - Always visible at top */}
         <button
           onClick={onClose}
-          className={`absolute top-4 right-4 p-2 rounded-full transition-colors ${
+          className={`absolute top-4 right-4 z-10 p-2 rounded-full transition-colors shadow-lg ${
             theme === 'dark' 
-              ? 'hover:bg-slate-800 text-slate-400 hover:text-slate-200' 
-              : 'hover:bg-slate-100 text-slate-600 hover:text-slate-900'
+              ? 'hover:bg-slate-800 text-slate-400 hover:text-slate-200 bg-slate-900/90' 
+              : 'hover:bg-slate-100 text-slate-600 hover:text-slate-900 bg-white/90'
           }`}
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -74,9 +75,9 @@ const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose, theme }) =
           </svg>
         </button>
 
-        {/* Header */}
-        <div className="p-8 pb-4">
-          <div className="text-center mb-6">
+        {/* Header - Fixed at top */}
+        <div className="flex-shrink-0 p-6 pb-4 border-b border-slate-200 dark:border-slate-700">
+          <div className="text-center mb-4">
             <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-r from-ink-500 to-neon-500 flex items-center justify-center">
               <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -97,6 +98,10 @@ const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose, theme }) =
             </div>
           )}
 
+        </div>
+        
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto p-6 pt-4">
           {/* Subscription Plans */}
           <div className="space-y-4 mb-6">
             {SUBSCRIPTION_PLANS.map((plan) => (

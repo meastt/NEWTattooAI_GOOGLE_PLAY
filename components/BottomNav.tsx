@@ -16,48 +16,36 @@ const NavItem: React.FC<{
   icon: React.ReactNode;
   isActive: boolean;
   onClick: () => void;
-}> = ({ label, icon, isActive, onClick }) => {
+  theme: 'light' | 'dark';
+}> = ({ label, icon, isActive, onClick, theme }) => {
   return (
     <button
       onClick={onClick}
-      className={`group relative flex flex-col items-center justify-center w-full py-3 px-2 transition-all duration-300 ${
-        isActive 
-          ? 'text-ink-600 dark:text-ink-400' 
-          : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+      className={`group relative flex flex-col items-center justify-center w-full py-3 px-2 transition-all duration-300 text-slate-500 ${
+        theme === 'dark' ? 'hover:text-slate-300' : 'hover:text-slate-700'
       }`}
     >
-      {/* Active Background */}
-      {isActive && (
-        <div className="absolute inset-0 bg-gradient-to-r from-ink-100 to-neon-100 dark:from-ink-900/50 dark:to-neon-900/50 rounded-2xl mx-2" />
-      )}
       
       {/* Icon Container */}
       <div className={`relative z-10 p-2 rounded-xl transition-all duration-300 ${
-        isActive 
-          ? 'bg-gradient-to-r from-ink-500 to-neon-500 text-white shadow-lg' 
-          : 'group-hover:bg-slate-100 dark:group-hover:bg-slate-800'
+        theme === 'dark' ? 'group-hover:bg-slate-800' : 'group-hover:bg-slate-100'
       }`}>
         {icon}
       </div>
       
       {/* Label */}
-      <span className={`text-xs mt-2 font-medium transition-all duration-300 ${
-        isActive ? 'text-ink-600 dark:text-ink-400' : 'text-slate-500 group-hover:text-slate-700 dark:group-hover:text-slate-300'
+      <span className={`text-xs mt-2 font-medium transition-all duration-300 text-slate-500 ${
+        theme === 'dark' ? 'group-hover:text-slate-300' : 'group-hover:text-slate-700'
       }`}>
         {label}
       </span>
       
-      {/* Active Indicator */}
-      {isActive && (
-        <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-gradient-to-r from-ink-500 to-neon-500 rounded-full" />
-      )}
     </button>
   );
 };
 
 
 const BottomNav: React.FC<BottomNavProps> = ({ activeView, onNavigate, theme }) => {
-  console.log('BottomNav theme:', theme);
   return (
     <nav 
       className="fixed bottom-0 left-0 right-0 z-50" 
@@ -88,24 +76,28 @@ const BottomNav: React.FC<BottomNavProps> = ({ activeView, onNavigate, theme }) 
             icon={<HomeIcon />}
             isActive={activeView === 'home'}
             onClick={() => onNavigate('home')}
+            theme={theme}
           />
           <NavItem
             label="Create"
             icon={<CreateIcon />}
             isActive={activeView === 'create'}
             onClick={() => onNavigate('create')}
+            theme={theme}
           />
           <NavItem
             label="My Ideas"
             icon={<SavedIcon />}
             isActive={activeView === 'saved'}
             onClick={() => onNavigate('saved')}
+            theme={theme}
           />
           <NavItem
             label="Settings"
             icon={<SettingsIcon />}
             isActive={activeView === 'settings'}
             onClick={() => onNavigate('settings')}
+            theme={theme}
           />
         </div>
       </div>

@@ -143,40 +143,28 @@
         padding-top: env(safe-area-inset-top, 0px) !important;
       }
 
-      /* iOS-specific nav background fixes - maximum specificity */
+      /* iOS-specific nav background fixes - dark mode only */
       html.dark nav.fixed.bottom-0,
-      html nav.fixed.bottom-0,
       body.dark nav.fixed.bottom-0,
-      body nav.fixed.bottom-0,
-      div.dark nav.fixed.bottom-0,
-      div nav.fixed.bottom-0 {
+      div.dark nav.fixed.bottom-0 {
         background-color: rgba(15, 23, 42, 0.95) !important;
         background: rgba(15, 23, 42, 0.95) !important;
       }
       
       html.dark nav.fixed.bottom-0 > div,
-      html nav.fixed.bottom-0 > div,
-      body.dark nav.fixed.bottom-0 > div, 
-      body nav.fixed.bottom-0 > div,
-      div.dark nav.fixed.bottom-0 > div,
-      div nav.fixed.bottom-0 > div {
+      body.dark nav.fixed.bottom-0 > div,
+      div.dark nav.fixed.bottom-0 > div {
         background-color: rgba(15, 23, 42, 0.95) !important;
         background: rgba(15, 23, 42, 0.95) !important;
       }
       
-      /* Force all elements in bottom nav to have dark background */
-      nav[class*="bottom-0"] *,
-      nav[class*="bottom-0"] *::before,
-      nav[class*="bottom-0"] *::after {
-        background-color: transparent !important;
-      }
-      
-      nav[class*="bottom-0"] {
+      /* Dark mode specific nav styling */
+      .dark nav[class*="bottom-0"] {
         background-color: rgba(15, 23, 42, 0.95) !important;
         background: rgba(15, 23, 42, 0.95) !important;
       }
       
-      nav[class*="bottom-0"] > div:first-child {
+      .dark nav[class*="bottom-0"] > div:first-child {
         background-color: rgba(15, 23, 42, 0.95) !important;
         background: rgba(15, 23, 42, 0.95) !important;
       }

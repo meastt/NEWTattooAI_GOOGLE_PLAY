@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { View, TattooStyle, TattooColor } from '../types';
-import { TATTOO_STYLES, TATTOO_COLORS } from '../constants';
+import { TATTOO_STYLES, TATTOO_COLORS, TATTOO_STYLE_DESCRIPTIONS } from '../constants';
 import { generateImage } from '../services/geminiService';
 import { saveIdea } from '../services/tattooService';
 import LoadingSpinner from './LoadingSpinner';
@@ -101,8 +101,77 @@ const TattooGenerator: React.FC<TattooGeneratorProps> = ({ onNavigate, onUpgrade
                 onChange={(e) => setStyle(e.target.value as TattooStyle)} 
                 className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600"
               >
-                {TATTOO_STYLES.map(s => <option key={s} value={s}>{s}</option>)}
+                <optgroup label="Traditional & Classic">
+                  <option value="American Traditional">American Traditional</option>
+                  <option value="Japanese Irezumi">Japanese Irezumi</option>
+                  <option value="Neo-Traditional">Neo-Traditional</option>
+                  <option value="Traditional Sailor">Traditional Sailor</option>
+                </optgroup>
+                
+                <optgroup label="Modern & Contemporary">
+                  <option value="Fine Line">Fine Line</option>
+                  <option value="Minimalist">Minimalist</option>
+                  <option value="Geometric">Geometric</option>
+                  <option value="Abstract">Abstract</option>
+                  <option value="Watercolor">Watercolor</option>
+                  <option value="Sketch Style">Sketch Style</option>
+                </optgroup>
+                
+                <optgroup label="Black & Bold">
+                  <option value="Blackwork">Blackwork</option>
+                  <option value="Tribal">Tribal</option>
+                  <option value="Dotwork">Dotwork</option>
+                  <option value="Ornamental">Ornamental</option>
+                  <option value="Mandala">Mandala</option>
+                </optgroup>
+                
+                <optgroup label="Realistic & Portrait">
+                  <option value="Realism">Realism</option>
+                  <option value="Photorealism">Photorealism</option>
+                  <option value="Portrait">Portrait</option>
+                  <option value="Biomechanical">Biomechanical</option>
+                </optgroup>
+                
+                <optgroup label="Text & Lettering">
+                  <option value="Script/Cursive">Script/Cursive</option>
+                  <option value="Old English">Old English</option>
+                  <option value="Sans Serif">Sans Serif</option>
+                  <option value="Serif/Roman">Serif/Roman</option>
+                  <option value="Calligraphy">Calligraphy</option>
+                  <option value="Gothic Lettering">Gothic Lettering</option>
+                  <option value="Graffiti Style">Graffiti Style</option>
+                  <option value="Hand Lettered">Hand Lettered</option>
+                </optgroup>
+                
+                <optgroup label="Cultural & Spiritual">
+                  <option value="Celtic">Celtic</option>
+                  <option value="Norse/Viking">Norse/Viking</option>
+                  <option value="Polynesian">Polynesian</option>
+                  <option value="Aztec/Mayan">Aztec/Mayan</option>
+                  <option value="Hindu/Buddhist">Hindu/Buddhist</option>
+                  <option value="Chinese">Chinese</option>
+                </optgroup>
+                
+                <optgroup label="Artistic & Unique">
+                  <option value="Surrealism">Surrealism</option>
+                  <option value="Pop Art">Pop Art</option>
+                  <option value="Comic Book">Comic Book</option>
+                  <option value="Gothic">Gothic</option>
+                  <option value="Art Nouveau">Art Nouveau</option>
+                  <option value="Chicano">Chicano</option>
+                </optgroup>
+                
+                <optgroup label="Fun & Playful">
+                  <option value="Cartoon">Cartoon</option>
+                  <option value="Anime/Manga">Anime/Manga</option>
+                  <option value="Retro/Vintage">Retro/Vintage</option>
+                  <option value="Pin-Up">Pin-Up</option>
+                  <option value="Kawaii/Cute">Kawaii/Cute</option>
+                </optgroup>
               </select>
+              <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                {TATTOO_STYLE_DESCRIPTIONS[style]}
+              </p>
             </div>
             <div className="space-y-2">
               <label htmlFor="color" className="block text-sm font-semibold text-slate-700 dark:text-slate-300">

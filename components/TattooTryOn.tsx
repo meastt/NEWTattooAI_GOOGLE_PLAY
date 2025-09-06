@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
-import type { View, TattooStyle, TattooColor } from '../types';
-import { TATTOO_STYLES, TATTOO_COLORS } from '../constants';
+import type { View, TattooStyle, TattooColor, TattooSize } from '../types';
+import { TATTOO_STYLES, TATTOO_COLORS, TATTOO_SIZES, TATTOO_SIZE_DESCRIPTIONS, TATTOO_STYLE_DESCRIPTIONS } from '../constants';
+import { generateSizedPrompt } from '../utils/tattooSizing';
 import { editImage } from '../services/geminiService';
 import { saveIdea } from '../services/tattooService';
 import ImageUploader from './ImageUploader';
@@ -18,6 +19,7 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
   const [style, setStyle] = useState<TattooStyle>(TATTOO_STYLES[0]);
   const [bodyPart, setBodyPart] = useState('');
   const [color, setColor] = useState<TattooColor>(TATTOO_COLORS[0]);
+  const [size, setSize] = useState<TattooSize>(TATTOO_SIZES[1]); // Default to 'Small'
   const [prompt, setPrompt] = useState('');
   
   const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +43,7 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
     setError(null);
     setResultImage(null);
 
-    const generatedPrompt = `Using the provided image of a person, add a realistic-looking tattoo. The tattoo is of a ${subject}. It should be in the ${style} style, located on the person's ${bodyPart}. The tattoo's color should be ${color}.`;
+    const generatedPrompt = generateSizedPrompt(subject, style, bodyPart, color, size);
     setPrompt(generatedPrompt);
 
     try {
@@ -113,11 +115,104 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
                 required
               />
             </div>
+            <div>
+              <label htmlFor="size" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Size *</label>
+              <select 
+                id="size" 
+                value={size} 
+                onChange={(e) => setSize(e.target.value as TattooSize)} 
+                className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600"
+                required
+              >
+                {TATTOO_SIZES.map(s => (
+                  <option key={s} value={s}>
+                    {s} - {TATTOO_SIZE_DESCRIPTIONS[s]}
+                  </option>
+                ))}
+              </select>
+              <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                Choose the size relative to your body part. For your ankle example, "Small" would be perfect for a 2-4 inch running shoe design.
+              </p>
+            </div>
              <div>
               <label htmlFor="style" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Style</label>
-              <select id="style" value={style} onChange={(e) => setStyle(e.target.value as TattooStyle)} className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600">
-                {TATTOO_STYLES.map(s => <option key={s} value={s}>{s}</option>)}
+              <select 
+                id="style" 
+                value={style} 
+                onChange={(e) => setStyle(e.target.value as TattooStyle)} 
+                className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600"
+              >
+                <optgroup label="Traditional & Classic">
+                  <option value="American Traditional">American Traditional</option>
+                  <option value="Japanese Irezumi">Japanese Irezumi</option>
+                  <option value="Neo-Traditional">Neo-Traditional</option>
+                  <option value="Traditional Sailor">Traditional Sailor</option>
+                </optgroup>
+                
+                <optgroup label="Modern & Contemporary">
+                  <option value="Fine Line">Fine Line</option>
+                  <option value="Minimalist">Minimalist</option>
+                  <option value="Geometric">Geometric</option>
+                  <option value="Abstract">Abstract</option>
+                  <option value="Watercolor">Watercolor</option>
+                  <option value="Sketch Style">Sketch Style</option>
+                </optgroup>
+                
+                <optgroup label="Black & Bold">
+                  <option value="Blackwork">Blackwork</option>
+                  <option value="Tribal">Tribal</option>
+                  <option value="Dotwork">Dotwork</option>
+                  <option value="Ornamental">Ornamental</option>
+                  <option value="Mandala">Mandala</option>
+                </optgroup>
+                
+                <optgroup label="Realistic & Portrait">
+                  <option value="Realism">Realism</option>
+                  <option value="Photorealism">Photorealism</option>
+                  <option value="Portrait">Portrait</option>
+                  <option value="Biomechanical">Biomechanical</option>
+                </optgroup>
+                
+                <optgroup label="Text & Lettering">
+                  <option value="Script/Cursive">Script/Cursive</option>
+                  <option value="Old English">Old English</option>
+                  <option value="Sans Serif">Sans Serif</option>
+                  <option value="Serif/Roman">Serif/Roman</option>
+                  <option value="Calligraphy">Calligraphy</option>
+                  <option value="Gothic Lettering">Gothic Lettering</option>
+                  <option value="Graffiti Style">Graffiti Style</option>
+                  <option value="Hand Lettered">Hand Lettered</option>
+                </optgroup>
+                
+                <optgroup label="Cultural & Spiritual">
+                  <option value="Celtic">Celtic</option>
+                  <option value="Norse/Viking">Norse/Viking</option>
+                  <option value="Polynesian">Polynesian</option>
+                  <option value="Aztec/Mayan">Aztec/Mayan</option>
+                  <option value="Hindu/Buddhist">Hindu/Buddhist</option>
+                  <option value="Chinese">Chinese</option>
+                </optgroup>
+                
+                <optgroup label="Artistic & Unique">
+                  <option value="Surrealism">Surrealism</option>
+                  <option value="Pop Art">Pop Art</option>
+                  <option value="Comic Book">Comic Book</option>
+                  <option value="Gothic">Gothic</option>
+                  <option value="Art Nouveau">Art Nouveau</option>
+                  <option value="Chicano">Chicano</option>
+                </optgroup>
+                
+                <optgroup label="Fun & Playful">
+                  <option value="Cartoon">Cartoon</option>
+                  <option value="Anime/Manga">Anime/Manga</option>
+                  <option value="Retro/Vintage">Retro/Vintage</option>
+                  <option value="Pin-Up">Pin-Up</option>
+                  <option value="Kawaii/Cute">Kawaii/Cute</option>
+                </optgroup>
               </select>
+              <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                {TATTOO_STYLE_DESCRIPTIONS[style]}
+              </p>
             </div>
             <div>
               <label htmlFor="color" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Color</label>

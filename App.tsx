@@ -140,10 +140,7 @@ const App: React.FC = () => {
       <main className="flex-grow container mx-auto px-4 py-8 pb-24 relative z-10" style={{ paddingBottom: 'calc(6rem + env(safe-area-inset-bottom))' }}>
         {renderContent()}
       </main>
-      <div 
-        className="md:hidden" 
-        style={{ backgroundColor: theme === 'dark' ? 'rgba(15, 23, 42, 0.9)' : 'rgba(255, 255, 255, 0.9)' }}
-      >
+      <div className="md:hidden">
         <BottomNav activeView={getActiveTab()} onNavigate={navigateTo} theme={theme} />
       </div>
       
