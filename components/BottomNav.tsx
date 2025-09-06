@@ -48,18 +48,31 @@ const NavItem: React.FC<{
 const BottomNav: React.FC<BottomNavProps> = ({ activeView, onNavigate, theme }) => {
   return (
     <nav 
-      className="fixed bottom-0 left-0 right-0 z-50" 
+      className="z-50" 
       style={{ 
-        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
-        backgroundColor: theme === 'dark' ? 'rgba(15, 23, 42, 0.9)' : 'rgba(255, 255, 255, 0.9)'
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 34px)',
+        backgroundColor: theme === 'dark' ? 'rgba(15, 23, 42, 0.98)' : 'rgba(255, 255, 255, 0.98)',
+        transform: 'translateZ(0)',
+        WebkitTransform: 'translateZ(0)',
+        WebkitBackfaceVisibility: 'hidden',
+        backfaceVisibility: 'hidden',
+        WebkitPerspective: '1000px',
+        perspective: '1000px',
+        zIndex: 9999
       }}
     >
       {/* Background with blur effect */}
       <div 
         className="backdrop-blur-md border-t"
         style={{
-          backgroundColor: theme === 'dark' ? 'rgba(15, 23, 42, 0.9)' : 'rgba(255, 255, 255, 0.9)',
-          borderColor: theme === 'dark' ? 'rgba(51, 65, 85, 0.5)' : 'rgba(226, 232, 240, 0.5)'
+          backgroundColor: theme === 'dark' ? 'rgba(15, 23, 42, 0.98)' : 'rgba(255, 255, 255, 0.98)',
+          borderColor: theme === 'dark' ? 'rgba(51, 65, 85, 0.5)' : 'rgba(226, 232, 240, 0.5)',
+          transform: 'translateZ(0)',
+          WebkitTransform: 'translateZ(0)'
         }}
       >
         {/* Gradient overlay */}

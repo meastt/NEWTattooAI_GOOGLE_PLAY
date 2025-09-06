@@ -76,14 +76,17 @@ export function generateSizedPrompt(
 ): string {
   const sizeGuidance = getSizeGuidance(bodyPart, size);
   
-  return `Using the provided image of a person, add a realistic-looking tattoo. The tattoo is of a ${subject}. It should be in the ${style} style, located on the person's ${bodyPart}. The tattoo's color should be ${color}.
+  return `Using the provided image of a person, add a SINGLE realistic-looking tattoo. The tattoo is of a ${subject}. It should be in the ${style} style, located on the person's ${bodyPart}. The tattoo's color should be ${color}.
 
-IMPORTANT SIZE CONSTRAINTS:
+CRITICAL REQUIREMENTS:
+- Add ONLY ONE tattoo - the one described above
+- Do NOT add any other tattoos, markings, or body art anywhere else on the person
+- Keep all existing skin clean and natural except for the single requested tattoo
 - The tattoo should be ${sizeGuidance.dimensions} in size (${sizeGuidance.coverage})
 - It should be positioned ${sizeGuidance.placement}
 - DO NOT cover the entire visible body part - keep the tattoo appropriately sized as a ${size.toLowerCase()} tattoo
 - The tattoo should look proportional to the body part, not overwhelming it
 - Leave plenty of natural skin visible around the tattoo
 
-Make sure the tattoo looks realistic and properly sized for the body part, as if it were actually inked on the skin.`;
+Make sure ONLY the requested tattoo appears on the person. Do not add any additional tattoos or body art anywhere else.`;
 }

@@ -4,7 +4,9 @@ import Header from './components/Header';
 import Dashboard from './components/Dashboard';
 import TattooTryOn from './components/TattooTryOn';
 import TattooGenerator from './components/TattooGenerator';
-import TattooRemoval from './components/TattooRemoval';
+import TattooRemovalOnly from './components/TattooRemovalOnly';
+import TattooCoverup from './components/TattooCoverup';
+import TattooAging from './components/TattooAging';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import Disclaimer from './components/Disclaimer';
 import Settings from './components/Settings';
@@ -49,7 +51,7 @@ const App: React.FC = () => {
   }, []);
 
   const getActiveTab = (): View => {
-    if (['tryOn', 'generator', 'removal'].includes(currentView)) {
+    if (['tryOn', 'generator', 'removal', 'coverup', 'aging'].includes(currentView)) {
       return 'create';
     }
     if (['home', 'privacy', 'disclaimer', 'settings'].includes(currentView)) {
@@ -71,7 +73,11 @@ const App: React.FC = () => {
       case 'generator':
         return <TattooGenerator onNavigate={navigateTo} onUpgradeClick={() => setShowUpgradeModal(true)} />;
       case 'removal':
-        return <TattooRemoval onNavigate={navigateTo} onUpgradeClick={() => setShowUpgradeModal(true)} />;
+        return <TattooRemovalOnly onNavigate={navigateTo} onUpgradeClick={() => setShowUpgradeModal(true)} />;
+      case 'coverup':
+        return <TattooCoverup onNavigate={navigateTo} onUpgradeClick={() => setShowUpgradeModal(true)} />;
+      case 'aging':
+        return <TattooAging onNavigate={navigateTo} onUpgradeClick={() => setShowUpgradeModal(true)} />;
       case 'privacy':
         return <PrivacyPolicy />;
       case 'disclaimer':
@@ -84,7 +90,7 @@ const App: React.FC = () => {
   };
 
   const getBackButtonTarget = (): View => {
-    if (['tryOn', 'generator', 'removal'].includes(currentView)) {
+    if (['tryOn', 'generator', 'removal', 'coverup', 'aging'].includes(currentView)) {
       return 'create';
     }
     return 'home';

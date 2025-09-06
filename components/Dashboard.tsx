@@ -3,6 +3,8 @@ import type { View } from '../types';
 import { SparklesIcon } from './icons/SparklesIcon';
 import { CameraIcon } from './icons/CameraIcon';
 import { EraserIcon } from './icons/EraserIcon';
+import { PaletteIcon } from './icons/PaletteIcon';
+import { ClockIcon } from './icons/ClockIcon';
 
 interface DashboardProps {
   onNavigate: (view: View) => void;
@@ -89,7 +91,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
       </div>
 
       {/* Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-7xl">
         <div className="animate-slide-up" style={{ animationDelay: '0.1s' }}>
           <DashboardCard
             icon={<CameraIcon />}
@@ -99,6 +101,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
             delay={100}
           />
         </div>
+        
         <div className="animate-slide-up" style={{ animationDelay: '0.2s' }}>
           <DashboardCard
             icon={<SparklesIcon />}
@@ -108,13 +111,34 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
             delay={200}
           />
         </div>
+        
         <div className="animate-slide-up" style={{ animationDelay: '0.3s' }}>
           <DashboardCard
             icon={<EraserIcon />}
             title="Tattoo Removal"
-            description="Curious about a cover-up or removal? Upload a photo of your existing tattoo and let AI show you a glimpse of a clean slate."
+            description="See a preview of your skin without a specific tattoo. Perfect for visualizing a clean slate before making decisions."
             onClick={() => onNavigate('removal')}
             delay={300}
+          />
+        </div>
+        
+        <div className="animate-slide-up" style={{ animationDelay: '0.4s' }}>
+          <DashboardCard
+            icon={<PaletteIcon />}
+            title="Cover-Up Designer"
+            description="Transform an old tattoo into something new. Upload your current tattoo and design a beautiful cover-up over it."
+            onClick={() => onNavigate('coverup')}
+            delay={400}
+          />
+        </div>
+        
+        <div className="animate-slide-up md:col-span-2 lg:col-span-1" style={{ animationDelay: '0.5s' }}>
+          <DashboardCard
+            icon={<ClockIcon />}
+            title="Time Machine"
+            description="See how your tattoo will look in 10, 20, or 30 years. Smart aging simulation based on style, skin type, and placement."
+            onClick={() => onNavigate('aging')}
+            delay={500}
           />
         </div>
       </div>

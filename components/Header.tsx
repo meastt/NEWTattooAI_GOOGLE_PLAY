@@ -1,6 +1,7 @@
 import React from 'react';
 import { BackArrowIcon } from './icons/BackArrowIcon';
 import CreditDisplay from './CreditDisplay';
+import { getUserSubscription, updateUserSubscription } from '../services/subscriptionService';
 
 type Theme = 'light' | 'dark';
 
@@ -12,6 +13,40 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ showBackButton, onBack, theme, onUpgradeClick }) => {
+  const handleReset = async () => {
+    console.log('Reset button clicked');
+    try {
+      const subscription = getUserSubscription();
+      const result = await updateUserSubscription({
+        currentFreeCredits: 5,
+        currentSubscriptionCredits: 0
+      });
+      console.log('Reset result:', result);
+      alert('Credits reset to 5');
+      window.location.reload(); // Force refresh to update UI
+    } catch (error) {
+      console.error('Reset failed:', error);
+      alert('Reset failed: ' + error);
+    }
+  };
+
+  const handleUnlimited = async () => {
+    console.log('999 button clicked');
+    try {
+      const subscription = getUserSubscription();
+      const result = await updateUserSubscription({
+        currentFreeCredits: 999,
+        currentSubscriptionCredits: 0
+      });
+      console.log('Unlimited result:', result);
+      alert('Credits set to 999');
+      window.location.reload(); // Force refresh to update UI
+    } catch (error) {
+      console.error('Unlimited failed:', error);
+      alert('Unlimited failed: ' + error);
+    }
+  };
+
   return (
     <header className="sticky top-0 z-50 header-safe" style={{ 
       paddingTop: 'max(env(safe-area-inset-top, 0px), 60px)',
@@ -52,7 +87,20 @@ const Header: React.FC<HeaderProps> = ({ showBackButton, onBack, theme, onUpgrad
                  </p>
              </div>
           </div>
-          <div className="flex items-center justify-end">
+          <div className="flex items-center justify-end space-x-2">
+            {/* Debug buttons - remove for production */}
+            <button 
+              onClick={handleReset}
+              className="text-xs px-3 py-2 bg-red-500 text-white rounded-lg font-bold hover:bg-red-600 active:bg-red-700"
+            >
+              Reset
+            </button>
+            <button 
+              onClick={handleUnlimited}
+              className="text-xs px-3 py-2 bg-green-500 text-white rounded-lg font-bold hover:bg-green-600 active:bg-green-700"
+            >
+              999
+            </button>
             <CreditDisplay theme={theme} onUpgradeClick={onUpgradeClick} />
           </div>
         </div>
