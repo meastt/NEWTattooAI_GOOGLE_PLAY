@@ -88,5 +88,11 @@ CRITICAL REQUIREMENTS:
 - The tattoo should look proportional to the body part, not overwhelming it
 - Leave plenty of natural skin visible around the tattoo
 
+ORIENTATION REQUIREMENTS:
+- Orient the tattoo so it looks correct when the person is standing upright in real life
+- If this is an arm/forearm photo, consider how the tattoo would appear to others looking at the person
+- The tattoo should read correctly from the viewer's perspective when the person is in normal standing position
+- For text or directional elements (like eagles, arrows, etc.), ensure they face the right way for real-world viewing
+
 Make sure ONLY the requested tattoo appears on the person. Do not add any additional tattoos or body art anywhere else.`;
 }

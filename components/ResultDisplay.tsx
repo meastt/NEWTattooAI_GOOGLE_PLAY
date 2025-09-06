@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import LoadingSpinner from './LoadingSpinner';
 import { SaveIcon } from './icons/SaveIcon';
+import { ShareIcon } from './icons/ShareIcon';
 
 interface ResultDisplayProps {
   isLoading: boolean;
@@ -38,6 +39,45 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
       // Optionally show an error message to the user
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleShareClick = async () => {
+    if (!resultImage) return;
+    
+    try {
+      // Convert data URL to blob
+      const response = await fetch(resultImage);
+      const blob = await response.blob();
+      
+      // Create file from blob
+      const file = new File([blob], 'tattoo-design.png', { type: 'image/png' });
+      
+      if (navigator.share && navigator.canShare({ files: [file] })) {
+        // Use native share if available
+        await navigator.share({
+          files: [file],
+          title: 'My Tattoo Design from InkPreview',
+          text: 'Check out this tattoo design I created with InkPreview!'
+        });
+      } else {
+        // Fallback: download the image
+        const link = document.createElement('a');
+        link.href = resultImage;
+        link.download = 'tattoo-design-inkpreview.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    } catch (error) {
+      console.error('Failed to share:', error);
+      // Fallback to download
+      const link = document.createElement('a');
+      link.href = resultImage;
+      link.download = 'tattoo-design-inkpreview.png';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
   };
 
@@ -94,6 +134,14 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
                   <SaveIcon />
                 )}
                 <span>{isSaved ? 'Saved!' : isSaving ? 'Saving...' : 'Save Idea'}</span>
+              </button>
+              
+              <button
+                onClick={handleShareClick}
+                className="bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 hover:from-blue-700 hover:via-blue-600 hover:to-cyan-600 text-white font-bold py-3 px-6 rounded-2xl transition-all duration-300 flex items-center gap-3 shadow-lg hover:shadow-xl hover:shadow-blue-500/25 group"
+              >
+                <ShareIcon />
+                <span>Share</span>
               </button>
             </div>
           </div>

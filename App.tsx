@@ -6,7 +6,6 @@ import TattooTryOn from './components/TattooTryOn';
 import TattooGenerator from './components/TattooGenerator';
 import TattooRemovalOnly from './components/TattooRemovalOnly';
 import TattooCoverup from './components/TattooCoverup';
-import TattooAging from './components/TattooAging';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import Disclaimer from './components/Disclaimer';
 import Settings from './components/Settings';
@@ -51,7 +50,7 @@ const App: React.FC = () => {
   }, []);
 
   const getActiveTab = (): View => {
-    if (['tryOn', 'generator', 'removal', 'coverup', 'aging'].includes(currentView)) {
+    if (['tryOn', 'generator', 'removal', 'coverup'].includes(currentView)) {
       return 'create';
     }
     if (['home', 'privacy', 'disclaimer', 'settings'].includes(currentView)) {
@@ -76,8 +75,6 @@ const App: React.FC = () => {
         return <TattooRemovalOnly onNavigate={navigateTo} onUpgradeClick={() => setShowUpgradeModal(true)} />;
       case 'coverup':
         return <TattooCoverup onNavigate={navigateTo} onUpgradeClick={() => setShowUpgradeModal(true)} />;
-      case 'aging':
-        return <TattooAging onNavigate={navigateTo} onUpgradeClick={() => setShowUpgradeModal(true)} />;
       case 'privacy':
         return <PrivacyPolicy />;
       case 'disclaimer':
@@ -90,7 +87,7 @@ const App: React.FC = () => {
   };
 
   const getBackButtonTarget = (): View => {
-    if (['tryOn', 'generator', 'removal', 'coverup', 'aging'].includes(currentView)) {
+    if (['tryOn', 'generator', 'removal', 'coverup'].includes(currentView)) {
       return 'create';
     }
     return 'home';
@@ -143,7 +140,7 @@ const App: React.FC = () => {
           onUpgradeClick={() => setShowUpgradeModal(true)}
         />
       )}
-      <main className="flex-grow container mx-auto px-4 py-8 pb-24 relative z-10" style={{ paddingBottom: 'calc(6rem + env(safe-area-inset-bottom))' }}>
+      <main className="flex-grow container mx-auto px-4 py-8 relative z-10" style={{ paddingBottom: 'calc(9rem + env(safe-area-inset-bottom, 0px))' }}>
         {renderContent()}
       </main>
       <div className="md:hidden">

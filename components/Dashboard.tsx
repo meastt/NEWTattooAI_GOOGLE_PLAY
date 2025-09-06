@@ -4,7 +4,6 @@ import { SparklesIcon } from './icons/SparklesIcon';
 import { CameraIcon } from './icons/CameraIcon';
 import { EraserIcon } from './icons/EraserIcon';
 import { PaletteIcon } from './icons/PaletteIcon';
-import { ClockIcon } from './icons/ClockIcon';
 
 interface DashboardProps {
   onNavigate: (view: View) => void;
@@ -91,7 +90,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
       </div>
 
       {/* Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-7xl mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl mb-8">
         <div className="animate-slide-up" style={{ animationDelay: '0.1s' }}>
           <DashboardCard
             icon={<CameraIcon />}
@@ -132,15 +131,6 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
           />
         </div>
         
-        <div className="animate-slide-up sm:col-span-2 lg:col-span-1 lg:col-start-2" style={{ animationDelay: '0.5s' }}>
-          <DashboardCard
-            icon={<ClockIcon />}
-            title="Time Machine"
-            description="See how your tattoo will look in 10, 20, or 30 years. Smart aging simulation based on style, skin type, and placement."
-            onClick={() => onNavigate('aging')}
-            delay={500}
-          />
-        </div>
       </div>
     </div>
   );
