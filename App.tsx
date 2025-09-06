@@ -13,6 +13,9 @@ import BottomNav from './components/BottomNav';
 import Home from './components/Home';
 import SavedIdeas from './components/SavedIdeas';
 import UpgradeModal from './components/UpgradeModal';
+import OnboardingTour from './components/OnboardingTour';
+import SmartConversionModal from './components/SmartConversionModal';
+import RatingPrompt from './components/RatingPrompt';
 import { initializeCreditService } from './services/creditService';
 import { initializeSubscriptionService } from './services/subscriptionService';
 
@@ -21,6 +24,9 @@ type Theme = 'light' | 'dark';
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('home');
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [showSmartConversion, setShowSmartConversion] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showRatingPrompt, setShowRatingPrompt] = useState(false);
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window === 'undefined') {
       return 'dark';
@@ -152,6 +158,22 @@ const App: React.FC = () => {
         isOpen={showUpgradeModal}
         onClose={() => setShowUpgradeModal(false)}
         theme={theme}
+      />
+
+      {/* Onboarding Tour */}
+      <OnboardingTour 
+        onComplete={() => setShowOnboarding(false)}
+      />
+
+      {/* Smart Conversion Modal */}
+      <SmartConversionModal 
+        onUpgradeClick={() => setShowUpgradeModal(true)}
+        onClose={() => setShowSmartConversion(false)}
+      />
+
+      {/* Rating Prompt */}
+      <RatingPrompt 
+        onClose={() => setShowRatingPrompt(false)}
       />
     </div>
   );

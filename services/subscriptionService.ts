@@ -77,7 +77,17 @@ export const getUserSubscription = (): UserSubscription => {
   }
   
   try {
-    return JSON.parse(stored);
+    const subscription = JSON.parse(stored);
+    
+    // Safety check: Prevent users from having excessive free credits
+    // Max free credits should never exceed 50 (likely from testing)
+    if (subscription.currentFreeCredits > 50 && subscription.subscriptionStatus === 'FREE') {
+      console.warn('Detected excessive free credits, resetting to default');
+      subscription.currentFreeCredits = DEFAULT_FREE_CREDITS;
+      localStorage.setItem(SUBSCRIPTION_STORAGE_KEY, JSON.stringify(subscription));
+    }
+    
+    return subscription;
   } catch {
     return initializeUserSubscription();
   }

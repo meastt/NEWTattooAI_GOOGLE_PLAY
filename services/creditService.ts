@@ -49,7 +49,16 @@ export const getUserCredits = (): UserCredits => {
   }
   
   try {
-    return JSON.parse(stored);
+    const credits = JSON.parse(stored);
+    
+    // Safety check: Prevent users from having excessive credits from testing remnants
+    if (credits.credits > 50 && !credits.isPremium) {
+      console.warn('Detected excessive credits, resetting to default');
+      credits.credits = DEFAULT_CREDITS;
+      localStorage.setItem(CREDITS_STORAGE_KEY, JSON.stringify(credits));
+    }
+    
+    return credits;
   } catch {
     return initializeUserCredits();
   }
@@ -167,43 +176,3 @@ export const initializeCreditService = async (): Promise<UserCredits> => {
   return await syncCreditsFromSupabase();
 };
 
-// Development/Testing helper - Reset credits to default
-export const resetCreditsForTesting = (): UserCredits => {
-  const userId = getOrCreateUserId();
-  const resetCredits: UserCredits = {
-    userId,
-    credits: DEFAULT_CREDITS,
-    isPremium: false,
-    lastUpdated: new Date().toISOString()
-  };
-  
-  localStorage.setItem(CREDITS_STORAGE_KEY, JSON.stringify(resetCredits));
-  
-  // Trigger storage event to update UI
-  window.dispatchEvent(new StorageEvent('storage', {
-    key: CREDITS_STORAGE_KEY,
-    newValue: JSON.stringify(resetCredits)
-  }));
-  
-  return resetCredits;
-};
-
-// Development/Testing helper - Add unlimited credits
-export const addUnlimitedCreditsForTesting = (): UserCredits => {
-  const current = getUserCredits();
-  const unlimitedCredits: UserCredits = {
-    ...current,
-    credits: 999,
-    lastUpdated: new Date().toISOString()
-  };
-  
-  localStorage.setItem(CREDITS_STORAGE_KEY, JSON.stringify(unlimitedCredits));
-  
-  // Trigger storage event to update UI
-  window.dispatchEvent(new StorageEvent('storage', {
-    key: CREDITS_STORAGE_KEY,
-    newValue: JSON.stringify(unlimitedCredits)
-  }));
-  
-  return unlimitedCredits;
-};
