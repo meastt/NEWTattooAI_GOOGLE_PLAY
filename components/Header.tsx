@@ -79,11 +79,11 @@ const Header: React.FC<HeaderProps> = ({ showBackButton, onBack, theme, onUpgrad
              <div className="flex-grow-0">
                <h1 className="text-xl md:text-2xl font-display font-bold tracking-tight">
                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-ink-600 via-ink-500 to-neon-500">
-                   InkSync
+                   InkPreview
                  </span>
                </h1>
                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium tracking-wide">
-                 Sync Before You Ink
+                 Preview Before You Ink
                  </p>
              </div>
           </div>

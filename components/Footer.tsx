@@ -32,7 +32,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate, theme }) => {
           THEME: {theme.toUpperCase()} - FOOTER TEST
         </p>
         <p style={{ color: 'white', fontSize: '18px' }}>
-          &copy; {new Date().getFullYear()} InkSync. All rights reserved.
+          &copy; {new Date().getFullYear()} InkPreview. All rights reserved.
         </p>
         <p style={{ color: 'white', fontSize: '16px' }}>
           Generated images are for conceptual purposes only. Consult a professional tattoo artist.
