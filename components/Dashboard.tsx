@@ -19,7 +19,7 @@ const DashboardCard: React.FC<{
 }> = ({ icon, title, description, onClick, delay = 0 }) => (
   <button
     onClick={onClick}
-    className="group relative overflow-hidden bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-8 rounded-3xl border border-slate-200/50 dark:border-slate-700/50 hover:border-ink-300 dark:hover:border-ink-600 hover:bg-white/90 dark:hover:bg-slate-800/90 transition-all duration-500 text-left w-full h-full flex flex-col hover:scale-105 hover:shadow-2xl hover:shadow-ink-500/10 dark:hover:shadow-ink-500/20"
+    className="group relative overflow-hidden bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-6 rounded-3xl border border-slate-200/50 dark:border-slate-700/50 hover:border-ink-300 dark:hover:border-ink-600 hover:bg-white/90 dark:hover:bg-slate-800/90 transition-all duration-500 text-left w-full min-h-[200px] flex flex-col hover:scale-105 hover:shadow-2xl hover:shadow-ink-500/10 dark:hover:shadow-ink-500/20"
     style={{ animationDelay: `${delay}ms` }}
   >
     {/* Background Gradient */}
@@ -91,7 +91,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
       </div>
 
       {/* Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-7xl">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-7xl mb-8">
         <div className="animate-slide-up" style={{ animationDelay: '0.1s' }}>
           <DashboardCard
             icon={<CameraIcon />}
@@ -132,7 +132,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
           />
         </div>
         
-        <div className="animate-slide-up md:col-span-2 lg:col-span-1" style={{ animationDelay: '0.5s' }}>
+        <div className="animate-slide-up sm:col-span-2 lg:col-span-1 lg:col-start-2" style={{ animationDelay: '0.5s' }}>
           <DashboardCard
             icon={<ClockIcon />}
             title="Time Machine"
