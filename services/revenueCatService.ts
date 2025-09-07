@@ -59,7 +59,7 @@ export const initializeRevenueCat = async (): Promise<void> => {
     console.log('RevenueCat initialized successfully');
   } catch (error) {
     console.error('Failed to initialize RevenueCat:', error);
-    // Graceful fallback - continue without RevenueCat
+    throw error; // Now that plugin is installed, don't fail silently
   }
 };
 
