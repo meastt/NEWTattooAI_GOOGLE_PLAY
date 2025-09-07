@@ -87,216 +87,166 @@ const Home: React.FC = () => {
       )}
 
       {!isLoading && !error && (
-        <div className="waterfall-container overflow-hidden">
-          {/* Column 1 */}
-          <div className="waterfall-column waterfall-column-1">
-            <div className="waterfall-scroll">
-              {duplicatedIdeas.filter((_, index) => index % 3 === 0).map((idea, index) => (
-                <div 
-                  key={`col1-${idea.id}`} 
-                  className="waterfall-item"
-                >
-                  <div className="relative overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm shadow-lg mb-4">
-                    <img 
-                      src={idea.image_url} 
-                      alt={idea.prompt} 
-                      className="w-full h-auto block object-cover"
-                      loading="lazy"
-                      style={{ maxHeight: '200px', minHeight: '120px' }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-3">
-                      <p className="text-white text-xs font-medium line-clamp-2 drop-shadow-sm">
-                        {idea.prompt.substring(0, 60)}...
-                      </p>
-                    </div>
-                  </div>
+        <div className="gallery-showcase">
+          <div className="gallery-track">
+            {/* First set of images */}
+            {ideas.map((idea, index) => (
+              <div key={`first-${idea.id}`} className="gallery-card">
+                <div className="card-inner">
+                  <img 
+                    src={idea.image_url} 
+                    alt="Tattoo inspiration" 
+                    className="card-image"
+                    loading="lazy"
+                  />
+                  <div className="card-overlay" />
                 </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Column 2 */}
-          <div className="waterfall-column waterfall-column-2">
-            <div className="waterfall-scroll">
-              {duplicatedIdeas.filter((_, index) => index % 3 === 1).map((idea, index) => (
-                <div 
-                  key={`col2-${idea.id}`} 
-                  className="waterfall-item"
-                >
-                  <div className="relative overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm shadow-lg mb-4">
-                    <img 
-                      src={idea.image_url} 
-                      alt={idea.prompt} 
-                      className="w-full h-auto block object-cover"
-                      loading="lazy"
-                      style={{ maxHeight: '180px', minHeight: '140px' }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-3">
-                      <p className="text-white text-xs font-medium line-clamp-2 drop-shadow-sm">
-                        {idea.prompt.substring(0, 60)}...
-                      </p>
-                    </div>
-                  </div>
+              </div>
+            ))}
+            {/* Duplicate set for seamless loop */}
+            {ideas.map((idea, index) => (
+              <div key={`second-${idea.id}`} className="gallery-card">
+                <div className="card-inner">
+                  <img 
+                    src={idea.image_url} 
+                    alt="Tattoo inspiration" 
+                    className="card-image"
+                    loading="lazy"
+                  />
+                  <div className="card-overlay" />
                 </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Column 3 */}
-          <div className="waterfall-column waterfall-column-3">
-            <div className="waterfall-scroll">
-              {duplicatedIdeas.filter((_, index) => index % 3 === 2).map((idea, index) => (
-                <div 
-                  key={`col3-${idea.id}`} 
-                  className="waterfall-item"
-                >
-                  <div className="relative overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm shadow-lg mb-4">
-                    <img 
-                      src={idea.image_url} 
-                      alt={idea.prompt} 
-                      className="w-full h-auto block object-cover"
-                      loading="lazy"
-                      style={{ maxHeight: '220px', minHeight: '100px' }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-3">
-                      <p className="text-white text-xs font-medium line-clamp-2 drop-shadow-sm">
-                        {idea.prompt.substring(0, 60)}...
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       )}
       
       <style>{`
-        .waterfall-container {
-          display: flex;
-          gap: 1rem;
-          height: 70vh;
-          mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
-          -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+        .gallery-showcase {
+          height: 400px;
+          overflow: hidden;
+          position: relative;
+          border-radius: 24px;
+          background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(236, 72, 153, 0.05));
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .waterfall-column {
-          flex: 1;
-          overflow: hidden;
+        .gallery-track {
+          display: flex;
+          gap: 20px;
+          padding: 20px;
+          animation: slideLeft 60s linear infinite;
+          will-change: transform;
+        }
+
+        .gallery-card {
+          flex-shrink: 0;
+          width: 280px;
+          height: 360px;
           position: relative;
         }
 
-        .waterfall-scroll {
-          animation-iteration-count: infinite;
-          animation-timing-function: linear;
-          animation-fill-mode: none;
-        }
-
-        .waterfall-column-1 .waterfall-scroll {
-          animation-name: scrollUp;
-          animation-duration: 180s;
-        }
-
-        .waterfall-column-2 .waterfall-scroll {
-          animation-name: scrollUp;
-          animation-duration: 150s;
-          animation-delay: -40s;
-        }
-
-        .waterfall-column-3 .waterfall-scroll {
-          animation-name: scrollUp;
-          animation-duration: 200s;
-          animation-delay: -100s;
-        }
-
-        @keyframes scrollUp {
-          0% {
-            transform: translateY(100%);
-          }
-          100% {
-            transform: translateY(-100%);
-          }
-        }
-
-        .waterfall-item {
-          margin-bottom: 1rem;
-          animation: fadeInScale 0.6s ease-out both;
-        }
-
-        @keyframes fadeInScale {
-          0% {
-            opacity: 0;
-            transform: scale(0.9) translateY(20px);
-          }
-          100% {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-          }
-        }
-
-        .line-clamp-2 {
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
+        .card-inner {
+          width: 100%;
+          height: 100%;
+          border-radius: 20px;
           overflow: hidden;
+          position: relative;
+          background: rgba(255, 255, 255, 0.9);
+          backdrop-filter: blur(10px);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+          transition: all 0.3s ease;
+        }
+
+        .dark .card-inner {
+          background: rgba(15, 23, 42, 0.9);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.3s ease;
+        }
+
+        .card-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            135deg,
+            rgba(99, 102, 241, 0.1) 0%,
+            rgba(236, 72, 153, 0.1) 50%,
+            rgba(59, 130, 246, 0.1) 100%
+          );
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+
+        .gallery-card:hover .card-inner {
+          transform: translateY(-8px) scale(1.02);
+          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .dark .gallery-card:hover .card-inner {
+          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .gallery-card:hover .card-overlay {
+          opacity: 1;
+        }
+
+        .gallery-card:hover .card-image {
+          transform: scale(1.05);
+        }
+
+        @keyframes slideLeft {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+
+        /* Pause animation on hover */
+        .gallery-showcase:hover .gallery-track {
+          animation-play-state: paused;
         }
 
         /* Responsive adjustments */
         @media (max-width: 640px) {
-          .waterfall-container {
-            height: 60vh;
-            gap: 0.75rem;
+          .gallery-showcase {
+            height: 320px;
           }
-          .waterfall-column-1 .waterfall-scroll {
-            animation-duration: 160s;
+          
+          .gallery-card {
+            width: 220px;
+            height: 280px;
           }
-          .waterfall-column-2 .waterfall-scroll {
-            animation-duration: 130s;
+          
+          .gallery-track {
+            gap: 16px;
+            padding: 16px;
+            animation-duration: 45s;
           }
-          .waterfall-column-3 .waterfall-scroll {
-            animation-duration: 180s;
+        }
+
+        @media (max-width: 480px) {
+          .gallery-showcase {
+            height: 280px;
           }
-        }
-
-        /* Hover pause effect */
-        .waterfall-container:hover .waterfall-scroll {
-          animation-play-state: paused;
-        }
-
-        /* Smooth gradient masks for better visual flow */
-        .waterfall-column::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          height: 60px;
-          background: linear-gradient(to bottom, rgba(255,255,255,0.8) 0%, transparent 100%);
-          z-index: 10;
-          pointer-events: none;
-        }
-
-        .dark .waterfall-column::before {
-          background: linear-gradient(to bottom, rgba(15,23,42,0.8) 0%, transparent 100%);
-        }
-
-        .waterfall-column::after {
-          content: '';
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          height: 60px;
-          background: linear-gradient(to top, rgba(255,255,255,0.8) 0%, transparent 100%);
-          z-index: 10;
-          pointer-events: none;
-        }
-
-        .dark .waterfall-column::after {
-          background: linear-gradient(to top, rgba(15,23,42,0.8) 0%, transparent 100%);
+          
+          .gallery-card {
+            width: 200px;
+            height: 240px;
+          }
+          
+          .gallery-track {
+            gap: 12px;
+            animation-duration: 40s;
+          }
         }
       `}</style>
     </div>

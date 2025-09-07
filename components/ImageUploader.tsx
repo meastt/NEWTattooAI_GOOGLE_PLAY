@@ -14,6 +14,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageReady }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     stopCamera();
@@ -40,6 +41,13 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageReady }) => {
         stopCamera();
         return;
     }
+    
+    // On iOS, use native camera via file input instead of getUserMedia
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+      triggerCameraInput();
+      return;
+    }
+    
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       if (videoRef.current) {
@@ -81,6 +89,8 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageReady }) => {
   };
   
   const triggerFileSelect = () => fileInputRef.current?.click();
+  
+  const triggerCameraInput = () => cameraInputRef.current?.click();
 
   return (
     <div className="flex flex-col items-center space-y-4">
@@ -101,6 +111,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageReady }) => {
       ) : (
         <div className="grid grid-cols-2 gap-4 w-full">
             <input type="file" accept="image/png, image/jpeg, image/webp" ref={fileInputRef} onChange={handleFileChange} className="hidden" />
+            <input type="file" accept="image/png, image/jpeg, image/webp" capture="environment" ref={cameraInputRef} onChange={handleFileChange} className="hidden" />
             <button onClick={triggerFileSelect} className="bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2">
                 <UploadIcon />
                 <span>Upload</span>

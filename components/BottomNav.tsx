@@ -51,20 +51,21 @@ const BottomNav: React.FC<BottomNavProps> = ({ activeView, onNavigate, theme }) 
       className="z-50" 
       style={{ 
         position: 'fixed',
-        bottom: '-15px',
+        bottom: '-8px',
         left: 0,
         right: 0,
-        paddingBottom: 'max(env(safe-area-inset-bottom, 25px), 25px)',
+        paddingBottom: 'max(env(safe-area-inset-bottom, 18px), 18px)',
         paddingTop: '8px',
         minHeight: 'calc(70px + env(safe-area-inset-bottom, 0px))',
         backgroundColor: theme === 'dark' ? 'rgba(15, 23, 42, 1)' : 'rgba(255, 255, 255, 1)',
-        transform: 'translateZ(0)',
-        WebkitTransform: 'translateZ(0)',
+        transform: 'translateZ(0) translateY(0)',
+        WebkitTransform: 'translateZ(0) translateY(0)',
         WebkitBackfaceVisibility: 'hidden',
         backfaceVisibility: 'hidden',
         WebkitPerspective: '1000px',
         perspective: '1000px',
-        zIndex: 9999
+        zIndex: 9999,
+        willChange: 'transform'
       }}
     >
       {/* Background with blur effect */}

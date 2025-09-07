@@ -1,7 +1,10 @@
-import { supabase } from './supabaseClient';
+import { Purchases, PACKAGE_TYPE, PurchasesOffering } from '@revenuecat/purchases-capacitor';
 import type { SubscriptionPlan, UserSubscription, SubscriptionStatus } from '../types';
 
-// Subscription Plans Configuration
+// RevenueCat API Key from environment variables
+const REVENUECAT_API_KEY = import.meta.env.VITE_REVENUECAT_API_KEY;
+
+// Subscription Plans Configuration (matches your existing plans)
 export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
   {
     id: 'quick-spark',
@@ -39,7 +42,28 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
 const SUBSCRIPTION_STORAGE_KEY = 'tattoo_app_subscription';
 const DEFAULT_FREE_CREDITS = 5;
 
-// Generate anonymous user ID
+// Initialize RevenueCat
+export const initializeRevenueCat = async (): Promise<void> => {
+  try {
+    if (!REVENUECAT_API_KEY || REVENUECAT_API_KEY === 'YOUR_API_KEY_HERE') {
+      console.warn('RevenueCat API key not configured. Add VITE_REVENUECAT_API_KEY to .env.local');
+      return;
+    }
+
+    // Initialize RevenueCat with your API key
+    await Purchases.configure({ 
+      apiKey: REVENUECAT_API_KEY,
+      appUserID: getOrCreateUserId() // Optional: set user ID
+    });
+    
+    console.log('RevenueCat initialized successfully');
+  } catch (error) {
+    console.error('Failed to initialize RevenueCat:', error);
+    // Graceful fallback - continue without RevenueCat
+  }
+};
+
+// Generate anonymous user ID (same as before)
 const getOrCreateUserId = (): string => {
   let userId = localStorage.getItem('tattoo_app_user_id');
   if (!userId) {
@@ -49,7 +73,7 @@ const getOrCreateUserId = (): string => {
   return userId;
 };
 
-// Initialize user subscription in localStorage
+// Initialize user subscription in localStorage (same as before)
 const initializeUserSubscription = (): UserSubscription => {
   const userId = getOrCreateUserId();
   const defaultSubscription: UserSubscription = {
@@ -80,7 +104,6 @@ export const getUserSubscription = (): UserSubscription => {
     const subscription = JSON.parse(stored);
     
     // Safety check: Prevent users from having excessive free credits
-    // Max free credits should never exceed 50 (likely from testing)
     if (subscription.currentFreeCredits > 50 && subscription.subscriptionStatus === 'FREE') {
       console.warn('Detected excessive free credits, resetting to default');
       subscription.currentFreeCredits = DEFAULT_FREE_CREDITS;
@@ -93,7 +116,7 @@ export const getUserSubscription = (): UserSubscription => {
   }
 };
 
-// Update user subscription in localStorage and sync to Supabase
+// Update user subscription in localStorage
 export const updateUserSubscription = async (updates: Partial<UserSubscription>): Promise<UserSubscription> => {
   const current = getUserSubscription();
   const updated: UserSubscription = {
@@ -104,76 +127,123 @@ export const updateUserSubscription = async (updates: Partial<UserSubscription>)
   
   // Save to localStorage
   localStorage.setItem(SUBSCRIPTION_STORAGE_KEY, JSON.stringify(updated));
-  
-  // Sync to Supabase if available
-  if (supabase) {
-    try {
-      await supabase
-        .from('user_subscriptions')
-        .upsert({
-          user_id: updated.userId,
-          subscription_status: updated.subscriptionStatus,
-          current_free_credits: updated.currentFreeCredits,
-          current_subscription_credits: updated.currentSubscriptionCredits,
-          subscription_start_date: updated.subscriptionStartDate,
-          subscription_end_date: updated.subscriptionEndDate,
-          last_credit_reset_date: updated.lastCreditResetDate,
-          product_id: updated.productId,
-          is_active: updated.isActive,
-          last_updated: updated.lastUpdated
-        });
-    } catch (error) {
-      console.warn('Failed to sync subscription to Supabase:', error);
-    }
-  }
-  
   return updated;
 };
 
-// Sync subscription from Supabase to localStorage
-export const syncSubscriptionFromSupabase = async (): Promise<UserSubscription> => {
-  const localSubscription = getUserSubscription();
-  
-  if (!supabase) {
-    return localSubscription;
-  }
-  
+// Get available offerings from RevenueCat
+export const getAvailableOfferings = async (): Promise<PurchasesOffering[]> => {
   try {
-    const { data, error } = await supabase
-      .from('user_subscriptions')
-      .select('*')
-      .eq('user_id', localSubscription.userId)
-      .single();
+    const offerings = await Purchases.getOfferings();
     
-    if (error || !data) {
-      // If no record exists in Supabase, create one
-      await updateUserSubscription({});
-      return localSubscription;
+    if (offerings.current) {
+      // Return available packages
+      return [offerings.current];
     }
     
-    // If Supabase data is newer, update localStorage
-    const supabaseSubscription: UserSubscription = {
-      userId: data.user_id,
-      subscriptionStatus: data.subscription_status,
-      currentFreeCredits: data.current_free_credits,
-      currentSubscriptionCredits: data.current_subscription_credits,
-      subscriptionStartDate: data.subscription_start_date,
-      subscriptionEndDate: data.subscription_end_date,
-      lastCreditResetDate: data.last_credit_reset_date,
-      productId: data.product_id,
-      isActive: data.is_active,
-      lastUpdated: data.last_updated
-    };
+    return [];
+  } catch (error) {
+    console.error('Failed to get offerings:', error);
+    return [];
+  }
+};
+
+// Purchase a subscription using RevenueCat
+export const purchaseSubscription = async (productId: string): Promise<{ success: boolean; error?: string }> => {
+  try {
+    // Get current offerings
+    const offerings = await Purchases.getOfferings();
     
-    if (new Date(supabaseSubscription.lastUpdated) > new Date(localSubscription.lastUpdated)) {
-      localStorage.setItem(SUBSCRIPTION_STORAGE_KEY, JSON.stringify(supabaseSubscription));
-      return supabaseSubscription;
+    if (!offerings.current) {
+      return { success: false, error: 'No subscription offerings available' };
+    }
+    
+    // Find the package that matches our product ID
+    const targetPackage = offerings.current.availablePackages.find(
+      pkg => pkg.product.identifier === productId
+    );
+    
+    if (!targetPackage) {
+      return { success: false, error: 'Subscription plan not found' };
+    }
+    
+    // Purchase the package - this will trigger Apple's payment flow
+    const purchaserInfo = await Purchases.purchasePackage({ aPackage: targetPackage });
+    
+    // Check if the purchase was successful
+    if (purchaserInfo.customerInfo.entitlements.active) {
+      // Update local subscription state
+      const plan = SUBSCRIPTION_PLANS.find(p => p.productId === productId);
+      if (plan) {
+        await updateUserSubscription({
+          subscriptionStatus: plan.id === 'quick-spark' ? 'QUICK_SPARK' : 'DEEP_DIVE',
+          currentSubscriptionCredits: plan.credits,
+          subscriptionStartDate: new Date().toISOString(),
+          subscriptionEndDate: null, // RevenueCat manages this
+          lastCreditResetDate: new Date().toISOString(),
+          productId: productId,
+          isActive: true
+        });
+      }
+      
+      return { success: true };
+    } else {
+      return { success: false, error: 'Purchase was not activated' };
+    }
+    
+  } catch (error: any) {
+    console.error('Purchase failed:', error);
+    
+    // Handle specific error cases
+    if (error.code === 'PURCHASE_CANCELLED_ERROR') {
+      return { success: false, error: 'Purchase was cancelled' };
+    } else if (error.code === 'PURCHASE_NOT_ALLOWED_ERROR') {
+      return { success: false, error: 'Purchases not allowed on this device' };
+    } else if (error.code === 'PAYMENT_PENDING_ERROR') {
+      return { success: false, error: 'Payment is pending approval' };
+    }
+    
+    return { success: false, error: error.message || 'Purchase failed' };
+  }
+};
+
+// Check current subscription status from RevenueCat
+export const syncSubscriptionStatus = async (): Promise<UserSubscription> => {
+  try {
+    const purchaserInfo = await Purchases.getCustomerInfo();
+    const localSubscription = getUserSubscription();
+    
+    // Check if user has active entitlements
+    const hasActiveSubscription = Object.keys(purchaserInfo.entitlements.active).length > 0;
+    
+    if (hasActiveSubscription) {
+      // User has active subscription - sync the status
+      const activeEntitlement = Object.values(purchaserInfo.entitlements.active)[0];
+      const plan = SUBSCRIPTION_PLANS.find(p => p.productId === activeEntitlement.productIdentifier);
+      
+      if (plan) {
+        return await updateUserSubscription({
+          subscriptionStatus: plan.id === 'quick-spark' ? 'QUICK_SPARK' : 'DEEP_DIVE',
+          currentSubscriptionCredits: plan.credits,
+          productId: plan.productId,
+          isActive: true,
+          subscriptionEndDate: activeEntitlement.expirationDate || null
+        });
+      }
+    } else {
+      // No active subscription
+      if (localSubscription.isActive) {
+        return await updateUserSubscription({
+          subscriptionStatus: 'EXPIRED',
+          currentSubscriptionCredits: 0,
+          isActive: false
+        });
+      }
     }
     
     return localSubscription;
   } catch (error) {
-    console.warn('Failed to sync subscription from Supabase:', error);
-    return localSubscription;
+    console.error('Failed to sync subscription status:', error);
+    return getUserSubscription();
   }
 };
 
@@ -181,19 +251,9 @@ export const syncSubscriptionFromSupabase = async (): Promise<UserSubscription> 
 const checkAndResetCredits = (subscription: UserSubscription): UserSubscription => {
   const now = new Date();
   const lastReset = subscription.lastCreditResetDate ? new Date(subscription.lastCreditResetDate) : null;
-  const subscriptionEnd = subscription.subscriptionEndDate ? new Date(subscription.subscriptionEndDate) : null;
   
-  // Check if subscription has expired
-  if (subscriptionEnd && now > subscriptionEnd) {
-    return {
-      ...subscription,
-      subscriptionStatus: 'EXPIRED',
-      currentSubscriptionCredits: 0,
-      isActive: false
-    };
-  }
-  
-  // Check if credits need to be reset for active subscription
+  // For RevenueCat, we rely on their subscription management
+  // But we still handle credit resets for active subscriptions
   if (subscription.isActive && subscription.subscriptionStatus !== 'FREE' && lastReset) {
     const plan = SUBSCRIPTION_PLANS.find(p => p.productId === subscription.productId);
     if (plan) {
@@ -233,7 +293,7 @@ export const canGenerate = (): boolean => {
   return getUserRemainingCredits() > 0;
 };
 
-// Consume a credit for generation (with priority: free credits first)
+// Consume a credit for generation
 export const consumeCredit = async (): Promise<{ success: boolean; remainingCredits: number }> => {
   const subscription = getUserSubscription();
   
@@ -268,47 +328,6 @@ export const consumeCredit = async (): Promise<{ success: boolean; remainingCred
   return { success: false, remainingCredits: 0 };
 };
 
-// Handle successful Apple IAP purchase
-export const userDidPurchaseSubscription = async (
-  userId: string, 
-  productId: string, 
-  transactionId: string, 
-  expirationDate: string
-): Promise<UserSubscription> => {
-  const plan = SUBSCRIPTION_PLANS.find(p => p.productId === productId);
-  if (!plan) {
-    throw new Error(`Unknown product ID: ${productId}`);
-  }
-  
-  const now = new Date();
-  const endDate = new Date(expirationDate);
-  
-  return await updateUserSubscription({
-    subscriptionStatus: plan.id === 'quick-spark' ? 'QUICK_SPARK' : 'DEEP_DIVE',
-    currentSubscriptionCredits: plan.credits,
-    subscriptionStartDate: now.toISOString(),
-    subscriptionEndDate: endDate.toISOString(),
-    lastCreditResetDate: now.toISOString(),
-    productId: productId,
-    isActive: true
-  });
-};
-
-// Handle subscription cancellation/expiration
-export const handleSubscriptionExpiration = async (): Promise<UserSubscription> => {
-  return await updateUserSubscription({
-    subscriptionStatus: 'EXPIRED',
-    currentSubscriptionCredits: 0,
-    isActive: false
-  });
-};
-
-// Get subscription status
-export const getSubscriptionStatus = (): SubscriptionStatus => {
-  const subscription = getUserSubscription();
-  return subscription.subscriptionStatus;
-};
-
 // Check if user has active subscription
 export const hasActiveSubscription = (): boolean => {
   const subscription = getUserSubscription();
@@ -323,30 +342,8 @@ export const getCurrentSubscriptionPlan = (): SubscriptionPlan | null => {
   return SUBSCRIPTION_PLANS.find(plan => plan.productId === subscription.productId) || null;
 };
 
-// Initialize subscription service
+// Initialize RevenueCat service
 export const initializeSubscriptionService = async (): Promise<UserSubscription> => {
-  return await syncSubscriptionFromSupabase();
-};
-
-// Apple IAP Integration via RevenueCat
-export const initiateAppleIAP = async (productId: string): Promise<{ success: boolean; transactionId?: string; error?: string }> => {
-  try {
-    // Import RevenueCat service
-    const { purchaseSubscription } = await import('./revenueCatService');
-    
-    // Use RevenueCat to handle the real purchase
-    const result = await purchaseSubscription(productId);
-    
-    return {
-      success: result.success,
-      error: result.error,
-      transactionId: result.success ? `revenuecat_${Date.now()}` : undefined
-    };
-  } catch (error) {
-    console.error('RevenueCat purchase failed:', error);
-    return { 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Purchase failed' 
-    };
-  }
+  await initializeRevenueCat();
+  return await syncSubscriptionStatus();
 };
