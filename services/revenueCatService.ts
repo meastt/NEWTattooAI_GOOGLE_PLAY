@@ -142,6 +142,10 @@ export const updateUserSubscription = async (updates: Partial<UserSubscription>)
 // Get available offerings from RevenueCat
 export const getAvailableOfferings = async (): Promise<PurchasesOffering[]> => {
   try {
+    if (!isRevenueCatConfigured) {
+      await initializeRevenueCat();
+    }
+    
     const offerings = await Purchases.getOfferings();
     
     if (offerings.current) {
@@ -159,6 +163,11 @@ export const getAvailableOfferings = async (): Promise<PurchasesOffering[]> => {
 // Purchase a subscription using RevenueCat
 export const purchaseSubscription = async (productId: string): Promise<{ success: boolean; error?: string }> => {
   try {
+    // Ensure RevenueCat is configured before making purchase
+    if (!isRevenueCatConfigured) {
+      await initializeRevenueCat();
+    }
+    
     // Get current offerings
     const offerings = await Purchases.getOfferings();
     
@@ -218,6 +227,11 @@ export const purchaseSubscription = async (productId: string): Promise<{ success
 // Check current subscription status from RevenueCat
 export const syncSubscriptionStatus = async (): Promise<UserSubscription> => {
   try {
+    // Ensure RevenueCat is configured before syncing
+    if (!isRevenueCatConfigured) {
+      await initializeRevenueCat();
+    }
+    
     const purchaserInfo = await Purchases.getCustomerInfo();
     const localSubscription = getUserSubscription();
     

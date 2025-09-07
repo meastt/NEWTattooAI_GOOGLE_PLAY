@@ -13,25 +13,22 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ showBackButton, onBack, theme, onUpgradeClick }) => {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 header-safe" style={{ 
-      transform: 'translateY(12px) translateZ(0)',
+    <header style={{ 
+      position: 'fixed',
+      top: '12px',
+      left: '0px',
+      right: '0px',
+      width: '100vw',
       paddingTop: 'max(env(safe-area-inset-top, 0px), 30px)',
       backgroundColor: 'rgba(0,0,0,0.1)',
-      willChange: 'transform',
+      zIndex: 9999,
+      transform: 'translate3d(0, 0, 0)',
+      WebkitTransform: 'translate3d(0, 0, 0)',
       backfaceVisibility: 'hidden',
       WebkitBackfaceVisibility: 'hidden',
-      position: 'fixed',
-      WebkitTransform: 'translateY(12px) translateZ(0)',
-      transformStyle: 'preserve-3d',
-      WebkitTransformStyle: 'preserve-3d',
-      isolation: 'isolate',
-      contain: 'layout style paint',
-      WebkitPerspective: '1000px',
-      perspective: '1000px',
-      zIndex: 9999,
-      top: 0,
-      left: 0,
-      right: 0
+      contain: 'strict',
+      willChange: 'auto',
+      isolation: 'isolate'
     }}>
       <div className={`backdrop-blur-md border-b transition-all duration-300 ${
         theme === 'dark' 
