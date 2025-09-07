@@ -14,8 +14,8 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ showBackButton, onBack, theme, onUpgradeClick }) => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 header-safe" style={{ 
-      transform: 'translateY(-2px)',
-      paddingTop: 'max(env(safe-area-inset-top, 5px), 40px)',
+      transform: 'translateY(6px)',
+      paddingTop: 'max(env(safe-area-inset-top, 0px), 35px)',
       backgroundColor: 'rgba(0,0,0,0.1)',
       willChange: 'transform',
       backfaceVisibility: 'hidden'
