@@ -65,7 +65,14 @@ const BottomNav: React.FC<BottomNavProps> = ({ activeView, onNavigate, theme }) 
         WebkitPerspective: '1000px',
         perspective: '1000px',
         zIndex: 9999,
-        willChange: 'transform'
+        willChange: 'transform',
+        transformStyle: 'preserve-3d',
+        WebkitTransformStyle: 'preserve-3d',
+        isolation: 'isolate',
+        contain: 'layout style paint',
+        WebkitOverflowScrolling: 'touch',
+        bottom: '-8px',
+        pointerEvents: 'auto'
       }}
     >
       {/* Background with blur effect */}

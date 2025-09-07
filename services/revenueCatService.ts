@@ -42,9 +42,17 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
 const SUBSCRIPTION_STORAGE_KEY = 'tattoo_app_subscription';
 const DEFAULT_FREE_CREDITS = 5;
 
+// Track if RevenueCat has been configured to prevent double initialization
+let isRevenueCatConfigured = false;
+
 // Initialize RevenueCat
 export const initializeRevenueCat = async (): Promise<void> => {
   try {
+    if (isRevenueCatConfigured) {
+      console.log('RevenueCat already configured, skipping initialization');
+      return;
+    }
+
     if (!REVENUECAT_API_KEY || REVENUECAT_API_KEY === 'YOUR_API_KEY_HERE') {
       console.warn('RevenueCat API key not configured. Add VITE_REVENUECAT_API_KEY to .env.local');
       return;
@@ -56,6 +64,7 @@ export const initializeRevenueCat = async (): Promise<void> => {
       appUserID: getOrCreateUserId() // Optional: set user ID
     });
     
+    isRevenueCatConfigured = true;
     console.log('RevenueCat initialized successfully');
   } catch (error) {
     console.error('Failed to initialize RevenueCat:', error);
@@ -342,8 +351,7 @@ export const getCurrentSubscriptionPlan = (): SubscriptionPlan | null => {
   return SUBSCRIPTION_PLANS.find(plan => plan.productId === subscription.productId) || null;
 };
 
-// Initialize RevenueCat service
+// Initialize RevenueCat service (assumes RevenueCat is already initialized)
 export const initializeSubscriptionService = async (): Promise<UserSubscription> => {
-  await initializeRevenueCat();
   return await syncSubscriptionStatus();
 };

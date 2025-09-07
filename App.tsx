@@ -18,6 +18,7 @@ import SmartConversionModal from './components/SmartConversionModal';
 import RatingPrompt from './components/RatingPrompt';
 import { initializeCreditService } from './services/creditService';
 import { initializeSubscriptionService } from './services/subscriptionService';
+import { initializeRevenueCat } from './services/revenueCatService';
 
 type Theme = 'light' | 'dark';
 
@@ -43,8 +44,17 @@ const App: React.FC = () => {
     // Apply theme class to document element for Tailwind dark mode
     document.documentElement.classList.toggle('dark', theme === 'dark');
     // Initialize services on app start
-    initializeCreditService();
-    initializeSubscriptionService();
+    const initializeServices = async () => {
+      try {
+        await initializeRevenueCat();
+        await initializeCreditService();
+        await initializeSubscriptionService();
+        console.log('All services initialized successfully');
+      } catch (error) {
+        console.error('Failed to initialize services:', error);
+      }
+    };
+    initializeServices();
   }, [theme]);
 
   const toggleTheme = () => {
