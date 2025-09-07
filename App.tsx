@@ -28,6 +28,7 @@ const App: React.FC = () => {
   const [showSmartConversion, setShowSmartConversion] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showRatingPrompt, setShowRatingPrompt] = useState(false);
+  const [isServicesInitialized, setIsServicesInitialized] = useState(false);
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window === 'undefined') {
       return 'dark';
@@ -50,8 +51,10 @@ const App: React.FC = () => {
         await initializeCreditService();
         await initializeSubscriptionService();
         console.log('All services initialized successfully');
+        setIsServicesInitialized(true);
       } catch (error) {
         console.error('Failed to initialize services:', error);
+        setIsServicesInitialized(true); // Allow app to continue even if services fail
       }
     };
     initializeServices();
@@ -112,7 +115,12 @@ const App: React.FC = () => {
   const showHeader = !['home', 'create', 'saved'].includes(currentView);
 
   return (
-    <div className={`min-h-screen font-sans flex flex-col relative overflow-hidden ${theme}`}>
+    <div className={`min-h-screen font-sans relative overflow-hidden ${theme}`} style={{
+      position: 'relative',
+      width: '100vw',
+      height: '100vh',
+      overflow: 'hidden'
+    }}>
       {/* Dynamic Background */}
       <div className="fixed inset-0 -z-10">
         <div className={`absolute inset-0 transition-all duration-1000 ${
@@ -156,7 +164,13 @@ const App: React.FC = () => {
           onUpgradeClick={() => setShowUpgradeModal(true)}
         />
       )}
-      <main className="flex-grow container mx-auto px-4 py-8 relative z-10" style={{ paddingTop: 'calc(5.5rem + env(safe-area-inset-top, 0px))', paddingBottom: 'calc(8rem + env(safe-area-inset-bottom, 0px))' }}>
+      <main className="container mx-auto px-4 py-8 relative z-10" style={{ 
+        paddingTop: 'calc(5.5rem + env(safe-area-inset-top, 0px))', 
+        paddingBottom: 'calc(8rem + env(safe-area-inset-bottom, 0px))',
+        height: '100vh',
+        overflowY: 'auto',
+        position: 'relative'
+      }}>
         {renderContent()}
       </main>
       <div className="md:hidden">
@@ -168,6 +182,7 @@ const App: React.FC = () => {
         isOpen={showUpgradeModal}
         onClose={() => setShowUpgradeModal(false)}
         theme={theme}
+        isServicesReady={isServicesInitialized}
       />
 
       {/* Onboarding Tour */}

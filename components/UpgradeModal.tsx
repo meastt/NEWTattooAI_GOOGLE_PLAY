@@ -7,9 +7,10 @@ interface UpgradeModalProps {
   isOpen: boolean;
   onClose: () => void;
   theme: 'light' | 'dark';
+  isServicesReady: boolean;
 }
 
-const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose, theme }) => {
+const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose, theme, isServicesReady }) => {
   const [isProcessing, setIsProcessing] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [selectedPlan, setSelectedPlan] = React.useState<string | null>(null);
@@ -17,6 +18,11 @@ const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose, theme }) =
   if (!isOpen) return null;
 
   const handleUpgrade = async (productId: string) => {
+    if (!isServicesReady) {
+      setError('Services are still initializing. Please wait a moment and try again.');
+      return;
+    }
+
     setIsProcessing(true);
     setError(null);
     setSelectedPlan(productId);
@@ -159,9 +165,9 @@ const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose, theme }) =
                 {/* Subscribe Button */}
                 <button
                   onClick={() => handleUpgrade(plan.productId)}
-                  disabled={isProcessing}
+                  disabled={isProcessing || !isServicesReady}
                   className={`w-full py-3 px-4 rounded-xl font-bold text-white transition-all duration-300 ${
-                    isProcessing && selectedPlan === plan.productId
+                    (isProcessing && selectedPlan === plan.productId) || !isServicesReady
                       ? 'bg-slate-400 cursor-not-allowed'
                       : 'bg-gradient-to-r from-ink-500 to-neon-500 hover:from-ink-600 hover:to-neon-600 transform hover:scale-105 shadow-lg hover:shadow-xl'
                   }`}
@@ -170,6 +176,11 @@ const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose, theme }) =
                     <div className="flex items-center justify-center space-x-2">
                       <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                       <span>Processing...</span>
+                    </div>
+                  ) : !isServicesReady ? (
+                    <div className="flex items-center justify-center space-x-2">
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      <span>Initializing...</span>
                     </div>
                   ) : (
                     `Subscribe to ${plan.name}`

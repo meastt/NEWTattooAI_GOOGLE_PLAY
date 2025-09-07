@@ -14,21 +14,16 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ showBackButton, onBack, theme, onUpgradeClick }) => {
   return (
     <header style={{ 
-      position: 'fixed',
-      top: '12px',
-      left: '0px',
-      right: '0px',
+      position: 'absolute',
+      top: 'calc(12px + env(safe-area-inset-top, 0px))',
+      left: '0',
+      right: '0',
       width: '100vw',
-      paddingTop: 'max(env(safe-area-inset-top, 0px), 30px)',
+      height: 'auto',
+      paddingTop: '30px',
       backgroundColor: 'rgba(0,0,0,0.1)',
       zIndex: 9999,
-      transform: 'translate3d(0, 0, 0)',
-      WebkitTransform: 'translate3d(0, 0, 0)',
-      backfaceVisibility: 'hidden',
-      WebkitBackfaceVisibility: 'hidden',
-      contain: 'strict',
-      willChange: 'auto',
-      isolation: 'isolate'
+      pointerEvents: 'auto'
     }}>
       <div className={`backdrop-blur-md border-b transition-all duration-300 ${
         theme === 'dark' 

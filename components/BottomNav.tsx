@@ -48,23 +48,17 @@ const NavItem: React.FC<{
 const BottomNav: React.FC<BottomNavProps> = ({ activeView, onNavigate, theme }) => {
   return (
     <nav style={{ 
-        position: 'fixed',
-        bottom: '-8px',
-        left: '0px',
-        right: '0px',
+        position: 'absolute',
+        bottom: 'calc(-8px - env(safe-area-inset-bottom, 0px))',
+        left: '0',
+        right: '0',
         width: '100vw',
+        height: 'calc(70px + env(safe-area-inset-bottom, 18px))',
         paddingBottom: 'max(env(safe-area-inset-bottom, 18px), 18px)',
         paddingTop: '8px',
-        minHeight: 'calc(70px + env(safe-area-inset-bottom, 0px))',
         backgroundColor: theme === 'dark' ? 'rgba(15, 23, 42, 1)' : 'rgba(255, 255, 255, 1)',
         zIndex: 9999,
-        transform: 'translate3d(0, 0, 0)',
-        WebkitTransform: 'translate3d(0, 0, 0)',
-        backfaceVisibility: 'hidden',
-        WebkitBackfaceVisibility: 'hidden',
-        contain: 'strict',
-        willChange: 'auto',
-        isolation: 'isolate'
+        pointerEvents: 'auto'
       }}
     >
       {/* Background with blur effect */}
