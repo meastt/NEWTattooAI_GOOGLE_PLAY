@@ -48,13 +48,13 @@ const NavItem: React.FC<{
 const BottomNav: React.FC<BottomNavProps> = ({ activeView, onNavigate, theme }) => {
   return (
     <nav style={{ 
-        position: 'absolute',
-        bottom: 'calc(-8px - env(safe-area-inset-bottom, 0px))',
+        position: 'fixed',
+        bottom: '0',
         left: '0',
         right: '0',
         width: '100vw',
-        height: 'calc(70px + env(safe-area-inset-bottom, 18px))',
-        paddingBottom: 'max(env(safe-area-inset-bottom, 18px), 18px)',
+        height: 'calc(70px + env(safe-area-inset-bottom, 0px))',
+        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
         paddingTop: '8px',
         backgroundColor: theme === 'dark' ? 'rgba(15, 23, 42, 1)' : 'rgba(255, 255, 255, 1)',
         zIndex: 9999,

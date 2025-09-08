@@ -115,12 +115,7 @@ const App: React.FC = () => {
   const showHeader = !['home', 'create', 'saved'].includes(currentView);
 
   return (
-    <div className={`min-h-screen font-sans relative overflow-hidden ${theme}`} style={{
-      position: 'relative',
-      width: '100vw',
-      height: '100vh',
-      overflow: 'hidden'
-    }}>
+    <div className={`min-h-screen font-sans relative ${theme}`}>
       {/* Dynamic Background */}
       <div className="fixed inset-0 -z-10">
         <div className={`absolute inset-0 transition-all duration-1000 ${
@@ -148,31 +143,29 @@ const App: React.FC = () => {
         }`} style={{ backgroundSize: '20px 20px' }} />
       </div>
 
-      {showHeader && (
-        <Header
-          showBackButton={true}
-          onBack={() => navigateTo(getBackButtonTarget())}
-          theme={theme}
-          onUpgradeClick={() => setShowUpgradeModal(true)}
-        />
-      )}
-       {!showHeader && (
-        <Header
-          showBackButton={false}
-          onBack={() => {}}
-          theme={theme}
-          onUpgradeClick={() => setShowUpgradeModal(true)}
-        />
-      )}
-      <main className="container mx-auto px-4 py-8 relative z-10" style={{ 
-        paddingTop: 'calc(5.5rem + env(safe-area-inset-top, 0px))', 
-        paddingBottom: 'calc(8rem + env(safe-area-inset-bottom, 0px))',
-        height: '100vh',
-        overflowY: 'auto',
-        position: 'relative'
-      }}>
-        {renderContent()}
+      {/* Header - Always show but with different back button state */}
+      <Header
+        showBackButton={showHeader}
+        onBack={() => navigateTo(getBackButtonTarget())}
+        theme={theme}
+        onUpgradeClick={() => setShowUpgradeModal(true)}
+      />
+      
+      {/* Main Content */}
+      <main 
+        className="relative z-10" 
+        style={{ 
+          paddingTop: 'calc(80px + env(safe-area-inset-top, 0px))',
+          paddingBottom: 'calc(70px + env(safe-area-inset-bottom, 0px))',
+          minHeight: '100vh'
+        }}
+      >
+        <div className="container mx-auto px-4 py-8">
+          {renderContent()}
+        </div>
       </main>
+      
+      {/* Bottom Navigation - Mobile only */}
       <div className="md:hidden">
         <BottomNav activeView={getActiveTab()} onNavigate={navigateTo} theme={theme} />
       </div>

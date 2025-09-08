@@ -4,6 +4,8 @@ import type { SubscriptionPlan, UserSubscription, SubscriptionStatus } from '../
 // RevenueCat API Key from environment variables
 const REVENUECAT_API_KEY = import.meta.env.VITE_REVENUECAT_API_KEY;
 
+// RevenueCat API Key - will be baked into build by Vite config
+
 // Subscription Plans Configuration (matches your existing plans)
 export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
   {
@@ -53,6 +55,14 @@ export const initializeRevenueCat = async (): Promise<void> => {
       return;
     }
 
+    // Debug: Log the API key status
+    console.log('RevenueCat API Key Status:', {
+      hasKey: !!REVENUECAT_API_KEY,
+      keyLength: REVENUECAT_API_KEY?.length || 0,
+      keyPrefix: REVENUECAT_API_KEY?.substring(0, 10) || 'none',
+      isPlaceholder: REVENUECAT_API_KEY === 'YOUR_API_KEY_HERE'
+    });
+
     if (!REVENUECAT_API_KEY || REVENUECAT_API_KEY === 'YOUR_API_KEY_HERE') {
       console.warn('RevenueCat API key not configured. Add VITE_REVENUECAT_API_KEY to .env.local');
       return;
@@ -65,7 +75,7 @@ export const initializeRevenueCat = async (): Promise<void> => {
     });
     
     isRevenueCatConfigured = true;
-    console.log('RevenueCat initialized successfully');
+    console.log('RevenueCat initialized successfully with key:', REVENUECAT_API_KEY.substring(0, 10) + '...');
   } catch (error) {
     console.error('Failed to initialize RevenueCat:', error);
     throw error; // Now that plugin is installed, don't fail silently
