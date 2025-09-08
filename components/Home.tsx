@@ -40,12 +40,12 @@ const Home: React.FC = () => {
   return (
     <div className="animate-fade-in">
       {/* Hero Section */}
-      <div className="text-center mb-8 relative">
+      <div className="text-center mb-0 relative">
         <div className="absolute inset-0 -z-10">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-ink-500/10 to-neon-500/10 rounded-full blur-3xl" />
         </div>
         
-        <h1 className="text-5xl md:text-6xl font-display font-bold mb-6">
+        <h1 className="text-5xl md:text-6xl font-display font-bold mb-3">
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-ink-600 via-ink-500 to-neon-500">
             Inspiration
           </span>
@@ -53,7 +53,7 @@ const Home: React.FC = () => {
           <span className="text-slate-900 dark:text-white">Gallery</span>
         </h1>
         
-        <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed mb-8">
+        <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed mb-4">
           Discover unique designs crafted by AI to spark your next tattoo idea. 
           Each piece is a masterpiece waiting to become part of your story.
         </p>

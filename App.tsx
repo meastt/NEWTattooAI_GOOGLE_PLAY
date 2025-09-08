@@ -163,8 +163,8 @@ const App: React.FC = () => {
       <main 
         className="relative z-10" 
         style={{ 
-          paddingTop: 'calc(110px + env(safe-area-inset-top, 0px) + 40px)', // Account for new header height
-          paddingBottom: 'calc(70px + env(safe-area-inset-bottom, 0px) + 20px)', // Account for bottom nav
+          paddingTop: 'calc(30px + env(safe-area-inset-top, 0px) + 20px)', // Much more reduced padding to move content up significantly
+          paddingBottom: 'calc(70px + env(safe-area-inset-bottom, 0px) + 80px)', // Account for much more extended bottom nav
           minHeight: 'calc(100vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 40px)',
           overflowX: 'hidden',
           maxWidth: '100vw'

@@ -20,15 +20,18 @@ const Header: React.FC<HeaderProps> = ({ showBackButton, onBack, theme, onUpgrad
           : 'bg-white/90 border-slate-200/50'
       }`}
       style={{ 
-        minHeight: '110px', // Use minHeight instead of fixed height
-        top: '0px', // Start from very top
-        left: '0',
-        right: '0',
-        position: 'fixed',
-        paddingTop: 'calc(env(safe-area-inset-top, 0px) + 40px)', // Add more breathing room
+        minHeight: '90px', // Reduced height to give more space for content
+        top: '0px !important', // Start from very top
+        left: '0 !important',
+        right: '0 !important',
+        position: 'fixed !important',
+        width: '100% !important',
+        paddingTop: 'calc(env(safe-area-inset-top, 0px) + 20px)', // Reduced breathing room
         paddingBottom: '10px', // Add bottom padding for flexibility
         transform: 'translateZ(0)', // Force hardware acceleration
-        willChange: 'transform' // Optimize for animations
+        willChange: 'transform', // Optimize for animations
+        backfaceVisibility: 'hidden',
+        WebkitBackfaceVisibility: 'hidden'
       }}
     >
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
