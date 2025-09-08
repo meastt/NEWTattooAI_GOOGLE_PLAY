@@ -18,7 +18,7 @@ import SmartConversionModal from './components/SmartConversionModal';
 import RatingPrompt from './components/RatingPrompt';
 import FloatingUpgradeButton from './components/FloatingUpgradeButton';
 import { initializeCreditService } from './services/creditService';
-import { initializeSubscriptionService, getUserRemainingCredits } from './services/subscriptionService';
+import { initializeSubscriptionService, getUserRemainingCredits, hasActiveSubscription } from './services/subscriptionService';
 import { initializeRevenueCat } from './services/revenueCatService';
 
 type Theme = 'light' | 'dark';
@@ -161,7 +161,7 @@ const App: React.FC = () => {
       <main 
         className="relative z-10" 
         style={{ 
-          paddingTop: '130px',
+          paddingTop: '130px', // Keep same visual spacing
           paddingBottom: '130px',
           minHeight: 'calc(100vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 40px)'
         }}
@@ -176,8 +176,8 @@ const App: React.FC = () => {
         <BottomNav activeView={getActiveTab()} onNavigate={navigateTo} theme={theme} />
       </div>
       
-      {/* Floating Upgrade Button - Show on most views */}
-      {!['settings', 'privacy', 'disclaimer'].includes(currentView) && (
+      {/* Floating Upgrade Button - Show on most views, hide for paid subscribers */}
+      {!['settings', 'privacy', 'disclaimer'].includes(currentView) && !hasActiveSubscription() && (
         <FloatingUpgradeButton 
           onUpgradeClick={() => setShowUpgradeModal(true)}
           theme={theme}

@@ -20,11 +20,12 @@ const Header: React.FC<HeaderProps> = ({ showBackButton, onBack, theme, onUpgrad
           : 'bg-white/90 border-slate-200/50'
       }`}
       style={{ 
-        height: '80px',
-        top: '30px',
+        height: '110px', // Extended height to cover space above
+        top: '0px', // Start from very top
         left: '0',
         right: '0',
-        position: 'fixed'
+        position: 'fixed',
+        paddingTop: '30px' // Add padding to push content down
       }}
     >
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
