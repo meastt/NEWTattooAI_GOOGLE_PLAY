@@ -161,8 +161,8 @@ const App: React.FC = () => {
       <main 
         className="relative z-10" 
         style={{ 
-          paddingTop: '120px',
-          paddingBottom: '110px',
+          paddingTop: '130px',
+          paddingBottom: '130px',
           minHeight: 'calc(100vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 40px)'
         }}
       >

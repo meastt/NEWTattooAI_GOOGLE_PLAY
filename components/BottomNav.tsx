@@ -49,7 +49,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ activeView, onNavigate, theme }) 
   return (
     <nav style={{ 
         position: 'fixed',
-        bottom: '20px',
+        bottom: '40px',
         left: '0',
         right: '0',
         width: '100%',

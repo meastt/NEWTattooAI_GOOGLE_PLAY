@@ -21,9 +21,10 @@ const Header: React.FC<HeaderProps> = ({ showBackButton, onBack, theme, onUpgrad
       }`}
       style={{ 
         height: '80px',
-        top: '20px',
+        top: '30px',
         left: '0',
-        right: '0'
+        right: '0',
+        position: 'fixed'
       }}
     >
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
