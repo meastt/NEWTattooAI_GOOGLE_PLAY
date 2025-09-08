@@ -65,7 +65,7 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
   };
 
   return (
-    <div className="max-w-4xl mx-auto animate-fade-in">
+    <div className="max-w-4xl mx-auto animate-fade-in" style={{ overflowX: 'hidden', maxWidth: '100%' }}>
       {/* Header */}
       <div className="text-center mb-12 relative">
         <div className="absolute inset-0 -z-10">

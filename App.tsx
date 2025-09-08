@@ -120,7 +120,9 @@ const App: React.FC = () => {
       paddingTop: 'calc(env(safe-area-inset-top, 0px) + 20px)',
       paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 20px)',
       paddingLeft: 'env(safe-area-inset-left, 0px)',
-      paddingRight: 'env(safe-area-inset-right, 0px)'
+      paddingRight: 'env(safe-area-inset-right, 0px)',
+      overflowX: 'hidden',
+      maxWidth: '100vw'
     }}>
       {/* Dynamic Background */}
       <div className="fixed inset-0 -z-10">
@@ -161,12 +163,14 @@ const App: React.FC = () => {
       <main 
         className="relative z-10" 
         style={{ 
-          paddingTop: '100px', // Reduced by 25% to bring content up
-          paddingBottom: '130px',
-          minHeight: 'calc(100vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 40px)'
+          paddingTop: 'calc(110px + env(safe-area-inset-top, 0px) + 40px)', // Account for new header height
+          paddingBottom: 'calc(70px + env(safe-area-inset-bottom, 0px) + 20px)', // Account for bottom nav
+          minHeight: 'calc(100vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 40px)',
+          overflowX: 'hidden',
+          maxWidth: '100vw'
         }}
       >
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-8" style={{ maxWidth: '100%', overflowX: 'hidden' }}>
           {renderContent()}
         </div>
       </main>

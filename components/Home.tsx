@@ -40,7 +40,7 @@ const Home: React.FC = () => {
   return (
     <div className="animate-fade-in">
       {/* Hero Section */}
-      <div className="text-center mb-16 relative">
+      <div className="text-center mb-8 relative">
         <div className="absolute inset-0 -z-10">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-ink-500/10 to-neon-500/10 rounded-full blur-3xl" />
         </div>
