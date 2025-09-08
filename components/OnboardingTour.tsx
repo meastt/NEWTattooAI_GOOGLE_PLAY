@@ -3,6 +3,7 @@ import { shouldShowOnboarding, completeOnboarding } from '../services/conversion
 
 interface OnboardingTourProps {
   onComplete: () => void;
+  onUpgradeClick?: () => void;
 }
 
 interface TourStep {
@@ -30,10 +31,16 @@ const TOUR_STEPS: TourStep[] = [
     description: "Generate original designs, get cover-up ideas, or visualize removals.",
     illustration: "🎯",
     benefit: "Explore every possibility"
+  },
+  {
+    title: "Don't Risk Permanent Regret 💎",
+    description: "For less than the cost of a fancy coffee, ensure your tattoo is exactly what you want before it's permanent.",
+    illustration: "☕",
+    benefit: "Peace of mind for life"
   }
 ];
 
-const OnboardingTour: React.FC<OnboardingTourProps> = ({ onComplete }) => {
+const OnboardingTour: React.FC<OnboardingTourProps> = ({ onComplete, onUpgradeClick }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -100,6 +107,21 @@ const OnboardingTour: React.FC<OnboardingTourProps> = ({ onComplete }) => {
               {step.benefit}
             </span>
           </div>
+
+          {/* Upgrade CTA for final step */}
+          {isLastStep && onUpgradeClick && (
+            <div className="mb-6">
+              <button
+                onClick={onUpgradeClick}
+                className="w-full bg-gradient-to-r from-neon-500 to-ink-500 hover:from-neon-600 hover:to-ink-600 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 border-2 border-neon-300/50"
+              >
+                ✨ Start Your Premium Journey - $4.99/week ✨
+              </button>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
+                Less than your daily coffee ☕
+              </p>
+            </div>
+          )}
 
           {/* Navigation */}
           <div className="flex items-center justify-between">

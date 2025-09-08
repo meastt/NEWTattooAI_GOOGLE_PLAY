@@ -2,9 +2,10 @@ import { Purchases, PACKAGE_TYPE, PurchasesOffering } from '@revenuecat/purchase
 import type { SubscriptionPlan, UserSubscription, SubscriptionStatus } from '../types';
 
 // RevenueCat API Key from environment variables
-const REVENUECAT_API_KEY = import.meta.env.VITE_REVENUECAT_API_KEY;
+const REVENUECAT_API_KEY = import.meta.env.VITE_REVENUECAT_API_KEY || '';
 
-// RevenueCat API Key - will be baked into build by Vite config
+// Debug logging for environment variables (simplified)
+console.log('RevenueCat Service Loading...');
 
 // Subscription Plans Configuration (matches your existing plans)
 export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
@@ -55,30 +56,37 @@ export const initializeRevenueCat = async (): Promise<void> => {
       return;
     }
 
-    // Debug: Log the API key status
-    console.log('RevenueCat API Key Status:', {
+    // Check API key configuration
+    console.log('RevenueCat Configuration Check:', {
       hasKey: !!REVENUECAT_API_KEY,
-      keyLength: REVENUECAT_API_KEY?.length || 0,
-      keyPrefix: REVENUECAT_API_KEY?.substring(0, 10) || 'none',
-      isPlaceholder: REVENUECAT_API_KEY === 'YOUR_API_KEY_HERE'
+      keyLength: REVENUECAT_API_KEY.length,
+      keyPrefix: REVENUECAT_API_KEY ? REVENUECAT_API_KEY.substring(0, 10) : 'NO_KEY'
     });
 
     if (!REVENUECAT_API_KEY || REVENUECAT_API_KEY === 'YOUR_API_KEY_HERE') {
-      console.warn('RevenueCat API key not configured. Add VITE_REVENUECAT_API_KEY to .env.local');
-      return;
+      // In production, this should throw an error
+      const errorMsg = 'RevenueCat API key not configured. The key is: ' + (REVENUECAT_API_KEY || 'undefined');
+      console.error(errorMsg);
+      throw new Error(errorMsg);
     }
 
     // Initialize RevenueCat with your API key
     await Purchases.configure({ 
       apiKey: REVENUECAT_API_KEY,
-      appUserID: getOrCreateUserId() // Optional: set user ID
+      appUserID: getOrCreateUserId(),
+      // Enable automatic collection of Apple Search Ads attribution
+      shouldShowInAppMessagesAutomatically: true,
+      // Enable automatic collection of subscriber attributes
+      shouldAutomaticallySyncSubscriberAttributes: true
     });
     
     isRevenueCatConfigured = true;
-    console.log('RevenueCat initialized successfully with key:', REVENUECAT_API_KEY.substring(0, 10) + '...');
-  } catch (error) {
+    console.log('RevenueCat initialized successfully');
+  } catch (error: any) {
     console.error('Failed to initialize RevenueCat:', error);
-    throw error; // Now that plugin is installed, don't fail silently
+    console.error('API Key used:', REVENUECAT_API_KEY);
+    // Re-throw the error so you can see it in production
+    throw error;
   }
 };
 

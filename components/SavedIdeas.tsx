@@ -28,15 +28,45 @@ const SavedIdeas: React.FC<SavedIdeasProps> = ({ onNavigate }) => {
     fetchIdeas();
   }, []);
 
-  const handleExportClick = (idea: Idea) => {
+  const handleExportClick = async (idea: Idea) => {
     if (!idea.image_data_url) return;
-    const link = document.createElement('a');
-    link.href = idea.image_data_url;
-    const fileName = idea.prompt.substring(0, 30).replace(/\s+/g, '_').toLowerCase() || 'saved-idea';
-    link.download = `${fileName}.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    
+    try {
+      // Convert data URL to blob
+      const response = await fetch(idea.image_data_url);
+      const blob = await response.blob();
+      
+      // Create file from blob
+      const fileName = idea.prompt.substring(0, 30).replace(/\s+/g, '_').toLowerCase() || 'saved-idea';
+      const file = new File([blob], `${fileName}.png`, { type: 'image/png' });
+      
+      if (navigator.share && navigator.canShare({ files: [file] })) {
+        // Use native share if available
+        await navigator.share({
+          files: [file],
+          title: 'My Tattoo Design from InkPreview',
+          text: `Check out this tattoo design: ${idea.prompt}`
+        });
+      } else {
+        // Fallback: download the image
+        const link = document.createElement('a');
+        link.href = idea.image_data_url;
+        link.download = `${fileName}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    } catch (error) {
+      console.error('Failed to export:', error);
+      // Fallback to download
+      const link = document.createElement('a');
+      link.href = idea.image_data_url;
+      const fileName = idea.prompt.substring(0, 30).replace(/\s+/g, '_').toLowerCase() || 'saved-idea';
+      link.download = `${fileName}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
   };
 
   return (

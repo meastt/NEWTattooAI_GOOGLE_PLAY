@@ -16,8 +16,9 @@ import UpgradeModal from './components/UpgradeModal';
 import OnboardingTour from './components/OnboardingTour';
 import SmartConversionModal from './components/SmartConversionModal';
 import RatingPrompt from './components/RatingPrompt';
+import FloatingUpgradeButton from './components/FloatingUpgradeButton';
 import { initializeCreditService } from './services/creditService';
-import { initializeSubscriptionService } from './services/subscriptionService';
+import { initializeSubscriptionService, getUserRemainingCredits } from './services/subscriptionService';
 import { initializeRevenueCat } from './services/revenueCatService';
 
 type Theme = 'light' | 'dark';
@@ -115,7 +116,12 @@ const App: React.FC = () => {
   const showHeader = !['home', 'create', 'saved'].includes(currentView);
 
   return (
-    <div className={`min-h-screen font-sans relative ${theme}`}>
+    <div className={`min-h-screen font-sans relative ${theme}`} style={{ 
+      paddingTop: 'calc(env(safe-area-inset-top, 0px) + 20px)',
+      paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 20px)',
+      paddingLeft: 'env(safe-area-inset-left, 0px)',
+      paddingRight: 'env(safe-area-inset-right, 0px)'
+    }}>
       {/* Dynamic Background */}
       <div className="fixed inset-0 -z-10">
         <div className={`absolute inset-0 transition-all duration-1000 ${
@@ -155,9 +161,9 @@ const App: React.FC = () => {
       <main 
         className="relative z-10" 
         style={{ 
-          paddingTop: 'calc(80px + env(safe-area-inset-top, 0px))',
-          paddingBottom: 'calc(70px + env(safe-area-inset-bottom, 0px))',
-          minHeight: '100vh'
+          paddingTop: '120px',
+          paddingBottom: '110px',
+          minHeight: 'calc(100vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 40px)'
         }}
       >
         <div className="container mx-auto px-4 py-8">
@@ -170,6 +176,15 @@ const App: React.FC = () => {
         <BottomNav activeView={getActiveTab()} onNavigate={navigateTo} theme={theme} />
       </div>
       
+      {/* Floating Upgrade Button - Show on most views */}
+      {!['settings', 'privacy', 'disclaimer'].includes(currentView) && (
+        <FloatingUpgradeButton 
+          onUpgradeClick={() => setShowUpgradeModal(true)}
+          theme={theme}
+          credits={getUserRemainingCredits()}
+        />
+      )}
+      
       {/* Upgrade Modal */}
       <UpgradeModal 
         isOpen={showUpgradeModal}
@@ -181,6 +196,7 @@ const App: React.FC = () => {
       {/* Onboarding Tour */}
       <OnboardingTour 
         onComplete={() => setShowOnboarding(false)}
+        onUpgradeClick={() => setShowUpgradeModal(true)}
       />
 
       {/* Smart Conversion Modal */}
