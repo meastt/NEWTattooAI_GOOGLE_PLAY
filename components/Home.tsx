@@ -40,12 +40,12 @@ const Home: React.FC = () => {
   return (
     <div className="animate-fade-in">
       {/* Hero Section */}
-      <div className="text-center mb-0 relative">
+      <div className="text-center mb-6 relative">
         <div className="absolute inset-0 -z-10">
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-ink-500/10 to-neon-500/10 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-ink-500/10 to-neon-500/10 rounded-full blur-3xl" />
         </div>
         
-        <h1 className="text-5xl md:text-6xl font-display font-bold mb-3">
+        <h1 className="text-4xl md:text-5xl font-display font-bold mb-2">
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-ink-600 via-ink-500 to-neon-500">
             Inspiration
           </span>
@@ -53,25 +53,24 @@ const Home: React.FC = () => {
           <span className="text-slate-900 dark:text-white">Gallery</span>
         </h1>
         
-        <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed mb-4">
-          Discover unique designs crafted by AI to spark your next tattoo idea. 
-          Each piece is a masterpiece waiting to become part of your story.
+        <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed mb-3">
+          Discover unique designs crafted by AI to spark your next tattoo idea.
         </p>
         
-        <div className="flex flex-wrap justify-center gap-4 text-sm text-slate-500 dark:text-slate-400">
-          <span className="px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800">AI Generated</span>
-          <span className="px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800">Unique Designs</span>
-          <span className="px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800">Multiple Styles</span>
+        <div className="flex flex-wrap justify-center gap-3 text-sm text-slate-500 dark:text-slate-400">
+          <span className="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800">AI Generated</span>
+          <span className="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800">Unique Designs</span>
+          <span className="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800">Multiple Styles</span>
         </div>
       </div>
 
       {isLoading && (
-        <div className="flex flex-col justify-center items-center h-64">
+        <div className="flex flex-col justify-center items-center h-32">
           <div className="relative">
-            <div className="w-16 h-16 border-4 border-ink-200 dark:border-ink-800 rounded-full animate-spin border-t-ink-500 dark:border-t-ink-400"></div>
-            <div className="absolute inset-0 w-16 h-16 border-4 border-transparent rounded-full animate-ping border-t-neon-500/30"></div>
+            <div className="w-12 h-12 border-4 border-ink-200 dark:border-ink-800 rounded-full animate-spin border-t-ink-500 dark:border-t-ink-400"></div>
+            <div className="absolute inset-0 w-12 h-12 border-4 border-transparent rounded-full animate-ping border-t-neon-500/30"></div>
           </div>
-          <p className="mt-4 text-slate-600 dark:text-slate-400 font-medium">Loading inspiration...</p>
+          <p className="mt-3 text-slate-600 dark:text-slate-400 font-medium">Loading inspiration...</p>
         </div>
       )}
 
@@ -123,7 +122,7 @@ const Home: React.FC = () => {
       
       <style>{`
         .gallery-showcase {
-          height: 400px;
+          height: 320px;
           overflow: hidden;
           position: relative;
           border-radius: 24px;
@@ -143,7 +142,7 @@ const Home: React.FC = () => {
         .gallery-card {
           flex-shrink: 0;
           width: 280px;
-          height: 360px;
+          height: 280px;
           position: relative;
         }
 
@@ -218,12 +217,12 @@ const Home: React.FC = () => {
         /* Responsive adjustments */
         @media (max-width: 640px) {
           .gallery-showcase {
-            height: 320px;
+            height: 260px;
           }
           
           .gallery-card {
             width: 220px;
-            height: 280px;
+            height: 220px;
           }
           
           .gallery-track {
@@ -235,12 +234,12 @@ const Home: React.FC = () => {
 
         @media (max-width: 480px) {
           .gallery-showcase {
-            height: 280px;
+            height: 220px;
           }
           
           .gallery-card {
             width: 200px;
-            height: 240px;
+            height: 200px;
           }
           
           .gallery-track {

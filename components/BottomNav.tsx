@@ -21,7 +21,7 @@ const NavItem: React.FC<{
   return (
     <button
       onClick={onClick}
-      className={`group relative flex flex-col items-center justify-center w-full py-3 px-2 transition-all duration-300 text-slate-500 ${
+      className={`group relative flex flex-col items-center justify-center w-full py-2 px-2 transition-all duration-300 text-slate-500 ${
         theme === 'dark' ? 'hover:text-slate-300' : 'hover:text-slate-700'
       }`}
     >
@@ -55,9 +55,9 @@ const BottomNav: React.FC<BottomNavProps> = ({ activeView, onNavigate, theme }) 
         left: '0px !important',
         right: '0px !important',
         width: '100% !important',
-        height: 'calc(70px + env(safe-area-inset-bottom, 0px) + 60px)', // Much more extended height to cover white space
-        paddingTop: '8px',
-        paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 60px)', // Much more extended padding
+        height: 'calc(56px + env(safe-area-inset-bottom, 0px) + 48px)', // Reduced by ~20% from 70px + 60px
+        paddingTop: '6px', // Reduced from 8px
+        paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 48px)', // Reduced from 60px
         backgroundColor: theme === 'dark' ? 'rgba(15, 23, 42, 1)' : 'rgba(255, 255, 255, 1)',
         zIndex: '9999 !important',
         pointerEvents: 'auto',
@@ -87,7 +87,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ activeView, onNavigate, theme }) 
         }`} />
         
         {/* Navigation items */}
-        <div className="relative flex justify-around items-center px-2 py-2">
+        <div className="relative flex justify-around items-center px-2 py-1">
           <NavItem
             label="Home"
             icon={<HomeIcon />}

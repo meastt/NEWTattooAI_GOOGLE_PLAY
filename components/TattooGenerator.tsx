@@ -86,6 +86,22 @@ const TattooGenerator: React.FC<TattooGeneratorProps> = ({ onNavigate, onUpgrade
               placeholder="e.g., A celestial wolf howling at a geometric moon"
               className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600"
               required
+              onFocus={() => {
+                setTimeout(() => {
+                  const header = document.querySelector('header');
+                  const nav = document.querySelector('nav');
+                  if (header) header.style.transform = 'translateZ(0)';
+                  if (nav) nav.style.transform = 'translateZ(0)';
+                }, 100);
+              }}
+              onBlur={() => {
+                setTimeout(() => {
+                  const header = document.querySelector('header');
+                  const nav = document.querySelector('nav');
+                  if (header) header.style.transform = 'translateZ(0)';
+                  if (nav) nav.style.transform = 'translateZ(0)';
+                }, 100);
+              }}
             />
           </div>
 
@@ -200,6 +216,22 @@ const TattooGenerator: React.FC<TattooGeneratorProps> = ({ onNavigate, onUpgrade
               placeholder="e.g., with swirling galaxy patterns in its fur, surrounded by constellations"
               className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600 resize-none"
               rows={4}
+              onFocus={() => {
+                setTimeout(() => {
+                  const header = document.querySelector('header');
+                  const nav = document.querySelector('nav');
+                  if (header) header.style.transform = 'translateZ(0)';
+                  if (nav) nav.style.transform = 'translateZ(0)';
+                }, 100);
+              }}
+              onBlur={() => {
+                setTimeout(() => {
+                  const header = document.querySelector('header');
+                  const nav = document.querySelector('nav');
+                  if (header) header.style.transform = 'translateZ(0)';
+                  if (nav) nav.style.transform = 'translateZ(0)';
+                }, 100);
+              }}
             />
           </div>
 

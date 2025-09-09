@@ -65,7 +65,12 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
   };
 
   return (
-    <div className="max-w-4xl mx-auto animate-fade-in" style={{ overflowX: 'hidden', maxWidth: '100%' }}>
+    <div className="max-w-4xl mx-auto animate-fade-in" style={{ 
+      overflowX: 'hidden', 
+      maxWidth: '100%',
+      minHeight: '100vh',
+      paddingBottom: '2rem'
+    }}>
       {/* Header */}
       <div className="text-center mb-12 relative">
         <div className="absolute inset-0 -z-10">
@@ -101,6 +106,24 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
                 className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600 resize-none"
                 rows={3}
                 required
+                onFocus={() => {
+                  // Force header/footer positioning when input is focused
+                  setTimeout(() => {
+                    const header = document.querySelector('header');
+                    const nav = document.querySelector('nav');
+                    if (header) header.style.transform = 'translateZ(0)';
+                    if (nav) nav.style.transform = 'translateZ(0)';
+                  }, 100);
+                }}
+                onBlur={() => {
+                  // Force header/footer positioning when input loses focus
+                  setTimeout(() => {
+                    const header = document.querySelector('header');
+                    const nav = document.querySelector('nav');
+                    if (header) header.style.transform = 'translateZ(0)';
+                    if (nav) nav.style.transform = 'translateZ(0)';
+                  }, 100);
+                }}
               />
             </div>
             <div>
@@ -113,6 +136,22 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
                 placeholder="e.g., Left forearm"
                 className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600"
                 required
+                onFocus={() => {
+                  setTimeout(() => {
+                    const header = document.querySelector('header');
+                    const nav = document.querySelector('nav');
+                    if (header) header.style.transform = 'translateZ(0)';
+                    if (nav) nav.style.transform = 'translateZ(0)';
+                  }, 100);
+                }}
+                onBlur={() => {
+                  setTimeout(() => {
+                    const header = document.querySelector('header');
+                    const nav = document.querySelector('nav');
+                    if (header) header.style.transform = 'translateZ(0)';
+                    if (nav) nav.style.transform = 'translateZ(0)';
+                  }, 100);
+                }}
               />
             </div>
             <div>
@@ -123,6 +162,22 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
                 onChange={(e) => setSize(e.target.value as TattooSize)} 
                 className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600"
                 required
+                onFocus={() => {
+                  setTimeout(() => {
+                    const header = document.querySelector('header');
+                    const nav = document.querySelector('nav');
+                    if (header) header.style.transform = 'translateZ(0)';
+                    if (nav) nav.style.transform = 'translateZ(0)';
+                  }, 100);
+                }}
+                onBlur={() => {
+                  setTimeout(() => {
+                    const header = document.querySelector('header');
+                    const nav = document.querySelector('nav');
+                    if (header) header.style.transform = 'translateZ(0)';
+                    if (nav) nav.style.transform = 'translateZ(0)';
+                  }, 100);
+                }}
               >
                 {TATTOO_SIZES.map(s => (
                   <option key={s} value={s}>
@@ -141,6 +196,22 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
                 value={style} 
                 onChange={(e) => setStyle(e.target.value as TattooStyle)} 
                 className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600"
+                onFocus={() => {
+                  setTimeout(() => {
+                    const header = document.querySelector('header');
+                    const nav = document.querySelector('nav');
+                    if (header) header.style.transform = 'translateZ(0)';
+                    if (nav) nav.style.transform = 'translateZ(0)';
+                  }, 100);
+                }}
+                onBlur={() => {
+                  setTimeout(() => {
+                    const header = document.querySelector('header');
+                    const nav = document.querySelector('nav');
+                    if (header) header.style.transform = 'translateZ(0)';
+                    if (nav) nav.style.transform = 'translateZ(0)';
+                  }, 100);
+                }}
               >
                 <optgroup label="Traditional & Classic">
                   <option value="American Traditional">American Traditional</option>
@@ -216,7 +287,28 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
             </div>
             <div>
               <label htmlFor="color" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Color</label>
-              <select id="color" value={color} onChange={(e) => setColor(e.target.value as TattooColor)} className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600">
+              <select 
+                id="color" 
+                value={color} 
+                onChange={(e) => setColor(e.target.value as TattooColor)} 
+                className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600"
+                onFocus={() => {
+                  setTimeout(() => {
+                    const header = document.querySelector('header');
+                    const nav = document.querySelector('nav');
+                    if (header) header.style.transform = 'translateZ(0)';
+                    if (nav) nav.style.transform = 'translateZ(0)';
+                  }, 100);
+                }}
+                onBlur={() => {
+                  setTimeout(() => {
+                    const header = document.querySelector('header');
+                    const nav = document.querySelector('nav');
+                    if (header) header.style.transform = 'translateZ(0)';
+                    if (nav) nav.style.transform = 'translateZ(0)';
+                  }, 100);
+                }}
+              >
                 {TATTOO_COLORS.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>

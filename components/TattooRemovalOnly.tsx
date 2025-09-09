@@ -121,6 +121,22 @@ const TattooRemovalOnly: React.FC<TattooRemovalOnlyProps> = ({ onNavigate, onUpg
                 className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:focus:border-red-400 transition-all duration-300 hover:border-red-300 dark:hover:border-red-600 resize-none"
                 rows={5}
                 required
+                onFocus={() => {
+                  setTimeout(() => {
+                    const header = document.querySelector('header');
+                    const nav = document.querySelector('nav');
+                    if (header) header.style.transform = 'translateZ(0)';
+                    if (nav) nav.style.transform = 'translateZ(0)';
+                  }, 100);
+                }}
+                onBlur={() => {
+                  setTimeout(() => {
+                    const header = document.querySelector('header');
+                    const nav = document.querySelector('nav');
+                    if (header) header.style.transform = 'translateZ(0)';
+                    if (nav) nav.style.transform = 'translateZ(0)';
+                  }, 100);
+                }}
               />
             </div>
             

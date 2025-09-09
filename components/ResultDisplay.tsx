@@ -89,7 +89,11 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
         </span>
       </h3>
       
-      <div className="w-full min-h-[30rem] bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-3xl flex flex-col items-center justify-center p-8 shadow-xl" style={{ overflowX: 'hidden', maxWidth: '100%' }}>
+      <div className="w-full min-h-[30rem] bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-3xl flex flex-col items-center justify-center p-8 shadow-xl" style={{ 
+        overflowX: 'hidden', 
+        maxWidth: '100%',
+        contain: 'layout style paint'
+      }}>
         {isLoading && (
           <div className="text-center">
             <div className="relative mb-6">
@@ -118,7 +122,21 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
                 src={resultImage} 
                 alt="Generated tattoo result" 
                 className="max-w-full max-h-[40rem] rounded-2xl object-contain shadow-2xl group-hover:scale-105 transition-transform duration-500" 
-                style={{ maxWidth: '100%', height: 'auto' }}
+                style={{ 
+                  maxWidth: '100%', 
+                  height: 'auto',
+                  contain: 'layout style paint',
+                  willChange: 'transform'
+                }}
+                onLoad={() => {
+                  // Force re-layout to prevent header/footer movement
+                  setTimeout(() => {
+                    const header = document.querySelector('header');
+                    const nav = document.querySelector('nav');
+                    if (header) header.style.transform = 'translateZ(0)';
+                    if (nav) nav.style.transform = 'translateZ(0)';
+                  }, 10);
+                }}
               />
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </div>
