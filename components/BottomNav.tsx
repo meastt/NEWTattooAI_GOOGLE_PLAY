@@ -47,22 +47,26 @@ const NavItem: React.FC<{
 
 const BottomNav: React.FC<BottomNavProps> = ({ activeView, onNavigate, theme }) => {
   return (
-    <nav style={{ 
+    <nav 
+      className="fixed bottom-0 left-0 right-0 w-full z-50"
+      style={{ 
         position: 'fixed !important',
         bottom: '0px !important',
-        left: '0 !important',
-        right: '0 !important',
+        left: '0px !important',
+        right: '0px !important',
         width: '100% !important',
         height: 'calc(70px + env(safe-area-inset-bottom, 0px) + 60px)', // Much more extended height to cover white space
         paddingTop: '8px',
         paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 60px)', // Much more extended padding
         backgroundColor: theme === 'dark' ? 'rgba(15, 23, 42, 1)' : 'rgba(255, 255, 255, 1)',
-        zIndex: 9999,
+        zIndex: '9999 !important',
         pointerEvents: 'auto',
-        transform: 'translateZ(0)', // Force hardware acceleration
-        willChange: 'transform', // Optimize for animations
-        backfaceVisibility: 'hidden',
-        WebkitBackfaceVisibility: 'hidden'
+        transform: 'translateZ(0) !important', // Force hardware acceleration
+        willChange: 'transform !important', // Optimize for animations
+        backfaceVisibility: 'hidden !important',
+        WebkitBackfaceVisibility: 'hidden !important',
+        isolation: 'isolate', // Create new stacking context
+        contain: 'layout style paint' // Optimize rendering
       }}
     >
       {/* Background with blur effect */}
