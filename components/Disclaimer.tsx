@@ -38,9 +38,38 @@ const Disclaimer: React.FC = () => {
             You are responsible for the images you upload. Do not upload content that you do not have the rights to use. While you are free to use the generated images for personal inspiration, be aware that AI-generated art exists in a complex legal landscape.
           </p>
 
+          <h3 className="text-2xl font-display font-bold mt-8 mb-4 text-slate-900 dark:text-white">5. Subscription Terms</h3>
+          <p className="text-lg leading-relaxed">
+            • Subscriptions are charged to your Apple ID account at confirmation of purchase<br/>
+            • Subscriptions automatically renew unless auto-renew is turned off at least 24 hours before the end of the current period<br/>
+            • Your account will be charged for renewal within 24 hours prior to the end of the current period<br/>
+            • You can manage and cancel your subscriptions by going to your account settings on the App Store after purchase<br/>
+            • Any unused portion of a free trial period will be forfeited when you purchase a subscription
+          </p>
+
+          <h3 className="text-2xl font-display font-bold mt-8 mb-4 text-slate-900 dark:text-white">6. Acceptable Use</h3>
+          <p className="text-lg leading-relaxed">
+            You agree not to use this app for any unlawful purposes or to upload content that is offensive, inappropriate, or violates any third-party rights. We reserve the right to terminate access for violations of these terms.
+          </p>
+
+          <h3 className="text-2xl font-display font-bold mt-8 mb-4 text-slate-900 dark:text-white">7. Service Availability</h3>
+          <p className="text-lg leading-relaxed">
+            We strive to maintain service availability but cannot guarantee uninterrupted access. We may modify, suspend, or discontinue features at any time without notice.
+          </p>
+
+          <h3 className="text-2xl font-display font-bold mt-8 mb-4 text-slate-900 dark:text-white">8. Changes to Terms</h3>
+          <p className="text-lg leading-relaxed">
+            We may update these terms at any time. Continued use of the app constitutes acceptance of any changes. Material changes will be communicated through the app or via email.
+          </p>
+
+          <h3 className="text-2xl font-display font-bold mt-8 mb-4 text-slate-900 dark:text-white">9. Contact Information</h3>
+          <p className="text-lg leading-relaxed">
+            For questions about these terms or to report issues, contact us at: support@inkpreview.app
+          </p>
+
           <div className="mt-8 p-6 bg-ink-50 dark:bg-ink-950/30 rounded-2xl border border-ink-200 dark:border-ink-800">
             <p className="text-lg font-bold text-ink-800 dark:text-ink-200 text-center">
-              By using this app, you acknowledge that you have read, understood, and agree to this disclaimer.
+              By using this app, you acknowledge that you have read, understood, and agree to these Terms of Use and Disclaimer.
             </p>
           </div>
         </div>
