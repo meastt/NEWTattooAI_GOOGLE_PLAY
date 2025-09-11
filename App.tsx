@@ -174,7 +174,7 @@ const App: React.FC = () => {
       </main>
       
       {/* Bottom Navigation - Mobile and iPad */}
-      <div className="lg:hidden">
+      <div className="xl:hidden">
         <BottomNav activeView={getActiveTab()} onNavigate={navigateTo} theme={theme} />
       </div>
       
