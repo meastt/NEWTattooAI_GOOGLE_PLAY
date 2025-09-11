@@ -19,6 +19,7 @@
     "@capacitor/status-bar": "^7.0.2",
     "@google/genai": "^1.16.0",
     "@revenuecat/purchases-capacitor": "^11.2.0",
+    "@supabase/supabase-js": "^2.57.4",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },

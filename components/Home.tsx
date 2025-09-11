@@ -214,7 +214,43 @@ const Home: React.FC = () => {
           animation-play-state: paused;
         }
 
-        /* Responsive adjustments */
+        /* iPad specific optimizations */
+        @media (min-width: 768px) and (max-width: 1024px) {
+          .gallery-showcase {
+            height: 400px;
+          }
+          
+          .gallery-card {
+            width: 320px;
+            height: 320px;
+          }
+          
+          .gallery-track {
+            gap: 24px;
+            padding: 24px;
+            animation-duration: 80s;
+          }
+        }
+
+        /* Large iPad Pro (1366px wide) */
+        @media (min-width: 1024px) and (max-width: 1366px) {
+          .gallery-showcase {
+            height: 450px;
+          }
+          
+          .gallery-card {
+            width: 360px;
+            height: 360px;
+          }
+          
+          .gallery-track {
+            gap: 28px;
+            padding: 28px;
+            animation-duration: 90s;
+          }
+        }
+
+        /* Mobile phone adjustments */
         @media (max-width: 640px) {
           .gallery-showcase {
             height: 260px;
