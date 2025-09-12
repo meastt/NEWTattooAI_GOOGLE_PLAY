@@ -7,6 +7,7 @@ import TattooGenerator from './components/TattooGenerator';
 import TattooRemovalOnly from './components/TattooRemovalOnly';
 import TattooCoverup from './components/TattooCoverup';
 import PrivacyPolicy from './components/PrivacyPolicy';
+import Terms from './components/Terms';
 import Disclaimer from './components/Disclaimer';
 import Settings from './components/Settings';
 import BottomNav from './components/BottomNav';
@@ -73,7 +74,7 @@ const App: React.FC = () => {
     if (['tryOn', 'generator', 'removal', 'coverup'].includes(currentView)) {
       return 'create';
     }
-    if (['home', 'privacy', 'disclaimer', 'settings'].includes(currentView)) {
+    if (['home', 'privacy', 'terms', 'disclaimer', 'settings'].includes(currentView)) {
         return 'home';
     }
     return currentView as View;
@@ -97,6 +98,8 @@ const App: React.FC = () => {
         return <TattooCoverup onNavigate={navigateTo} onUpgradeClick={() => setShowUpgradeModal(true)} />;
       case 'privacy':
         return <PrivacyPolicy />;
+      case 'terms':
+        return <Terms />;
       case 'disclaimer':
         return <Disclaimer />;
       case 'settings':
@@ -179,7 +182,7 @@ const App: React.FC = () => {
       </div>
       
       {/* Floating Upgrade Button - Show on most views, hide for paid subscribers */}
-      {!['settings', 'privacy', 'disclaimer'].includes(currentView) && !hasActiveSubscription() && (
+      {!['settings', 'privacy', 'terms', 'disclaimer'].includes(currentView) && !hasActiveSubscription() && (
         <FloatingUpgradeButton 
           onUpgradeClick={() => setShowUpgradeModal(true)}
           theme={theme}

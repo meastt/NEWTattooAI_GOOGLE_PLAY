@@ -14,6 +14,12 @@ const Home: React.FC = () => {
       try {
         setIsLoading(true);
         const galleryIdeas = await getGalleryIdeas();
+        console.log('Gallery ideas fetched:', galleryIdeas);
+        console.log('Number of ideas:', galleryIdeas.length);
+        galleryIdeas.forEach((idea, index) => {
+          console.log(`Idea ${index}:`, { id: idea.id, image_url: idea.image_url, prompt: idea.prompt });
+        });
+        
         if (galleryIdeas.length === 0) {
             setError('Could not load inspiration gallery. The database may be offline or empty.');
         } else {
@@ -29,6 +35,7 @@ const Home: React.FC = () => {
             setDuplicatedIdeas(multipliedIdeas);
         }
       } catch (err) {
+        console.error('Error in fetchIdeas:', err);
         setError('Failed to fetch gallery ideas.');
       } finally {
         setIsLoading(false);
@@ -97,6 +104,24 @@ const Home: React.FC = () => {
                     alt="Tattoo inspiration" 
                     className="card-image"
                     loading="lazy"
+                    onLoad={(e) => {
+                      console.log(`✅ Image loaded successfully: ${idea.image_url}`);
+                      console.log('Image dimensions:', (e.target as HTMLImageElement).naturalWidth + 'x' + (e.target as HTMLImageElement).naturalHeight);
+                    }}
+                    onError={(e) => {
+                      console.error(`❌ Image failed to load: ${idea.image_url}`);
+                      console.log('Error event:', e);
+                      console.log('Image element:', e.target);
+                      
+                      // Add a placeholder or retry logic
+                      const img = e.target as HTMLImageElement;
+                      img.style.backgroundColor = '#f3f4f6';
+                      img.style.border = '1px dashed #d1d5db';
+                      img.style.display = 'flex';
+                      img.style.alignItems = 'center';
+                      img.style.justifyContent = 'center';
+                      img.alt = `Failed to load: ${idea.image_url}`;
+                    }}
                   />
                   <div className="card-overlay" />
                 </div>
@@ -111,6 +136,24 @@ const Home: React.FC = () => {
                     alt="Tattoo inspiration" 
                     className="card-image"
                     loading="lazy"
+                    onLoad={(e) => {
+                      console.log(`✅ Image loaded successfully (duplicate): ${idea.image_url}`);
+                      console.log('Image dimensions:', (e.target as HTMLImageElement).naturalWidth + 'x' + (e.target as HTMLImageElement).naturalHeight);
+                    }}
+                    onError={(e) => {
+                      console.error(`❌ Image failed to load (duplicate): ${idea.image_url}`);
+                      console.log('Error event:', e);
+                      console.log('Image element:', e.target);
+                      
+                      // Add a placeholder or retry logic
+                      const img = e.target as HTMLImageElement;
+                      img.style.backgroundColor = '#f3f4f6';
+                      img.style.border = '1px dashed #d1d5db';
+                      img.style.display = 'flex';
+                      img.style.alignItems = 'center';
+                      img.style.justifyContent = 'center';
+                      img.alt = `Failed to load: ${idea.image_url}`;
+                    }}
                   />
                   <div className="card-overlay" />
                 </div>

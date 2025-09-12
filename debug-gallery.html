@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gallery Debug Test</title>
+</head>
+<body>
+    <h1>Gallery Images Debug Test</h1>
+    <div id="output"></div>
+    <div id="images"></div>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = "https://zflkdyuswpegqabkwlgw.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmbGtkeXVzd3BlZ3FhYmt3bGd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY5MzAyNDEsImV4cCI6MjA3MjUwNjI0MX0.VyAjSGVjKRWtraecEAFe2kJ3OfGyIRmlN5j_9e7ImBM";
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        async function testGalleryFetch() {
+            const output = document.getElementById('output');
+            const imagesDiv = document.getElementById('images');
+            
+            try {
+                output.innerHTML = '<p>Fetching gallery ideas...</p>';
+                
+                const { data, error } = await supabase
+                    .from('gallery_ideas')
+                    .select('id, image_url, prompt')
+                    .order('created_at', { ascending: false });
+                
+                if (error) {
+                    output.innerHTML = '<p style="color: red;">Error: ' + error.message + '</p>';
+                    return;
+                }
+                
+                output.innerHTML = '<p style="color: green;">Successfully fetched ' + data.length + ' gallery ideas</p>';
+                
+                // Display the data
+                output.innerHTML += '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                
+                // Try to load images
+                data.forEach((idea, index) => {
+                    const img = document.createElement('img');
+                    img.src = idea.image_url;
+                    img.style.width = '200px';
+                    img.style.height = '200px';
+                    img.style.objectFit = 'cover';
+                    img.style.margin = '10px';
+                    img.style.border = '2px solid #ccc';
+                    
+                    img.onload = () => {
+                        console.log('Image loaded successfully:', idea.image_url);
+                        img.style.border = '2px solid green';
+                    };
+                    
+                    img.onerror = (e) => {
+                        console.error('Image failed to load:', idea.image_url, e);
+                        img.style.border = '2px solid red';
+                        img.alt = 'Failed to load: ' + idea.image_url;
+                    };
+                    
+                    imagesDiv.appendChild(img);
+                });
+                
+            } catch (err) {
+                output.innerHTML = '<p style="color: red;">Caught error: ' + err.message + '</p>';
+                console.error('Error:', err);
+            }
+        }
+        
+        // Run test when page loads
+        testGalleryFetch();
+    </script>
+</body>
+</html>

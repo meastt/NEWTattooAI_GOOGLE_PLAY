@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Gallery Test</title>
+    <style>
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .image-test { margin: 20px 0; }
+        img { max-width: 200px; height: 150px; object-fit: cover; border: 2px solid #ccc; margin: 5px; }
+        .loaded { border-color: green; }
+        .failed { border-color: red; background-color: #ffeee; }
+        .debug { background: #f5f5f5; padding: 10px; margin: 10px 0; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gallery Images Test</h1>
+        
+        <h2>Direct Image URLs Test</h2>
+        <div class="image-test" id="direct-images">
+            <h3>Loading images directly...</h3>
+        </div>
+        
+        <h2>Supabase Database Test</h2>
+        <div class="debug" id="db-status">Connecting to database...</div>
+        <div class="image-test" id="db-images">
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Test direct image URLs first
+        const directUrls = [
+            'https://zflkdyuswpegqabkwlgw.supabase.co/storage/v1/object/public/gallery-images/Generated%20Image%20September%2005,%202025%20-%204_33PM.jpeg',
+            'https://zflkdyuswpegqabkwlgw.supabase.co/storage/v1/object/public/gallery-images/Generated%20Image%20September%2005,%202025%20-%204_34PM%20(1).jpeg',
+            'https://zflkdyuswpegqabkwlgw.supabase.co/storage/v1/object/public/gallery-images/Generated%20Image%20September%2005,%202025%20-%204_34PM.jpeg'
+        ];
+
+        function testDirectImages() {
+            const container = document.getElementById('direct-images');
+            container.innerHTML = '<h3>Testing direct URLs:</h3>';
+            
+            directUrls.forEach((url, index) => {
+                const img = document.createElement('img');
+                img.src = url;
+                img.title = `Image ${index + 1}`;
+                
+                img.onload = () => {
+                    img.classList.add('loaded');
+                    console.log(`✅ Direct image loaded: ${url}`);
+                };
+                
+                img.onerror = () => {
+                    img.classList.add('failed');
+                    img.alt = `Failed: ${url}`;
+                    console.error(`❌ Direct image failed: ${url}`);
+                };
+                
+                container.appendChild(img);
+            });
+        }
+
+        // Test Supabase database connection
+        async function testDatabase() {
+            const statusDiv = document.getElementById('db-status');
+            const imagesDiv = document.getElementById('db-images');
+            
+            try {
+                if (!window.supabase) {
+                    statusDiv.innerHTML = '❌ Supabase not available on window object';
+                    return;
+                }
+                
+                statusDiv.innerHTML = '🔄 Creating Supabase client...';
+                
+                const SUPABASE_URL = "https://zflkdyuswpegqabkwlgw.supabase.co";
+                const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmbGtkeXVzd3BlZ3FhYmt3bGd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY5MzAyNDEsImV4cCI6MjA3MjUwNjI0MX0.VyAjSGVjKRWtraecEAFe2kJ3OfGyIRmlN5j_9e7ImBM";
+                
+                const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                statusDiv.innerHTML = '🔄 Querying gallery_ideas table...';
+                
+                const { data, error } = await supabase
+                    .from('gallery_ideas')
+                    .select('id, image_url, prompt')
+                    .order('created_at', { ascending: false });
+                    
+                if (error) {
+                    statusDiv.innerHTML = `❌ Database error: ${error.message}`;
+                    console.error('Supabase error:', error);
+                    return;
+                }
+                
+                statusDiv.innerHTML = `✅ Successfully fetched ${data.length} gallery ideas from database`;
+                console.log('Gallery data:', data);
+                
+                if (data.length === 0) {
+                    imagesDiv.innerHTML = '<p>No gallery ideas found in database</p>';
+                    return;
+                }
+                
+                data.forEach((idea, index) => {
+                    const img = document.createElement('img');
+                    img.src = idea.image_url;
+                    img.title = `DB Image ${idea.id}: ${idea.prompt || 'No prompt'}`;
+                    
+                    img.onload = () => {
+                        img.classList.add('loaded');
+                        console.log(`✅ DB image loaded: ${idea.image_url}`);
+                    };
+                    
+                    img.onerror = () => {
+                        img.classList.add('failed');
+                        img.alt = `Failed: ${idea.image_url}`;
+                        console.error(`❌ DB image failed: ${idea.image_url}`);
+                    };
+                    
+                    imagesDiv.appendChild(img);
+                });
+                
+            } catch (err) {
+                statusDiv.innerHTML = `❌ Caught error: ${err.message}`;
+                console.error('Database test error:', err);
+            }
+        }
+
+        // Run tests when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            testDirectImages();
+            
+            // Give Supabase a moment to load
+            setTimeout(testDatabase, 500);
+        });
+    </script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-export type View = 'home' | 'create' | 'saved' | 'tryOn' | 'generator' | 'removal' | 'coverup' | 'privacy' | 'disclaimer' | 'settings';
+export type View = 'home' | 'create' | 'saved' | 'tryOn' | 'generator' | 'removal' | 'coverup' | 'privacy' | 'disclaimer' | 'terms' | 'settings';
 
 export type TattooStyle = 
   // Traditional & Classic

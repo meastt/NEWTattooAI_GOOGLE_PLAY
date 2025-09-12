@@ -15,6 +15,28 @@ export const getGalleryIdeas = async (): Promise<Idea[]> => {
       .order('created_at', { ascending: false });
 
     if (error) throw error;
+    
+    // Debug logging
+    console.log('Raw gallery data from Supabase:', data);
+    
+    // Test if images are accessible
+    if (data && data.length > 0) {
+      const testImage = data[0];
+      console.log('Testing first image URL:', testImage.image_url);
+      
+      // Try to fetch the first image to see if it's accessible
+      if (testImage.image_url) {
+        fetch(testImage.image_url, { method: 'HEAD' })
+          .then(response => {
+            console.log(`Image test for ${testImage.image_url}: ${response.status} ${response.statusText}`);
+            console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+          })
+          .catch(err => {
+            console.error(`Failed to test image ${testImage.image_url}:`, err);
+          });
+      }
+    }
+    
     return data || [];
   } catch (error) {
     console.error('Error fetching gallery ideas:', error);

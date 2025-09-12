@@ -215,6 +215,12 @@ const Settings: React.FC<SettingsProps> = ({ onNavigate, theme, toggleTheme }) =
                 View Privacy Policy
               </button>
               <button
+                onClick={() => onNavigate('terms')}
+                className="flex-1 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 font-medium py-3 px-6 rounded-2xl transition-colors duration-300"
+              >
+                View Terms of Use
+              </button>
+              <button
                 onClick={() => onNavigate('disclaimer')}
                 className="flex-1 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 font-medium py-3 px-6 rounded-2xl transition-colors duration-300"
               >
