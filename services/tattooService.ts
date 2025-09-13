@@ -16,37 +16,8 @@ export const getGalleryIdeas = async (): Promise<Idea[]> => {
 
     if (error) throw error;
     
-    // Debug logging
-    console.log('Raw gallery data from Supabase:', data);
-    
-    // Resolve image URLs via signed URLs in case the bucket isn't public
-    const resolved = await Promise.all((data || []).map(async (item: any) => {
-      let finalUrl: string | undefined = item.image_url;
-      try {
-        if (finalUrl && finalUrl.startsWith('http')) {
-          const url = new URL(finalUrl);
-          // Handle paths like /storage/v1/object/public/gallery-images/<encoded path>
-          const marker = '/gallery-images/';
-          const idx = url.pathname.indexOf(marker);
-          if (idx !== -1) {
-            const encodedPath = url.pathname.slice(idx + marker.length);
-            const objectPath = decodeURIComponent(encodedPath);
-            // Attempt to create a signed URL (works whether or not bucket is public)
-            const { data: signed, error: signError } = await supabase.storage
-              .from('gallery-images')
-              .createSignedUrl(objectPath, 60 * 60); // 1 hour
-            if (!signError && signed?.signedUrl) {
-              finalUrl = signed.signedUrl;
-            }
-          }
-        }
-      } catch (e) {
-        console.warn('Failed to create signed URL for', item?.image_url, e);
-      }
-      return { ...item, image_url: finalUrl };
-    }));
-    
-    return resolved;
+    // URLs have been fixed in the database, return the data directly
+    return data || [];
   } catch (error) {
     console.error('Error fetching gallery ideas:', error);
     return [];

@@ -69,7 +69,7 @@ const PrivacyPolicy: React.FC = () => {
 
           <h3 className="text-2xl font-display font-bold mt-8 mb-4 text-slate-900 dark:text-white">7. Contact Us</h3>
           <p className="text-lg leading-relaxed">
-            If you have any questions about this Privacy Policy, You can contact us by email at: privacy@example.com
+            If you have any questions about this Privacy Policy, You can contact us by email at support@inkpreview.com
           </p>
         </div>
       </div>

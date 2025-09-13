@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { View } from '../types';
-import { deleteUserData, addGalleryImages } from '../services/tattooService';
+import { deleteUserData } from '../services/tattooService';
 import LoadingSpinner from './LoadingSpinner';
 import ThemeToggle from './ThemeToggle';
 import Version from './Version';
@@ -277,15 +277,6 @@ const Settings: React.FC<SettingsProps> = ({ onNavigate, theme, toggleTheme }) =
         </div>
       )}
       
-      {/* Admin Button (temporary) */}
-      <div className="mt-8 text-center">
-        <button
-          onClick={addGalleryImages}
-          className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition-colors"
-        >
-          Add Gallery Images
-        </button>
-      </div>
 
       {/* Version Info */}
       <div className="mt-8 text-center">
