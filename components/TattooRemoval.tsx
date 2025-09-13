@@ -3,7 +3,7 @@ import type { View, TattooStyle, TattooColor } from '../types';
 import { TATTOO_STYLES, TATTOO_COLORS, TATTOO_STYLE_DESCRIPTIONS } from '../constants';
 import { editImage } from '../services/geminiService';
 import { saveIdea } from '../services/tattooService';
-import { canGenerate, consumeCredit } from '../services/creditService';
+import { canGenerate } from '../services/creditService';
 import ImageUploader from './ImageUploader';
 import LoadingSpinner from './LoadingSpinner';
 import ResultDisplay from './ResultDisplay';
@@ -72,14 +72,6 @@ const TattooRemoval: React.FC<TattooRemovalProps> = ({ onNavigate, onUpgradeClic
     setPrompt(generatedPrompt);
 
     try {
-      // Consume credit before generation
-      const creditResult = await consumeCredit();
-      if (!creditResult.success) {
-        setError("Failed to use credit. Please try again.");
-        setIsLoading(false);
-        return;
-      }
-
       console.log('Starting image generation with prompt:', generatedPrompt);
       const result = await editImage(userImage.base64, userImage.mimeType, generatedPrompt);
       console.log('Image generation result:', result);

@@ -20,7 +20,7 @@ const FloatingUpgradeButton: React.FC<FloatingUpgradeButtonProps> = ({
         isLowCredits ? 'animate-pulse' : ''
       }`}
       style={{
-        bottom: '130px',
+        bottom: 'calc(130px + 5% + env(safe-area-inset-bottom, 0px))',
         right: '16px'
       }}
     >

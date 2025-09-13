@@ -50,16 +50,12 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
       const response = await fetch(resultImage);
       const blob = await response.blob();
       
-      // Create file from blob
-      const file = new File([blob], 'tattoo-design.png', { type: 'image/png' });
+      // Create file from blob (generic name; no prompt)
+      const file = new File([blob], 'tattoo-design-inkpreview.png', { type: 'image/png' });
       
       if (navigator.share && navigator.canShare({ files: [file] })) {
-        // Use native share if available
-        await navigator.share({
-          files: [file],
-          title: 'My Tattoo Design from InkPreview',
-          text: 'Check out this tattoo design I created with InkPreview!'
-        });
+        // Use native share if available - share image only
+        await navigator.share({ files: [file] });
       } else {
         // Fallback: download the image
         const link = document.createElement('a');

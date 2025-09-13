@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import type { View } from '../types';
 import { editImage } from '../services/geminiService';
 import { saveIdea } from '../services/tattooService';
-import { canGenerate, consumeCredit } from '../services/creditService';
+import { canGenerate } from '../services/creditService';
 import ImageUploader from './ImageUploader';
 import ResultDisplay from './ResultDisplay';
 
@@ -51,14 +51,6 @@ const TattooRemovalOnly: React.FC<TattooRemovalOnlyProps> = ({ onNavigate, onUpg
     setPrompt(generatedPrompt);
 
     try {
-      // Consume credit before generation
-      const creditResult = await consumeCredit();
-      if (!creditResult.success) {
-        setError("Failed to use credit. Please try again.");
-        setIsLoading(false);
-        return;
-      }
-
       console.log('Starting tattoo removal with prompt:', generatedPrompt);
       const result = await editImage(userImage.base64, userImage.mimeType, generatedPrompt);
       console.log('Tattoo removal result:', result);
