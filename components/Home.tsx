@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { supabase } from '../services/supabaseClient';
 import { getGalleryIdeas } from '../services/tattooService';
 import type { Idea } from '../types';
 import LoadingSpinner from './LoadingSpinner';
@@ -110,17 +111,59 @@ const Home: React.FC = () => {
                     }}
                     onError={(e) => {
                       console.error(`❌ Image failed to load: ${idea.image_url}`);
-                      console.log('Error event:', e);
-                      console.log('Image element:', e.target);
-                      
-                      // Add a placeholder or retry logic
                       const img = e.target as HTMLImageElement;
-                      img.style.backgroundColor = '#f3f4f6';
-                      img.style.border = '1px dashed #d1d5db';
-                      img.style.display = 'flex';
-                      img.style.alignItems = 'center';
-                      img.style.justifyContent = 'center';
-                      img.alt = `Failed to load: ${idea.image_url}`;
+                      // Attempt fallback resolution from Supabase Storage
+                      (async () => {
+                        try {
+                          const parseStorageUrl = (urlStr: string) => {
+                            try {
+                              const u = new URL(urlStr);
+                              const marker = '/storage/v1/object/public/';
+                              const idx = u.pathname.indexOf(marker);
+                              if (idx !== -1) {
+                                const remainder = u.pathname.slice(idx + marker.length);
+                                const parts = remainder.split('/');
+                                const bucket = parts.shift() as string;
+                                const objectPath = decodeURIComponent(parts.join('/'));
+                                return { bucket, objectPath };
+                              }
+                            } catch (_) {}
+                            return null;
+                          };
+                          const parsed = idea.image_url ? parseStorageUrl(idea.image_url) : null;
+                          if (!parsed) {
+                            throw new Error('Could not parse storage URL for fallback');
+                          }
+                          // Try signed URL first
+                          const { data: signed, error: signErr } = await supabase.storage
+                            .from(parsed.bucket)
+                            .createSignedUrl(parsed.objectPath, 60 * 60);
+                          if (!signErr && signed?.signedUrl) {
+                            console.log('Using signed URL fallback for image:', parsed.objectPath);
+                            img.src = signed.signedUrl;
+                            return;
+                          }
+                          // Fallback to direct download -> blob URL
+                          const { data: blob, error: dlErr } = await supabase.storage
+                            .from(parsed.bucket)
+                            .download(parsed.objectPath);
+                          if (dlErr || !blob) {
+                            throw dlErr || new Error('Download returned no data');
+                          }
+                          const objectUrl = URL.createObjectURL(blob);
+                          console.log('Using blob URL fallback for image:', parsed.objectPath);
+                          img.src = objectUrl;
+                        } catch (fallbackErr) {
+                          console.warn('Gallery fallback failed:', fallbackErr);
+                          // Final visual placeholder
+                          img.style.backgroundColor = '#f3f4f6';
+                          img.style.border = '1px dashed #d1d5db';
+                          img.style.display = 'flex';
+                          img.style.alignItems = 'center';
+                          img.style.justifyContent = 'center';
+                          img.alt = `Failed to load: ${idea.image_url}`;
+                        }
+                      })();
                     }}
                   />
                   <div className="card-overlay" />
@@ -142,17 +185,55 @@ const Home: React.FC = () => {
                     }}
                     onError={(e) => {
                       console.error(`❌ Image failed to load (duplicate): ${idea.image_url}`);
-                      console.log('Error event:', e);
-                      console.log('Image element:', e.target);
-                      
-                      // Add a placeholder or retry logic
                       const img = e.target as HTMLImageElement;
-                      img.style.backgroundColor = '#f3f4f6';
-                      img.style.border = '1px dashed #d1d5db';
-                      img.style.display = 'flex';
-                      img.style.alignItems = 'center';
-                      img.style.justifyContent = 'center';
-                      img.alt = `Failed to load: ${idea.image_url}`;
+                      (async () => {
+                        try {
+                          const parseStorageUrl = (urlStr: string) => {
+                            try {
+                              const u = new URL(urlStr);
+                              const marker = '/storage/v1/object/public/';
+                              const idx = u.pathname.indexOf(marker);
+                              if (idx !== -1) {
+                                const remainder = u.pathname.slice(idx + marker.length);
+                                const parts = remainder.split('/');
+                                const bucket = parts.shift() as string;
+                                const objectPath = decodeURIComponent(parts.join('/'));
+                                return { bucket, objectPath };
+                              }
+                            } catch (_) {}
+                            return null;
+                          };
+                          const parsed = idea.image_url ? parseStorageUrl(idea.image_url) : null;
+                          if (!parsed) {
+                            throw new Error('Could not parse storage URL for fallback');
+                          }
+                          const { data: signed, error: signErr } = await supabase.storage
+                            .from(parsed.bucket)
+                            .createSignedUrl(parsed.objectPath, 60 * 60);
+                          if (!signErr && signed?.signedUrl) {
+                            console.log('Using signed URL fallback for image (duplicate):', parsed.objectPath);
+                            img.src = signed.signedUrl;
+                            return;
+                          }
+                          const { data: blob, error: dlErr } = await supabase.storage
+                            .from(parsed.bucket)
+                            .download(parsed.objectPath);
+                          if (dlErr || !blob) {
+                            throw dlErr || new Error('Download returned no data');
+                          }
+                          const objectUrl = URL.createObjectURL(blob);
+                          console.log('Using blob URL fallback for image (duplicate):', parsed.objectPath);
+                          img.src = objectUrl;
+                        } catch (fallbackErr) {
+                          console.warn('Gallery fallback (duplicate) failed:', fallbackErr);
+                          img.style.backgroundColor = '#f3f4f6';
+                          img.style.border = '1px dashed #d1d5db';
+                          img.style.display = 'flex';
+                          img.style.alignItems = 'center';
+                          img.style.justifyContent = 'center';
+                          img.alt = `Failed to load: ${idea.image_url}`;
+                        }
+                      })();
                     }}
                   />
                   <div className="card-overlay" />
