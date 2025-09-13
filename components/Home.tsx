@@ -3,6 +3,7 @@ import { supabase } from '../services/supabaseClient';
 import { getGalleryIdeas } from '../services/tattooService';
 import type { Idea } from '../types';
 import LoadingSpinner from './LoadingSpinner';
+import ImageDiagnostic from './ImageDiagnostic';
 
 const Home: React.FC = () => {
   const [ideas, setIdeas] = useState<Idea[]>([]);
@@ -43,10 +44,46 @@ const Home: React.FC = () => {
       }
     };
     fetchIdeas();
+    
+    // Diagnostic: Test if we can load Supabase images
+    const testImageUrl = 'https://zflkdyuswpegqabkwlgw.supabase.co/storage/v1/object/public/gallery-images/Generated%20Image%20September%2005,%202025%20-%204_33PM.jpeg';
+    const testImg = new Image();
+    testImg.crossOrigin = 'anonymous';
+    testImg.onload = () => {
+      console.log('✅ Test image loaded successfully from Supabase storage');
+      console.log('Test image dimensions:', testImg.width + 'x' + testImg.height);
+    };
+    testImg.onerror = (e) => {
+      console.error('❌ Test image failed to load from Supabase storage');
+      console.error('Error:', e);
+      
+      // Try without crossOrigin
+      const testImg2 = new Image();
+      testImg2.onload = () => {
+        console.log('✅ Test image loaded WITHOUT crossOrigin attribute');
+      };
+      testImg2.onerror = () => {
+        console.error('❌ Test image failed even without crossOrigin');
+        
+        // Check if it's a network issue
+        fetch(testImageUrl, { method: 'HEAD' })
+          .then(response => {
+            console.log('Fetch test response:', response.status, response.statusText);
+            console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+          })
+          .catch(err => {
+            console.error('Fetch test failed:', err);
+          });
+      };
+      testImg2.src = testImageUrl;
+    };
+    testImg.src = testImageUrl;
   }, []);
 
   return (
     <div className="animate-fade-in">
+      {/* Temporary diagnostic component */}
+      <ImageDiagnostic />
       {/* Hero Section */}
       <div className="text-center mb-6 relative">
         <div className="absolute inset-0 -z-10">
@@ -102,7 +139,7 @@ const Home: React.FC = () => {
                 <div className="card-inner">
                   <img 
                     src={idea.image_url} 
-                    alt="Tattoo inspiration" 
+                    alt={idea.prompt || "Tattoo inspiration"} 
                     className="card-image"
                     loading="lazy"
                     onLoad={(e) => {
@@ -111,7 +148,13 @@ const Home: React.FC = () => {
                     }}
                     onError={(e) => {
                       console.error(`❌ Image failed to load: ${idea.image_url}`);
+                      console.log('Error event:', e);
+                      
                       const img = e.target as HTMLImageElement;
+                      console.log('Current src:', img.src);
+                      console.log('Complete:', img.complete);
+                      console.log('Natural width:', img.naturalWidth);
+                      
                       // Attempt fallback resolution from Supabase Storage
                       (async () => {
                         try {
@@ -155,13 +198,9 @@ const Home: React.FC = () => {
                           img.src = objectUrl;
                         } catch (fallbackErr) {
                           console.warn('Gallery fallback failed:', fallbackErr);
-                          // Final visual placeholder
-                          img.style.backgroundColor = '#f3f4f6';
-                          img.style.border = '1px dashed #d1d5db';
-                          img.style.display = 'flex';
-                          img.style.alignItems = 'center';
-                          img.style.justifyContent = 'center';
-                          img.alt = `Failed to load: ${idea.image_url}`;
+                          // Use SVG placeholder as final fallback
+                          img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"%3E%3Crect width="200" height="200" fill="%23f3f4f6"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="%239ca3af"%3EImage unavailable%3C/text%3E%3C/svg%3E';
+                          img.alt = idea.prompt || 'Image loading failed';
                         }
                       })();
                     }}
@@ -176,7 +215,7 @@ const Home: React.FC = () => {
                 <div className="card-inner">
                   <img 
                     src={idea.image_url} 
-                    alt="Tattoo inspiration" 
+                    alt={idea.prompt || "Tattoo inspiration"} 
                     className="card-image"
                     loading="lazy"
                     onLoad={(e) => {
@@ -185,7 +224,13 @@ const Home: React.FC = () => {
                     }}
                     onError={(e) => {
                       console.error(`❌ Image failed to load (duplicate): ${idea.image_url}`);
+                      console.log('Error event:', e);
+                      
                       const img = e.target as HTMLImageElement;
+                      console.log('Current src:', img.src);
+                      console.log('Complete:', img.complete);
+                      console.log('Natural width:', img.naturalWidth);
+                      
                       (async () => {
                         try {
                           const parseStorageUrl = (urlStr: string) => {
@@ -226,12 +271,9 @@ const Home: React.FC = () => {
                           img.src = objectUrl;
                         } catch (fallbackErr) {
                           console.warn('Gallery fallback (duplicate) failed:', fallbackErr);
-                          img.style.backgroundColor = '#f3f4f6';
-                          img.style.border = '1px dashed #d1d5db';
-                          img.style.display = 'flex';
-                          img.style.alignItems = 'center';
-                          img.style.justifyContent = 'center';
-                          img.alt = `Failed to load: ${idea.image_url}`;
+                          // Use SVG placeholder as final fallback
+                          img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"%3E%3Crect width="200" height="200" fill="%23f3f4f6"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="%239ca3af"%3EImage unavailable%3C/text%3E%3C/svg%3E';
+                          img.alt = idea.prompt || 'Image loading failed';
                         }
                       })();
                     }}

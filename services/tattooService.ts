@@ -110,30 +110,31 @@ export const addGalleryImages = async (): Promise<void> => {
     return;
   }
 
+  // Use properly encoded URLs - spaces should be %20 in URLs
   const galleryImages = [
     {
       image_url: 'https://zflkdyuswpegqabkwlgw.supabase.co/storage/v1/object/public/gallery-images/Generated%20Image%20September%2005,%202025%20-%204_33PM.jpeg',
-      prompt: ''
+      prompt: 'Artistic tattoo design'
     },
     {
       image_url: 'https://zflkdyuswpegqabkwlgw.supabase.co/storage/v1/object/public/gallery-images/Generated%20Image%20September%2005,%202025%20-%204_34PM%20(1).jpeg',
-      prompt: ''
+      prompt: 'Creative tattoo concept'
     },
     {
       image_url: 'https://zflkdyuswpegqabkwlgw.supabase.co/storage/v1/object/public/gallery-images/Generated%20Image%20September%2005,%202025%20-%204_34PM.jpeg',
-      prompt: ''
+      prompt: 'Unique tattoo inspiration'
     },
     {
       image_url: 'https://zflkdyuswpegqabkwlgw.supabase.co/storage/v1/object/public/gallery-images/Generated%20Image%20September%2005,%202025%20-%204_37PM.jpeg',
-      prompt: ''
+      prompt: 'Modern tattoo design'
     },
     {
       image_url: 'https://zflkdyuswpegqabkwlgw.supabase.co/storage/v1/object/public/gallery-images/Generated%20Image%20September%2005,%202025%20-%204_47PM.jpeg',
-      prompt: ''
+      prompt: 'Beautiful tattoo artwork'
     },
     {
       image_url: 'https://zflkdyuswpegqabkwlgw.supabase.co/storage/v1/object/public/gallery-images/Generated%20Image%20September%2005,%202025%20-%204_50PM.jpeg',
-      prompt: ''
+      prompt: 'Stunning tattoo creation'
     }
   ];
 
