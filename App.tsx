@@ -11,7 +11,7 @@ import Terms from './components/Terms';
 import Disclaimer from './components/Disclaimer';
 import Settings from './components/Settings';
 import BottomNav from './components/BottomNav';
-import Home from './components/Home';
+import HomeDashboard from './components/HomeDashboard';
 import SavedIdeas from './components/SavedIdeas';
 import UpgradeModal from './components/UpgradeModal';
 import OnboardingTour from './components/OnboardingTour';
@@ -83,7 +83,7 @@ const App: React.FC = () => {
   const renderContent = () => {
     switch (currentView) {
       case 'home':
-        return <Home />;
+        return <HomeDashboard onNavigate={navigateTo} />;
       case 'create':
         return <Dashboard onNavigate={navigateTo} />;
       case 'saved':
@@ -105,7 +105,7 @@ const App: React.FC = () => {
       case 'settings':
         return <Settings onNavigate={navigateTo} theme={theme} toggleTheme={toggleTheme} />;
       default:
-        return <Home />;
+        return <HomeDashboard onNavigate={navigateTo} />;
     }
   };
 

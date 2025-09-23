@@ -3,28 +3,6 @@ import { getUserId } from '../utils/user';
 import type { Idea } from '../types';
 
 /**
- * Fetches tattoo ideas for the main inspiration gallery.
- * @returns A promise that resolves to an array of ideas.
- */
-export const getGalleryIdeas = async (): Promise<Idea[]> => {
-  if (!supabase) return [];
-  try {
-    const { data, error } = await supabase
-      .from('gallery_ideas')
-      .select('id, image_url, prompt')
-      .order('created_at', { ascending: false });
-
-    if (error) throw error;
-    
-    // URLs have been fixed in the database, return the data directly
-    return data || [];
-  } catch (error) {
-    console.error('Error fetching gallery ideas:', error);
-    return [];
-  }
-};
-
-/**
  * Fetches ideas saved by the current user.
  * @returns A promise that resolves to an array of saved ideas.
  */

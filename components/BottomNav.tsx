@@ -89,7 +89,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ activeView, onNavigate, theme }) 
         {/* Navigation items */}
         <div className="relative flex justify-around items-center px-2 py-1">
           <NavItem
-            label="Home"
+            label="Dashboard"
             icon={<HomeIcon />}
             isActive={activeView === 'home'}
             onClick={() => onNavigate('home')}
