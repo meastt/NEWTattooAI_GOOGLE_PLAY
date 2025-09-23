@@ -20,6 +20,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // Ensure production environment variables are available
+            buildConfigField "String", "REVENUECAT_API_KEY", "\"${System.getenv('VITE_REVENUECAT_API_KEY') ?: ''}\""
+        }
+        debug {
+            // Debug build also gets environment variables for testing
+            buildConfigField "String", "REVENUECAT_API_KEY", "\"${System.getenv('VITE_REVENUECAT_API_KEY') ?: ''}\""
         }
     }
 }
