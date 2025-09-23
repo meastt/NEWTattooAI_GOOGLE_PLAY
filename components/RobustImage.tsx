@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../services/supabaseClient';
 
 interface RobustImageProps {
   originalUrl: string;
@@ -28,14 +27,13 @@ const RobustImage: React.FC<RobustImageProps> = ({
         return;
       }
 
-      // Strategy 1: Try the cleaned URL directly
+      // Clean the URL
       let cleanedUrl = originalUrl;
       cleanedUrl = cleanedUrl.replace(/[\r\n]/g, '').trim();
-      cleanedUrl = cleanedUrl.replace(/a_t%20attoo/g, 'a_tattoo');
       cleanedUrl = cleanedUrl.replace(/\s+/g, '%20');
       cleanedUrl = cleanedUrl.replace(/%20+/g, '%20');
       
-      // Test if the cleaned URL works (silently)
+      // Test if the cleaned URL works
       try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 3000);
@@ -52,33 +50,11 @@ const RobustImage: React.FC<RobustImageProps> = ({
           return;
         }
       } catch (err) {
-        // Continue to next strategy (errors expected and handled silently)
-      }
-
-      // Strategy 2: Try to create a signed URL
-      try {
-        const url = new URL(cleanedUrl);
-        const pathParts = url.pathname.split('/');
-        const fileName = pathParts[pathParts.length - 1];
-        const decodedFileName = decodeURIComponent(fileName);
-        
-        const { data: signedData, error: signedError } = await supabase.storage
-          .from('gallery-images')
-          .createSignedUrl(decodedFileName, 60 * 60);
-          
-        if (!signedError && signedData?.signedUrl) {
-          setCurrentSrc(signedData.signedUrl);
-          setIsLoading(false);
-          return;
-        }
-      } catch (err) {
         // Continue to next strategy
       }
 
-      // Strategy 3: Try variations of the filename
+      // Try variations of the filename
       const variations = [
-        cleanedUrl.replace(/a_t%20attoo/g, 'a_tattoo'),
-        cleanedUrl.replace(/a_tattoo/g, 'a_t%20attoo'),
         cleanedUrl.replace(/%20/g, ''),
         cleanedUrl.replace(/%20/g, '_'),
         cleanedUrl.replace(/\s+/g, ''),
@@ -101,7 +77,7 @@ const RobustImage: React.FC<RobustImageProps> = ({
             return;
           }
         } catch (err) {
-          // Continue to next variation (errors expected and handled silently)
+          // Continue to next variation
         }
       }
 

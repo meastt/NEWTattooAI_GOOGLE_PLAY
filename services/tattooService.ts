@@ -51,61 +51,6 @@ export const saveIdea = async ({ prompt, imageDataUrl }: { prompt: string; image
 };
 
 /**
- * Admin function to add gallery images (temporary - for adding new images)
- */
-export const addGalleryImages = async (): Promise<void> => {
-  if (!supabase) {
-    console.error('Database not configured');
-    return;
-  }
-
-  // Use properly encoded URLs - spaces should be %20 in URLs
-  const galleryImages = [
-    {
-      image_url: 'https://zflkdyuswpegqabkwlgw.supabase.co/storage/v1/object/public/gallery-images/Generated%20Image%20September%2005,%202025%20-%204_33PM.jpeg',
-      prompt: 'Artistic tattoo design'
-    },
-    {
-      image_url: 'https://zflkdyuswpegqabkwlgw.supabase.co/storage/v1/object/public/gallery-images/Generated%20Image%20September%2005,%202025%20-%204_34PM%20(1).jpeg',
-      prompt: 'Creative tattoo concept'
-    },
-    {
-      image_url: 'https://zflkdyuswpegqabkwlgw.supabase.co/storage/v1/object/public/gallery-images/Generated%20Image%20September%2005,%202025%20-%204_34PM.jpeg',
-      prompt: 'Unique tattoo inspiration'
-    },
-    {
-      image_url: 'https://zflkdyuswpegqabkwlgw.supabase.co/storage/v1/object/public/gallery-images/Generated%20Image%20September%2005,%202025%20-%204_37PM.jpeg',
-      prompt: 'Modern tattoo design'
-    },
-    {
-      image_url: 'https://zflkdyuswpegqabkwlgw.supabase.co/storage/v1/object/public/gallery-images/Generated%20Image%20September%2005,%202025%20-%204_47PM.jpeg',
-      prompt: 'Beautiful tattoo artwork'
-    },
-    {
-      image_url: 'https://zflkdyuswpegqabkwlgw.supabase.co/storage/v1/object/public/gallery-images/Generated%20Image%20September%2005,%202025%20-%204_50PM.jpeg',
-      prompt: 'Stunning tattoo creation'
-    }
-  ];
-
-  try {
-    console.log('Adding gallery images to database...');
-    
-    const { data, error } = await supabase
-      .from('gallery_ideas')
-      .insert(galleryImages);
-    
-    if (error) {
-      console.error('Error inserting images:', error);
-      return;
-    }
-    
-    console.log('Successfully added', galleryImages.length, 'gallery images!');
-  } catch (error) {
-    console.error('Failed to add gallery images:', error);
-  }
-};
-
-/**
  * Deletes all saved ideas for the current user and clears localStorage.
  * This function ensures complete data deletion for App Store compliance.
  */
