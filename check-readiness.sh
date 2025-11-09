@@ -48,10 +48,15 @@ if check_file ".env.production" ".env.production file exists"; then
     # Check RevenueCat key
     if grep -q "VITE_REVENUECAT_API_KEY" .env.production 2>/dev/null; then
         REVENUECAT_KEY=$(grep "VITE_REVENUECAT_API_KEY" .env.production | cut -d '=' -f2 | tr -d ' "')
-        if [[ "$REVENUECAT_KEY" == rcb_* ]] && [[ "$REVENUECAT_KEY" != "YOUR_PRODUCTION_REVENUECAT_API_KEY" ]]; then
-            echo -e "${GREEN}✅${NC} RevenueCat API key is configured (Android production key)"
+        if [[ "$REVENUECAT_KEY" == rcb_* ]] || [[ "$REVENUECAT_KEY" == goog_* ]]; then
+            if [[ "$REVENUECAT_KEY" != "YOUR_PRODUCTION_REVENUECAT_API_KEY" ]]; then
+                echo -e "${GREEN}✅${NC} RevenueCat API key is configured (valid SDK key format)"
+            else
+                echo -e "${RED}❌${NC} RevenueCat API key is placeholder - needs real key"
+                ALL_GOOD=false
+            fi
         else
-            echo -e "${RED}❌${NC} RevenueCat API key missing or not Android production key (should start with 'rcb_')"
+            echo -e "${RED}❌${NC} RevenueCat API key has unexpected format (should start with 'rcb_' or 'goog_')"
             ALL_GOOD=false
         fi
     else
@@ -183,6 +188,6 @@ else
     echo "Please fix the issues above before proceeding."
 fi
 echo ""
-echo "📖 For detailed instructions, see: GOOGLE_PLAY_SUBMISSION_GUIDE.md"
+echo "📖 For detailed instructions, see: START_HERE.md or ANDROID_SETUP_GUIDE.md"
 echo ""
 
