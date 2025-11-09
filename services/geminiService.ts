@@ -31,7 +31,7 @@ export const editImage = async (
 
   try {
     const response: GenerateContentResponse = await ai.models.generateContent({
-      model: 'gemini-2.5-flash-image-preview',
+      model: 'gemini-2.5-flash-image',
       contents: {
         parts: [
           {
@@ -47,6 +47,9 @@ export const editImage = async (
       },
       config: {
         responseModalities: [Modality.IMAGE, Modality.TEXT],
+        imageConfig: {
+          imageSize: '1K',
+        },
       },
     });
     
@@ -87,7 +90,7 @@ export const generateImage = async (prompt: string): Promise<string> => {
 
   try {
     const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash-image-preview',
+        model: 'gemini-2.5-flash-image',
         contents: {
           parts: [
             {
@@ -97,6 +100,9 @@ export const generateImage = async (prompt: string): Promise<string> => {
         },
         config: {
           responseModalities: [Modality.IMAGE],
+          imageConfig: {
+            imageSize: '1K',
+          },
         },
     });
 
