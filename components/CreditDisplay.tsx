@@ -39,54 +39,54 @@ const CreditDisplay: React.FC<CreditDisplayProps> = ({ theme, onUpgradeClick }) 
 
   if (subscriptionInfo.hasSubscription) {
     return (
-      <div className={`flex items-center space-x-2 px-3 py-2 rounded-2xl transition-all duration-300 min-w-0 ${
-        theme === 'dark' 
-          ? 'bg-gradient-to-r from-ink-900/50 to-neon-900/50 border border-ink-700/50' 
-          : 'bg-gradient-to-r from-ink-50 to-neon-50 border border-ink-200/50'
+      <div className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg transition-all duration-300 min-w-0 ${
+        theme === 'dark'
+          ? 'bg-gradient-to-r from-electric-500/10 to-magenta-500/10 border border-electric-500/30'
+          : 'bg-gradient-to-r from-electric-50 to-magenta-50 border border-electric-200/50'
       }`}>
         <div className="flex items-center space-x-2 min-w-0">
-          <div className="w-2 h-2 rounded-full bg-gradient-to-r from-ink-500 to-neon-500 animate-pulse flex-shrink-0"></div>
-          <span className={`text-sm font-bold truncate ${
-            theme === 'dark' ? 'text-ink-300' : 'text-ink-700'
+          <div className="w-1.5 h-1.5 rounded-full bg-electric-400 animate-pulse flex-shrink-0"></div>
+          <span className={`text-xs font-heading uppercase tracking-wider truncate ${
+            theme === 'dark' ? 'text-electric-400' : 'text-electric-600'
           }`}>
             {subscriptionInfo.plan?.name || 'PRO'}
           </span>
         </div>
-        <div className="w-px h-4 bg-slate-300 dark:bg-slate-600 flex-shrink-0"></div>
-        <span className="text-sm font-medium text-slate-600 dark:text-slate-400 truncate">
-          {subscriptionInfo.isUnlimited ? '∞ Unlimited' : `${subscriptionInfo.totalCredits} credits`}
+        <div className="w-px h-3 bg-void-600 flex-shrink-0"></div>
+        <span className="text-xs font-medium text-steel-400 truncate">
+          {subscriptionInfo.isUnlimited ? '∞' : `${subscriptionInfo.totalCredits}`}
         </span>
       </div>
     );
   }
 
   return (
-    <div className={`flex items-center space-x-2 px-3 py-2 rounded-2xl transition-all duration-300 min-w-0 ${
-      theme === 'dark' 
-        ? 'bg-slate-800/50 border border-slate-700/50' 
-        : 'bg-white/50 border border-slate-200/50'
+    <div className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg transition-all duration-300 min-w-0 ${
+      theme === 'dark'
+        ? 'bg-void-800/80 border border-void-600'
+        : 'bg-white/80 border border-steel-200'
     }`}>
       {/* Credits */}
       <div className="flex items-center space-x-2 min-w-0">
-        <div className={`w-2 h-2 rounded-full flex-shrink-0 ${
-          subscriptionInfo.totalCredits > 2 
-            ? 'bg-green-500' 
-            : subscriptionInfo.totalCredits > 0 
-              ? 'bg-yellow-500' 
-              : 'bg-red-500'
+        <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
+          subscriptionInfo.totalCredits > 2
+            ? 'bg-electric-400'
+            : subscriptionInfo.totalCredits > 0
+              ? 'bg-yellow-400'
+              : 'bg-red-400'
         }`}></div>
-        <span className="text-sm font-medium text-slate-600 dark:text-slate-400 truncate">
-          {subscriptionInfo.totalCredits} credits
+        <span className="text-xs font-medium text-steel-400 truncate">
+          {subscriptionInfo.totalCredits}
         </span>
       </div>
 
       {/* Upgrade Button */}
       {subscriptionInfo.totalCredits <= 1 && onUpgradeClick && (
         <>
-          <div className="w-px h-4 bg-slate-300 dark:bg-slate-600 flex-shrink-0"></div>
+          <div className="w-px h-3 bg-void-600 flex-shrink-0"></div>
           <button
             onClick={onUpgradeClick}
-            className="text-xs font-bold text-ink-600 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-300 transition-colors duration-300 flex-shrink-0"
+            className="text-xs font-heading uppercase tracking-wider text-magenta-400 hover:text-magenta-300 transition-colors duration-300 flex-shrink-0"
           >
             Upgrade
           </button>

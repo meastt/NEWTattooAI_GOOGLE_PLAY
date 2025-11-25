@@ -7,10 +7,10 @@
     <title>InkPreview - Preview Before You Ink</title>
     <meta name="description" content="Transform your tattoo ideas into reality with AI-powered design generation, virtual try-ons, and removal previews." />
     
-    <!-- Custom Fonts -->
+    <!-- Custom Fonts - Bold Industrial Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -20,55 +20,81 @@
           extend: {
             fontFamily: {
               'sans': ['Inter', 'system-ui', 'sans-serif'],
-              'display': ['Space Grotesk', 'system-ui', 'sans-serif'],
+              'display': ['Bebas Neue', 'Oswald', 'system-ui', 'sans-serif'],
+              'heading': ['Oswald', 'system-ui', 'sans-serif'],
             },
             colors: {
-              'ink': {
-                50: '#fef7f0',
-                100: '#fdeee0',
-                200: '#fbd9c1',
-                300: '#f8c19e',
-                400: '#f4a570',
-                500: '#f0884a',
-                600: '#e16d2a',
-                700: '#ba5420',
-                800: '#944420',
-                900: '#773a1c',
-                950: '#411c0e',
+              // Deep blacks for backgrounds
+              'void': {
+                950: '#030304',
+                900: '#0a0a0c',
+                800: '#111115',
+                700: '#18181d',
+                600: '#1f1f26',
               },
-              'skin': {
-                50: '#fdf4f0',
-                100: '#fce7e0',
-                200: '#f8d0c1',
-                300: '#f2b19e',
-                400: '#ea8a70',
-                500: '#e16d4a',
-                600: '#d24f2a',
-                700: '#b03d20',
-                800: '#913420',
-                900: '#762e1c',
-                950: '#40150e',
+              // Electric cyan - primary neon accent
+              'electric': {
+                50: '#ecfeff',
+                100: '#cffafe',
+                200: '#a5f3fc',
+                300: '#67e8f9',
+                400: '#22d3ee',
+                500: '#00d4ff',
+                600: '#00b8db',
+                700: '#0891b2',
+                800: '#0e7490',
+                900: '#155e75',
+                950: '#083344',
+              },
+              // Hot magenta - secondary neon accent
+              'magenta': {
+                50: '#fdf4ff',
+                100: '#fae8ff',
+                200: '#f5d0fe',
+                300: '#f0abfc',
+                400: '#e879f9',
+                500: '#ff00ff',
+                600: '#c026d3',
+                700: '#a21caf',
+                800: '#86198f',
+                900: '#701a75',
+                950: '#4a044e',
+              },
+              // Neutral grays with slight blue tint
+              'steel': {
+                50: '#f8fafc',
+                100: '#f1f5f9',
+                200: '#e2e8f0',
+                300: '#cbd5e1',
+                400: '#94a3b8',
+                500: '#64748b',
+                600: '#475569',
+                700: '#334155',
+                800: '#1e293b',
+                900: '#0f172a',
+                950: '#020617',
+              },
+              // Keep legacy colors for gradual migration
+              'ink': {
+                500: '#00d4ff',
+                600: '#00b8db',
+                950: '#030304',
               },
               'neon': {
-                50: '#f0f9ff',
-                100: '#e0f2fe',
-                200: '#bae6fd',
-                300: '#7dd3fc',
-                400: '#38bdf8',
-                500: '#0ea5e9',
-                600: '#0284c7',
-                700: '#0369a1',
-                800: '#075985',
-                900: '#0c4a6e',
-                950: '#082f49',
+                500: '#ff00ff',
+                950: '#030304',
               }
             },
             animation: {
-              'fade-in': 'fadeIn 0.6s ease-out',
-              'slide-up': 'slideUp 0.6s ease-out',
-              'scale-in': 'scaleIn 0.4s ease-out',
+              'fade-in': 'fadeIn 0.5s ease-out',
+              'slide-up': 'slideUp 0.5s ease-out',
+              'scale-in': 'scaleIn 0.3s ease-out',
               'float': 'float 6s ease-in-out infinite',
               'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'glow': 'glow 2s ease-in-out infinite alternate',
+              'flicker': 'flicker 3s ease-in-out infinite',
+              'scan': 'scan 2s linear infinite',
+              'border-flow': 'borderFlow 3s linear infinite',
             },
             keyframes: {
               fadeIn: {
@@ -76,21 +102,45 @@
                 '100%': { opacity: '1' },
               },
               slideUp: {
-                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '0%': { opacity: '0', transform: 'translateY(30px)' },
                 '100%': { opacity: '1', transform: 'translateY(0)' },
               },
               scaleIn: {
-                '0%': { opacity: '0', transform: 'scale(0.9)' },
+                '0%': { opacity: '0', transform: 'scale(0.95)' },
                 '100%': { opacity: '1', transform: 'scale(1)' },
               },
               float: {
                 '0%, 100%': { transform: 'translateY(0px)' },
                 '50%': { transform: 'translateY(-10px)' },
               },
+              glow: {
+                '0%': { boxShadow: '0 0 20px rgba(0, 212, 255, 0.3), 0 0 40px rgba(0, 212, 255, 0.1)' },
+                '100%': { boxShadow: '0 0 30px rgba(0, 212, 255, 0.5), 0 0 60px rgba(0, 212, 255, 0.2)' },
+              },
+              flicker: {
+                '0%, 100%': { opacity: '1' },
+                '50%': { opacity: '0.8' },
+                '75%': { opacity: '0.9' },
+              },
+              scan: {
+                '0%': { transform: 'translateY(-100%)' },
+                '100%': { transform: 'translateY(100%)' },
+              },
+              borderFlow: {
+                '0%': { backgroundPosition: '0% 50%' },
+                '50%': { backgroundPosition: '100% 50%' },
+                '100%': { backgroundPosition: '0% 50%' },
+              },
             },
             backdropBlur: {
               xs: '2px',
-            }
+            },
+            boxShadow: {
+              'neon-cyan': '0 0 20px rgba(0, 212, 255, 0.4), 0 0 40px rgba(0, 212, 255, 0.2)',
+              'neon-magenta': '0 0 20px rgba(255, 0, 255, 0.4), 0 0 40px rgba(255, 0, 255, 0.2)',
+              'neon-dual': '0 0 20px rgba(0, 212, 255, 0.3), 0 0 40px rgba(255, 0, 255, 0.2)',
+              'inner-glow': 'inset 0 0 20px rgba(0, 212, 255, 0.1)',
+            },
           }
         }
       }
@@ -147,26 +197,63 @@
       html.dark nav.fixed.bottom-0,
       body.dark nav.fixed.bottom-0,
       div.dark nav.fixed.bottom-0 {
-        background-color: rgba(15, 23, 42, 0.95) !important;
-        background: rgba(15, 23, 42, 0.95) !important;
+        background-color: rgba(3, 3, 4, 0.98) !important;
+        background: rgba(3, 3, 4, 0.98) !important;
       }
-      
+
       html.dark nav.fixed.bottom-0 > div,
       body.dark nav.fixed.bottom-0 > div,
       div.dark nav.fixed.bottom-0 > div {
-        background-color: rgba(15, 23, 42, 0.95) !important;
-        background: rgba(15, 23, 42, 0.95) !important;
+        background-color: rgba(3, 3, 4, 0.98) !important;
+        background: rgba(3, 3, 4, 0.98) !important;
       }
-      
+
       /* Dark mode specific nav styling */
       .dark nav[class*="bottom-0"] {
-        background-color: rgba(15, 23, 42, 0.95) !important;
-        background: rgba(15, 23, 42, 0.95) !important;
+        background-color: rgba(3, 3, 4, 0.98) !important;
+        background: rgba(3, 3, 4, 0.98) !important;
       }
-      
+
       .dark nav[class*="bottom-0"] > div:first-child {
-        background-color: rgba(15, 23, 42, 0.95) !important;
-        background: rgba(15, 23, 42, 0.95) !important;
+        background-color: rgba(3, 3, 4, 0.98) !important;
+        background: rgba(3, 3, 4, 0.98) !important;
+      }
+
+      /* Neon glow utilities */
+      .neon-text-cyan {
+        text-shadow: 0 0 10px rgba(0, 212, 255, 0.8), 0 0 20px rgba(0, 212, 255, 0.5), 0 0 30px rgba(0, 212, 255, 0.3);
+      }
+
+      .neon-text-magenta {
+        text-shadow: 0 0 10px rgba(255, 0, 255, 0.8), 0 0 20px rgba(255, 0, 255, 0.5), 0 0 30px rgba(255, 0, 255, 0.3);
+      }
+
+      .neon-border {
+        box-shadow: 0 0 10px rgba(0, 212, 255, 0.4), inset 0 0 10px rgba(0, 212, 255, 0.1);
+      }
+
+      .neon-border-magenta {
+        box-shadow: 0 0 10px rgba(255, 0, 255, 0.4), inset 0 0 10px rgba(255, 0, 255, 0.1);
+      }
+
+      /* Gradient border animation */
+      .gradient-border {
+        position: relative;
+      }
+
+      .gradient-border::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        padding: 1px;
+        background: linear-gradient(135deg, #00d4ff, #ff00ff, #00d4ff);
+        background-size: 200% 200%;
+        animation: borderFlow 3s linear infinite;
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
       }
 
       /* iOS specific safe area fixes */

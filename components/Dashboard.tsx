@@ -15,122 +15,157 @@ const DashboardCard: React.FC<{
   description: string;
   onClick: () => void;
   delay?: number;
-}> = ({ icon, title, description, onClick, delay = 0 }) => (
-  <button
-    onClick={onClick}
-    className="group relative overflow-hidden bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-6 rounded-3xl border border-slate-200/50 dark:border-slate-700/50 hover:border-ink-300 dark:hover:border-ink-600 hover:bg-white/90 dark:hover:bg-slate-800/90 transition-all duration-500 text-left w-full min-h-[200px] flex flex-col hover:scale-105 hover:shadow-2xl hover:shadow-ink-500/10 dark:hover:shadow-ink-500/20"
-    style={{ animationDelay: `${delay}ms` }}
-  >
-    {/* Background Gradient */}
-    <div className="absolute inset-0 bg-gradient-to-br from-ink-50/50 via-transparent to-neon-50/50 dark:from-ink-950/30 dark:via-transparent dark:to-neon-950/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-    
-    {/* Icon Container */}
-    <div className="relative mb-6">
-      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-ink-100 to-neon-100 dark:from-ink-900 dark:to-neon-900 flex items-center justify-center text-ink-600 dark:text-ink-400 group-hover:scale-110 transition-transform duration-300">
-        {icon}
+  accentColor: 'cyan' | 'magenta';
+  number: string;
+}> = ({ icon, title, description, onClick, delay = 0, accentColor, number }) => {
+  const glowColor = accentColor === 'cyan'
+    ? 'rgba(0, 212, 255, 0.15)'
+    : 'rgba(255, 0, 255, 0.15)';
+  const borderColor = accentColor === 'cyan'
+    ? 'border-electric-500/30 hover:border-electric-400/60'
+    : 'border-magenta-500/30 hover:border-magenta-400/60';
+  const iconBg = accentColor === 'cyan'
+    ? 'bg-electric-500/10 group-hover:bg-electric-500/20'
+    : 'bg-magenta-500/10 group-hover:bg-magenta-500/20';
+  const iconColor = accentColor === 'cyan'
+    ? 'text-electric-400'
+    : 'text-magenta-400';
+  const numberColor = accentColor === 'cyan'
+    ? 'text-electric-500/20'
+    : 'text-magenta-500/20';
+
+  return (
+    <button
+      onClick={onClick}
+      className={`group relative overflow-hidden bg-void-900/80 dark:bg-void-900/80 backdrop-blur-sm p-6 rounded-2xl border ${borderColor} transition-all duration-500 text-left w-full min-h-[180px] flex flex-col hover:scale-[1.02] hover:-translate-y-1`}
+      style={{
+        animationDelay: `${delay}ms`,
+        boxShadow: `0 0 40px ${glowColor}`
+      }}
+    >
+      {/* Large background number */}
+      <span className={`absolute -right-2 -top-4 font-display text-[120px] leading-none ${numberColor} select-none pointer-events-none transition-all duration-500 group-hover:scale-110 group-hover:opacity-50`}>
+        {number}
+      </span>
+
+      {/* Scan line effect on hover */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent h-[200%] animate-scan" />
       </div>
-      <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-gradient-to-r from-ink-500 to-neon-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-    </div>
-    
-    {/* Content */}
-    <h3 className="text-2xl font-display font-bold text-slate-900 dark:text-slate-100 mb-4 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-ink-600 group-hover:to-neon-600 transition-all duration-300">
-      {title}
-    </h3>
-    <p className="text-slate-600 dark:text-slate-400 flex-grow leading-relaxed group-hover:text-slate-700 dark:group-hover:text-slate-300 transition-colors duration-300">
-      {description}
-    </p>
-    
-    {/* Action Indicator */}
-    <div className="mt-6 flex items-center text-sm font-semibold text-ink-500 dark:text-ink-400 group-hover:text-ink-600 dark:group-hover:text-ink-300 transition-colors duration-300">
-      <span>Get Started</span>
-      <svg className="ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-      </svg>
-    </div>
-    
-    {/* Hover Effect Border */}
-    <div className="absolute inset-0 rounded-3xl border-2 border-transparent group-hover:border-gradient-to-r group-hover:from-ink-500 group-hover:to-neon-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-  </button>
-);
+
+      {/* Icon Container */}
+      <div className="relative mb-4 z-10">
+        <div className={`w-14 h-14 rounded-xl ${iconBg} flex items-center justify-center ${iconColor} transition-all duration-300 group-hover:scale-110`}>
+          {icon}
+        </div>
+      </div>
+
+      {/* Content */}
+      <h3 className="font-heading text-xl font-bold text-white mb-2 uppercase tracking-wide group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-electric-400 group-hover:to-magenta-400 transition-all duration-300 z-10">
+        {title}
+      </h3>
+      <p className="text-steel-400 text-sm flex-grow leading-relaxed group-hover:text-steel-300 transition-colors duration-300 z-10">
+        {description}
+      </p>
+
+      {/* Action Indicator */}
+      <div className={`mt-4 flex items-center text-xs font-heading font-semibold uppercase tracking-wider ${iconColor} transition-colors duration-300 z-10`}>
+        <span>Launch</span>
+        <svg className="ml-2 w-4 h-4 transform group-hover:translate-x-2 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg>
+      </div>
+
+      {/* Corner accent */}
+      <div className={`absolute bottom-0 right-0 w-16 h-16 ${accentColor === 'cyan' ? 'bg-electric-500/10' : 'bg-magenta-500/10'} blur-2xl rounded-full translate-x-1/2 translate-y-1/2 group-hover:scale-150 transition-transform duration-500`} />
+    </button>
+  );
+};
 
 
 const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
   return (
     <div className="flex flex-col items-center animate-fade-in">
       {/* Hero Section */}
-      <div className="text-center mb-16 relative">
+      <div className="text-center mb-12 relative">
+        {/* Background glow effects */}
         <div className="absolute inset-0 -z-10">
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-ink-500/10 to-neon-500/10 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/4 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-electric-500/10 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 right-1/4 transform translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-magenta-500/10 rounded-full blur-3xl" />
         </div>
-        
-        <h2 className="text-5xl md:text-6xl font-display font-bold mb-6">
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-ink-600 via-ink-500 to-neon-500">
-            Unleash Your
-          </span>
-          <br />
-          <span className="text-slate-900 dark:text-white">Inner Ink</span>
+
+        {/* Main headline */}
+        <h2 className="font-display text-5xl md:text-7xl tracking-wider mb-4 uppercase">
+          <span className="text-white dark:text-white neon-text-cyan">CREATE</span>
         </h2>
-        
-        <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed mb-8">
-          Visualize your next tattoo like never before. Use AI to try on designs, create new concepts, 
-          or even see what you'd look like without old ink. Your canvas awaits.
+
+        <p className="text-lg text-steel-400 dark:text-steel-400 max-w-2xl mx-auto leading-relaxed mb-8 font-sans">
+          Choose your creative path. Generate designs, preview on your skin, remove old ink, or design a cover-up.
         </p>
-        
-        <div className="flex flex-wrap justify-center gap-4 text-sm">
-          <span className="px-4 py-2 rounded-full bg-ink-100 dark:bg-ink-900 text-ink-700 dark:text-ink-300 font-medium">
+
+        {/* Feature tags */}
+        <div className="flex flex-wrap justify-center gap-3 text-xs">
+          <span className="px-3 py-1.5 rounded-full bg-electric-500/10 text-electric-400 font-heading uppercase tracking-wider border border-electric-500/20">
             AI-Powered
           </span>
-          <span className="px-4 py-2 rounded-full bg-neon-100 dark:bg-neon-900 text-neon-700 dark:text-neon-300 font-medium">
-            Realistic Preview
+          <span className="px-3 py-1.5 rounded-full bg-magenta-500/10 text-magenta-400 font-heading uppercase tracking-wider border border-magenta-500/20">
+            Realistic
           </span>
-          <span className="px-4 py-2 rounded-full bg-skin-100 dark:bg-skin-900 text-skin-700 dark:text-skin-300 font-medium">
-            Multiple Styles
+          <span className="px-3 py-1.5 rounded-full bg-void-700 text-steel-300 font-heading uppercase tracking-wider border border-void-600">
+            45+ Styles
           </span>
         </div>
       </div>
 
       {/* Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full max-w-4xl mb-8">
         <div className="animate-slide-up" style={{ animationDelay: '0.1s' }}>
           <DashboardCard
             icon={<CameraIcon />}
             title="Tattoo Try-On"
-            description="Upload a photo of yourself and describe your ideal tattoo. See a realistic preview on your own skin in seconds."
+            description="Upload a photo and see a realistic preview of your tattoo on your own skin."
             onClick={() => onNavigate('tryOn')}
             delay={100}
+            accentColor="cyan"
+            number="01"
           />
         </div>
-        
+
         <div className="animate-slide-up" style={{ animationDelay: '0.2s' }}>
           <DashboardCard
             icon={<SparklesIcon />}
             title="Idea Generator"
-            description="Don't have a design yet? Describe your concept, style, and elements to generate unique, custom tattoo art from scratch."
+            description="Describe your vision and let AI create unique tattoo designs from scratch."
             onClick={() => onNavigate('generator')}
             delay={200}
+            accentColor="magenta"
+            number="02"
           />
         </div>
-        
+
         <div className="animate-slide-up" style={{ animationDelay: '0.3s' }}>
           <DashboardCard
             icon={<EraserIcon />}
             title="Tattoo Removal"
-            description="See a preview of your skin without a specific tattoo. Perfect for visualizing a clean slate before making decisions."
+            description="Preview what your skin would look like without a specific tattoo."
             onClick={() => onNavigate('removal')}
             delay={300}
+            accentColor="cyan"
+            number="03"
           />
         </div>
-        
+
         <div className="animate-slide-up" style={{ animationDelay: '0.4s' }}>
           <DashboardCard
             icon={<PaletteIcon />}
             title="Cover-Up Designer"
-            description="Transform an old tattoo into something new. Upload your current tattoo and design a beautiful cover-up over it."
+            description="Transform old tattoos into something new with AI-designed cover-ups."
             onClick={() => onNavigate('coverup')}
             delay={400}
+            accentColor="magenta"
+            number="04"
           />
         </div>
-        
       </div>
     </div>
   );

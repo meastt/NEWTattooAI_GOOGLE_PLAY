@@ -17,104 +17,135 @@ const NavItem: React.FC<{
   isActive: boolean;
   onClick: () => void;
   theme: 'light' | 'dark';
-}> = ({ label, icon, isActive, onClick, theme }) => {
+  accentColor?: 'cyan' | 'magenta';
+}> = ({ label, icon, isActive, onClick, theme, accentColor = 'cyan' }) => {
+  const activeStyles = accentColor === 'cyan'
+    ? 'text-electric-400 neon-text-cyan'
+    : 'text-magenta-400 neon-text-magenta';
+
   return (
     <button
       onClick={onClick}
-      className={`group relative flex flex-col items-center justify-center w-full py-2 px-2 transition-all duration-300 text-slate-500 ${
-        theme === 'dark' ? 'hover:text-slate-300' : 'hover:text-slate-700'
+      className={`group relative flex flex-col items-center justify-center w-full py-2 px-1 transition-all duration-300 ${
+        isActive
+          ? activeStyles
+          : theme === 'dark'
+            ? 'text-steel-500 hover:text-steel-300'
+            : 'text-steel-400 hover:text-steel-600'
       }`}
     >
-      
+      {/* Active indicator - neon glow bar */}
+      {isActive && (
+        <div className={`absolute -top-1 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full ${
+          accentColor === 'cyan'
+            ? 'bg-electric-400 shadow-[0_0_10px_rgba(0,212,255,0.8)]'
+            : 'bg-magenta-400 shadow-[0_0_10px_rgba(255,0,255,0.8)]'
+        }`} />
+      )}
+
       {/* Icon Container */}
-      <div className={`relative z-10 p-2 rounded-xl transition-all duration-300 ${
-        theme === 'dark' ? 'group-hover:bg-slate-800' : 'group-hover:bg-slate-100'
+      <div className={`relative z-10 p-2 rounded-lg transition-all duration-300 ${
+        isActive
+          ? theme === 'dark'
+            ? 'bg-void-800/80'
+            : 'bg-steel-100'
+          : theme === 'dark'
+            ? 'group-hover:bg-void-800/50'
+            : 'group-hover:bg-steel-100/50'
       }`}>
         {icon}
       </div>
-      
+
       {/* Label */}
-      <span className={`text-xs mt-2 font-medium transition-all duration-300 text-slate-500 ${
-        theme === 'dark' ? 'group-hover:text-slate-300' : 'group-hover:text-slate-700'
+      <span className={`text-[10px] mt-1 font-heading font-medium uppercase tracking-wider transition-all duration-300 ${
+        isActive
+          ? ''
+          : theme === 'dark'
+            ? 'text-steel-500 group-hover:text-steel-400'
+            : 'text-steel-400 group-hover:text-steel-600'
       }`}>
         {label}
       </span>
-      
     </button>
   );
 };
 
 
 const BottomNav: React.FC<BottomNavProps> = ({ activeView, onNavigate, theme }) => {
+  // Determine if a view is active for the nav items
+  const isHomeActive = activeView === 'home';
+  const isCreateActive = ['create', 'tryOn', 'generator', 'removal', 'coverup'].includes(activeView);
+  const isSavedActive = activeView === 'saved';
+  const isSettingsActive = ['settings', 'privacy', 'terms', 'disclaimer'].includes(activeView);
+
   return (
-    <nav 
+    <nav
       className="fixed bottom-0 left-0 right-0 w-full z-50"
-      style={{ 
+      style={{
         position: 'fixed !important',
         bottom: '0px !important',
         left: '0px !important',
         right: '0px !important',
         width: '100% !important',
-        height: 'calc(56px + env(safe-area-inset-bottom, 0px) + 48px)', // Reduced by ~20% from 70px + 60px
-        paddingTop: '6px', // Reduced from 8px
-        paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 48px)', // Reduced from 60px
-        backgroundColor: theme === 'dark' ? 'rgba(15, 23, 42, 1)' : 'rgba(255, 255, 255, 1)',
+        height: 'calc(56px + env(safe-area-inset-bottom, 0px) + 48px)',
+        paddingTop: '6px',
+        paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 48px)',
+        backgroundColor: theme === 'dark' ? 'rgba(3, 3, 4, 1)' : 'rgba(255, 255, 255, 1)',
         zIndex: '9999 !important',
         pointerEvents: 'auto',
-        transform: 'translateZ(0) !important', // Force hardware acceleration
-        willChange: 'transform !important', // Optimize for animations
+        transform: 'translateZ(0) !important',
+        willChange: 'transform !important',
         backfaceVisibility: 'hidden !important',
         WebkitBackfaceVisibility: 'hidden !important',
-        isolation: 'isolate', // Create new stacking context
-        contain: 'layout style paint' // Optimize rendering
+        isolation: 'isolate',
+        contain: 'layout style paint'
       }}
     >
+      {/* Top border - neon gradient line */}
+      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-electric-500/30 via-magenta-500/30 to-electric-500/30" />
+
       {/* Background with blur effect */}
-      <div 
-        className="backdrop-blur-md border-t"
+      <div
+        className="backdrop-blur-xl"
         style={{
-          backgroundColor: theme === 'dark' ? 'rgba(15, 23, 42, 0.98)' : 'rgba(255, 255, 255, 0.98)',
-          borderColor: theme === 'dark' ? 'rgba(51, 65, 85, 0.5)' : 'rgba(226, 232, 240, 0.5)',
+          backgroundColor: theme === 'dark' ? 'rgba(3, 3, 4, 0.98)' : 'rgba(255, 255, 255, 0.98)',
           transform: 'translateZ(0)',
           WebkitTransform: 'translateZ(0)'
         }}
       >
-        {/* Gradient overlay */}
-        <div className={`absolute inset-0 bg-gradient-to-r via-transparent ${
-          theme === 'dark' 
-            ? 'from-ink-950/30 to-neon-950/30' 
-            : 'from-ink-50/30 to-neon-50/30'
-        }`} />
-        
         {/* Navigation items */}
         <div className="relative flex justify-around items-center px-2 py-1">
           <NavItem
-            label="Dashboard"
+            label="Home"
             icon={<HomeIcon />}
-            isActive={activeView === 'home'}
+            isActive={isHomeActive}
             onClick={() => onNavigate('home')}
             theme={theme}
+            accentColor="cyan"
           />
           <NavItem
             label="Create"
             icon={<CreateIcon />}
-            isActive={activeView === 'create'}
+            isActive={isCreateActive}
             onClick={() => onNavigate('create')}
             theme={theme}
+            accentColor="magenta"
           />
           <NavItem
-            label="My Ideas"
+            label="Saved"
             icon={<SavedIcon />}
-            isActive={activeView === 'saved'}
+            isActive={isSavedActive}
             onClick={() => onNavigate('saved')}
             theme={theme}
+            accentColor="cyan"
           />
           <NavItem
             label="Settings"
             icon={<SettingsIcon />}
-            isActive={activeView === 'settings'}
+            isActive={isSettingsActive}
             onClick={() => onNavigate('settings')}
             theme={theme}
+            accentColor="cyan"
           />
         </div>
       </div>

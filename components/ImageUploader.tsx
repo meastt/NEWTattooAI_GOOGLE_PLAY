@@ -94,32 +94,48 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageReady }) => {
 
   return (
     <div className="flex flex-col items-center space-y-4">
-      <div className="w-full h-64 bg-white dark:bg-slate-800 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 flex items-center justify-center overflow-hidden">
+      <div className="w-full h-56 bg-void-800 rounded-xl border border-void-600 border-dashed flex items-center justify-center overflow-hidden relative group">
         {preview && <img src={preview} alt="Preview" className="h-full w-full object-contain" />}
         {isCameraOpen && <video ref={videoRef} autoPlay playsInline className="h-full w-full object-cover"></video>}
-        {!preview && !isCameraOpen && <span className="text-slate-500">Image Preview</span>}
+        {!preview && !isCameraOpen && (
+          <div className="flex flex-col items-center text-steel-500">
+            <div className="w-12 h-12 rounded-lg bg-void-700 flex items-center justify-center mb-2">
+              <UploadIcon />
+            </div>
+            <span className="text-xs font-heading uppercase tracking-wider">Image Preview</span>
+          </div>
+        )}
+        {/* Corner accents */}
+        <div className="absolute top-2 left-2 w-4 h-4 border-l-2 border-t-2 border-electric-500/30 rounded-tl" />
+        <div className="absolute top-2 right-2 w-4 h-4 border-r-2 border-t-2 border-electric-500/30 rounded-tr" />
+        <div className="absolute bottom-2 left-2 w-4 h-4 border-l-2 border-b-2 border-electric-500/30 rounded-bl" />
+        <div className="absolute bottom-2 right-2 w-4 h-4 border-r-2 border-b-2 border-electric-500/30 rounded-br" />
       </div>
-       <canvas ref={canvasRef} style={{ display: 'none' }} />
+      <canvas ref={canvasRef} style={{ display: 'none' }} />
 
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+      {error && (
+        <div className="w-full px-3 py-2 bg-red-500/10 border border-red-500/30 rounded-lg">
+          <p className="text-red-400 text-xs">{error}</p>
+        </div>
+      )}
 
       {isCameraOpen ? (
-         <button onClick={takePicture} className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2">
-            <CameraIcon />
-            <span>Take Picture</span>
+        <button onClick={takePicture} className="w-full bg-magenta-500 hover:bg-magenta-400 text-white font-heading uppercase tracking-wider text-sm py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 shadow-neon-magenta">
+          <CameraIcon />
+          <span>Capture</span>
         </button>
       ) : (
-        <div className="grid grid-cols-2 gap-4 w-full">
-            <input type="file" accept="image/png, image/jpeg, image/webp" ref={fileInputRef} onChange={handleFileChange} className="hidden" />
-            <input type="file" accept="image/png, image/jpeg, image/webp" capture="environment" ref={cameraInputRef} onChange={handleFileChange} className="hidden" />
-            <button onClick={triggerFileSelect} className="bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2">
-                <UploadIcon />
-                <span>Upload</span>
-            </button>
-            <button onClick={startCamera} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2">
-                <CameraIcon />
-                <span>Camera</span>
-            </button>
+        <div className="grid grid-cols-2 gap-3 w-full">
+          <input type="file" accept="image/png, image/jpeg, image/webp" ref={fileInputRef} onChange={handleFileChange} className="hidden" />
+          <input type="file" accept="image/png, image/jpeg, image/webp" capture="environment" ref={cameraInputRef} onChange={handleFileChange} className="hidden" />
+          <button onClick={triggerFileSelect} className="bg-void-700 hover:bg-void-600 border border-void-600 hover:border-electric-500/50 text-steel-300 hover:text-white font-heading uppercase tracking-wider text-xs py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2">
+            <UploadIcon />
+            <span>Upload</span>
+          </button>
+          <button onClick={startCamera} className="bg-electric-500/20 hover:bg-electric-500/30 border border-electric-500/30 hover:border-electric-500/50 text-electric-400 hover:text-electric-300 font-heading uppercase tracking-wider text-xs py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2">
+            <CameraIcon />
+            <span>Camera</span>
+          </button>
         </div>
       )}
     </div>

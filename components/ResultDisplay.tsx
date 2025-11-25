@@ -78,54 +78,61 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
   };
 
   return (
-    <div className="mt-12 animate-slide-up">
-      <h3 className="text-3xl font-display font-bold text-center mb-8">
-        <span className="text-transparent bg-clip-text bg-gradient-to-r from-ink-600 to-neon-500">
-          Your Design
-        </span>
-      </h3>
-      
-      <div className="w-full min-h-[30rem] bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-3xl flex flex-col items-center justify-center p-8 shadow-xl" style={{ 
-        overflowX: 'hidden', 
+    <div className="mt-10 animate-slide-up">
+      <div className="flex items-center justify-center gap-3 mb-6">
+        <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-electric-500/30" />
+        <h3 className="font-display text-2xl tracking-wider uppercase">
+          <span className="text-white">RESULT</span>
+        </h3>
+        <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-magenta-500/30" />
+      </div>
+
+      <div className="w-full min-h-[28rem] bg-void-900/80 backdrop-blur-sm border border-void-700 rounded-2xl flex flex-col items-center justify-center p-6 relative overflow-hidden" style={{
+        overflowX: 'hidden',
         maxWidth: '100%',
         contain: 'layout style paint'
       }}>
+        {/* Corner accents */}
+        <div className="absolute top-3 left-3 w-6 h-6 border-l-2 border-t-2 border-electric-500/30 rounded-tl" />
+        <div className="absolute top-3 right-3 w-6 h-6 border-r-2 border-t-2 border-magenta-500/30 rounded-tr" />
+        <div className="absolute bottom-3 left-3 w-6 h-6 border-l-2 border-b-2 border-electric-500/30 rounded-bl" />
+        <div className="absolute bottom-3 right-3 w-6 h-6 border-r-2 border-b-2 border-magenta-500/30 rounded-br" />
+
         {isLoading && (
           <div className="text-center">
             <div className="relative mb-6">
-              <div className="w-16 h-16 border-4 border-ink-200 dark:border-ink-800 rounded-full animate-spin border-t-ink-500 dark:border-t-ink-400"></div>
-              <div className="absolute inset-0 w-16 h-16 border-4 border-transparent rounded-full animate-ping border-t-neon-500/30"></div>
+              <div className="w-16 h-16 border-2 border-void-600 rounded-full animate-spin border-t-electric-500"></div>
+              <div className="absolute inset-0 w-16 h-16 border-2 border-transparent rounded-full animate-ping border-t-magenta-500/30"></div>
             </div>
-            <p className="text-xl text-slate-600 dark:text-slate-300 font-medium">{loadingText}</p>
+            <p className="text-steel-400 font-medium text-sm">{loadingText}</p>
           </div>
         )}
-        
+
         {error && (
-          <div className="text-center p-8 rounded-2xl bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-              <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="text-center p-6 rounded-xl bg-red-500/10 border border-red-500/30 max-w-md">
+            <div className="w-12 h-12 mx-auto mb-3 rounded-lg bg-red-500/20 flex items-center justify-center">
+              <svg className="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
               </svg>
             </div>
-            <p className="text-red-600 dark:text-red-400 font-medium text-lg">{error}</p>
+            <p className="text-red-400 text-sm">{error}</p>
           </div>
         )}
-        
+
         {!isLoading && !error && resultImage && (
-          <div className="flex flex-col items-center gap-6">
+          <div className="flex flex-col items-center gap-5 w-full">
             <div className="relative group">
-              <img 
-                src={resultImage} 
-                alt="Generated tattoo result" 
-                className="max-w-full max-h-[40rem] rounded-2xl object-contain shadow-2xl group-hover:scale-105 transition-transform duration-500" 
-                style={{ 
-                  maxWidth: '100%', 
+              <img
+                src={resultImage}
+                alt="Generated tattoo result"
+                className="max-w-full max-h-[36rem] rounded-xl object-contain shadow-2xl group-hover:scale-[1.02] transition-transform duration-500"
+                style={{
+                  maxWidth: '100%',
                   height: 'auto',
                   contain: 'layout style paint',
                   willChange: 'transform'
                 }}
                 onLoad={() => {
-                  // Force re-layout to prevent header/footer movement
                   setTimeout(() => {
                     const header = document.querySelector('header');
                     const nav = document.querySelector('nav');
@@ -134,42 +141,43 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
                   }, 10);
                 }}
               />
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              {/* Neon border glow on hover */}
+              <div className="absolute -inset-[1px] rounded-xl bg-gradient-to-r from-electric-500/50 to-magenta-500/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-sm" />
             </div>
-            
-            <div className="flex flex-col sm:flex-row items-center gap-4 mt-6">
+
+            <div className="flex flex-col sm:flex-row items-center gap-3 mt-4">
               <button
                 onClick={handleSaveClick}
                 disabled={isSaving || isSaved}
-                className="bg-gradient-to-r from-ink-600 via-ink-500 to-neon-500 hover:from-ink-700 hover:via-ink-600 hover:to-neon-600 text-white font-bold py-3 px-6 rounded-2xl transition-all duration-300 flex items-center gap-3 disabled:bg-slate-400 disabled:cursor-not-allowed shadow-lg hover:shadow-xl hover:shadow-ink-500/25 disabled:shadow-none group"
+                className={`${isSaved ? 'bg-green-500/20 border-green-500/30 text-green-400' : 'bg-electric-500/20 border-electric-500/30 hover:border-electric-500/50 text-electric-400 hover:text-electric-300'} border font-heading uppercase tracking-wider text-xs py-3 px-5 rounded-xl transition-all duration-300 flex items-center gap-2 disabled:cursor-not-allowed`}
               >
                 {isSaving ? (
-                  <div className="w-5 h-5 border-2 border-white/30 rounded-full animate-spin border-t-white" />
+                  <div className="w-4 h-4 border-2 border-electric-400/30 rounded-full animate-spin border-t-electric-400" />
                 ) : (
                   <SaveIcon />
                 )}
                 <span>{isSaved ? 'Saved!' : isSaving ? 'Saving...' : 'Save Idea'}</span>
               </button>
-              
+
               <button
                 onClick={handleShareClick}
-                className="bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 hover:from-blue-700 hover:via-blue-600 hover:to-cyan-600 text-white font-bold py-3 px-6 rounded-2xl transition-all duration-300 flex items-center gap-3 shadow-lg hover:shadow-xl hover:shadow-blue-500/25 group"
+                className="bg-magenta-500/20 border border-magenta-500/30 hover:border-magenta-500/50 text-magenta-400 hover:text-magenta-300 font-heading uppercase tracking-wider text-xs py-3 px-5 rounded-xl transition-all duration-300 flex items-center gap-2"
               >
                 <ShareIcon />
-                <span>Share</span>
+                <span>Export</span>
               </button>
             </div>
           </div>
         )}
-        
+
         {!isLoading && !error && !resultImage && (
           <div className="text-center">
-            <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-r from-ink-100 to-neon-100 dark:from-ink-900 dark:to-neon-900 flex items-center justify-center">
-              <svg className="w-10 h-10 text-ink-500 dark:text-ink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-xl bg-void-800 border border-void-600 flex items-center justify-center">
+              <svg className="w-8 h-8 text-steel-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
             </div>
-            <p className="text-slate-500 dark:text-slate-400 text-lg font-medium">{initialText}</p>
+            <p className="text-steel-500 text-sm font-heading uppercase tracking-wider">{initialText}</p>
           </div>
         )}
       </div>

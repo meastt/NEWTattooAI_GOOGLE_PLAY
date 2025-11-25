@@ -72,42 +72,50 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
       paddingBottom: '2rem'
     }}>
       {/* Header */}
-      <div className="text-center mb-12 relative">
+      <div className="text-center mb-10 relative">
         <div className="absolute inset-0 -z-10">
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-ink-500/10 to-neon-500/10 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-electric-500/10 rounded-full blur-3xl" />
         </div>
 
-        <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-ink-600 via-ink-500 to-neon-500">
-            Tattoo Try-On
-          </span>
+        <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full bg-electric-500/10 border border-electric-500/20">
+          <div className="w-1.5 h-1.5 rounded-full bg-electric-400 animate-pulse" />
+          <span className="text-xs font-heading uppercase tracking-wider text-electric-400">Try-On Mode</span>
+        </div>
+
+        <h2 className="font-display text-4xl md:text-5xl tracking-wider uppercase mb-3">
+          <span className="text-white neon-text-cyan">TATTOO TRY-ON</span>
         </h2>
-        <p className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
-          See your tattoo idea on your skin before the needle ever touches it.
+        <p className="text-lg text-steel-400 max-w-xl mx-auto leading-relaxed">
+          Preview your design on your own skin before committing to ink.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-8 rounded-3xl border border-slate-200/50 dark:border-slate-700/50 shadow-xl">
-          <h3 className="text-2xl font-display font-bold mb-6 text-slate-900 dark:text-white border-b border-slate-200 dark:border-slate-700 pb-4">1. Your Photo</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="bg-void-900/80 backdrop-blur-sm p-6 rounded-2xl border border-void-700 shadow-xl">
+          <div className="flex items-center gap-3 mb-5 pb-4 border-b border-void-700">
+            <span className="font-display text-2xl text-electric-500/50">01</span>
+            <h3 className="font-heading text-lg font-bold text-white uppercase tracking-wide">Your Photo</h3>
+          </div>
           <ImageUploader onImageReady={handleImageReady} />
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-8 rounded-3xl border border-slate-200/50 dark:border-slate-700/50 shadow-xl">
-          <h3 className="text-2xl font-display font-bold mb-6 text-slate-900 dark:text-white border-b border-slate-200 dark:border-slate-700 pb-4">2. Your Tattoo Idea</h3>
-          <div className="space-y-6">
+        <form onSubmit={handleSubmit} className="bg-void-900/80 backdrop-blur-sm p-6 rounded-2xl border border-void-700 shadow-xl">
+          <div className="flex items-center gap-3 mb-5 pb-4 border-b border-void-700">
+            <span className="font-display text-2xl text-magenta-500/50">02</span>
+            <h3 className="font-heading text-lg font-bold text-white uppercase tracking-wide">Your Design</h3>
+          </div>
+          <div className="space-y-5">
             <div>
-              <label htmlFor="subject" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Tattoo Subject *</label>
+              <label htmlFor="subject" className="block text-xs font-heading uppercase tracking-wider text-steel-400 mb-2">Tattoo Subject *</label>
               <textarea
                 id="subject"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
                 placeholder="e.g., A majestic lion with a crown"
-                className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600 resize-none"
+                className="w-full bg-void-800 border border-void-600 rounded-xl p-4 text-white placeholder-steel-500 focus:ring-1 focus:ring-electric-500 focus:border-electric-500 transition-all duration-300 hover:border-electric-500/50 resize-none text-sm"
                 rows={3}
                 required
                 onFocus={() => {
-                  // Force header/footer positioning when input is focused
                   setTimeout(() => {
                     const header = document.querySelector('header');
                     const nav = document.querySelector('nav');
@@ -116,7 +124,6 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
                   }, 100);
                 }}
                 onBlur={() => {
-                  // Force header/footer positioning when input loses focus
                   setTimeout(() => {
                     const header = document.querySelector('header');
                     const nav = document.querySelector('nav');
@@ -127,14 +134,14 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
               />
             </div>
             <div>
-              <label htmlFor="bodyPart" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Body Part *</label>
+              <label htmlFor="bodyPart" className="block text-xs font-heading uppercase tracking-wider text-steel-400 mb-2">Body Part *</label>
               <input
                 type="text"
                 id="bodyPart"
                 value={bodyPart}
                 onChange={(e) => setBodyPart(e.target.value)}
                 placeholder="e.g., Left forearm"
-                className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600"
+                className="w-full bg-void-800 border border-void-600 rounded-xl p-4 text-white placeholder-steel-500 focus:ring-1 focus:ring-electric-500 focus:border-electric-500 transition-all duration-300 hover:border-electric-500/50 text-sm"
                 required
                 onFocus={() => {
                   setTimeout(() => {
@@ -155,12 +162,12 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
               />
             </div>
             <div>
-              <label htmlFor="size" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Size *</label>
+              <label htmlFor="size" className="block text-xs font-heading uppercase tracking-wider text-steel-400 mb-2">Size *</label>
               <select
                 id="size"
                 value={size}
                 onChange={(e) => setSize(e.target.value as TattooSize)}
-                className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600"
+                className="w-full bg-void-800 border border-void-600 rounded-xl p-4 text-white focus:ring-1 focus:ring-electric-500 focus:border-electric-500 transition-all duration-300 hover:border-electric-500/50 text-sm"
                 required
                 onFocus={() => {
                   setTimeout(() => {
@@ -185,17 +192,17 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
                   </option>
                 ))}
               </select>
-              <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
-                Choose the size relative to your body part. For your ankle example, "Small" would be perfect for a 2-4 inch running shoe design.
+              <p className="mt-2 text-xs text-steel-500">
+                Choose the size relative to your body part.
               </p>
             </div>
             <div>
-              <label htmlFor="style" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Style</label>
+              <label htmlFor="style" className="block text-xs font-heading uppercase tracking-wider text-steel-400 mb-2">Style</label>
               <select
                 id="style"
                 value={style}
                 onChange={(e) => setStyle(e.target.value as TattooStyle)}
-                className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600"
+                className="w-full bg-void-800 border border-void-600 rounded-xl p-4 text-white focus:ring-1 focus:ring-electric-500 focus:border-electric-500 transition-all duration-300 hover:border-electric-500/50 text-sm"
                 onFocus={() => {
                   setTimeout(() => {
                     const header = document.querySelector('header');
@@ -281,17 +288,17 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
                   <option value="Kawaii/Cute">Kawaii/Cute</option>
                 </optgroup>
               </select>
-              <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+              <p className="mt-2 text-xs text-steel-500">
                 {TATTOO_STYLE_DESCRIPTIONS[style]}
               </p>
             </div>
             <div>
-              <label htmlFor="color" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Color</label>
+              <label htmlFor="color" className="block text-xs font-heading uppercase tracking-wider text-steel-400 mb-2">Color</label>
               <select
                 id="color"
                 value={color}
                 onChange={(e) => setColor(e.target.value as TattooColor)}
-                className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600"
+                className="w-full bg-void-800 border border-void-600 rounded-xl p-4 text-white focus:ring-1 focus:ring-electric-500 focus:border-electric-500 transition-all duration-300 hover:border-electric-500/50 text-sm"
                 onFocus={() => {
                   setTimeout(() => {
                     const header = document.querySelector('header');
@@ -315,20 +322,16 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
             <button
               type="submit"
               disabled={isLoading || !userImage}
-              className="w-full bg-gradient-to-r from-ink-600 via-ink-500 to-neon-500 hover:from-ink-700 hover:via-ink-600 hover:to-neon-600 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-300 disabled:bg-slate-400 disabled:cursor-not-allowed flex items-center justify-center group shadow-lg hover:shadow-xl hover:shadow-ink-500/25 disabled:shadow-none relative overflow-hidden"
+              className="w-full bg-gradient-to-r from-electric-500 to-magenta-500 hover:from-electric-400 hover:to-magenta-400 text-white font-heading uppercase tracking-wider py-4 px-6 rounded-xl transition-all duration-300 disabled:bg-void-700 disabled:text-steel-500 disabled:cursor-not-allowed flex items-center justify-center group shadow-lg hover:shadow-neon-dual disabled:shadow-none relative overflow-hidden"
             >
-              {/* Pro Badge Background Effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] animate-[shimmer_2s_infinite]" />
-
               {isLoading ? (
                 <div className="flex items-center space-x-3">
                   <div className="w-5 h-5 border-2 border-white/30 rounded-full animate-spin border-t-white" />
-                  <span className="animate-pulse">Designing with Nano Banana Pro...</span>
+                  <span className="animate-pulse text-sm">Generating Preview...</span>
                 </div>
               ) : (
-                <div className="flex items-center space-x-2">
-                  <span>Visualize Tattoo</span>
-                  <span className="bg-white/20 text-xs py-0.5 px-2 rounded-full border border-white/30 font-medium tracking-wide">PRO</span>
+                <div className="flex items-center space-x-3">
+                  <span className="text-sm">Visualize Tattoo</span>
                   <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
@@ -351,12 +354,15 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
       />
 
       {(!isLoading && (resultImage || error)) && (
-        <div className="mt-6 text-center">
+        <div className="mt-8 text-center">
           <button
             onClick={() => onNavigate('create')}
-            className="bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-void-800 border border-void-600 hover:border-electric-500/50 text-steel-300 hover:text-white font-heading uppercase tracking-wider text-sm rounded-xl transition-all duration-300"
           >
-            Back to Create Hub
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+            </svg>
+            Back to Create
           </button>
         </div>
       )}

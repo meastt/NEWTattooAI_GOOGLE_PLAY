@@ -119,37 +119,57 @@ const App: React.FC = () => {
   const showHeader = !['home', 'create', 'saved'].includes(currentView);
 
   return (
-    <div className={`min-h-screen font-sans relative ${theme}`} style={{ 
+    <div className={`min-h-screen font-sans relative ${theme}`} style={{
       paddingLeft: 'env(safe-area-inset-left, 0px)',
       paddingRight: 'env(safe-area-inset-right, 0px)',
       overflowX: 'hidden',
       maxWidth: '100vw'
     }}>
-      {/* Dynamic Background */}
+      {/* Dynamic Background - Premium Studio Dark */}
       <div className="fixed inset-0 -z-10">
         <div className={`absolute inset-0 transition-all duration-1000 ${
-          theme === 'dark' 
-            ? 'bg-gradient-to-br from-slate-950 via-slate-900 to-ink-950' 
-            : 'bg-gradient-to-br from-slate-50 via-white to-ink-50'
+          theme === 'dark'
+            ? 'bg-void-950'
+            : 'bg-gradient-to-br from-steel-50 via-white to-steel-100'
         }`} />
-        
-        {/* Animated Background Elements */}
+
+        {/* Subtle gradient overlays */}
+        {theme === 'dark' && (
+          <>
+            <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-electric-500/5 to-transparent" />
+            <div className="absolute bottom-0 right-0 w-full h-1/2 bg-gradient-to-t from-magenta-500/5 to-transparent" />
+          </>
+        )}
+
+        {/* Animated Neon Glow Elements */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className={`absolute -top-40 -right-40 w-80 h-80 rounded-full opacity-20 animate-float ${
-            theme === 'dark' ? 'bg-ink-500' : 'bg-ink-300'
+          <div className={`absolute -top-40 -right-40 w-96 h-96 rounded-full blur-3xl animate-float ${
+            theme === 'dark' ? 'bg-electric-500/10' : 'bg-electric-300/20'
           }`} />
-          <div className={`absolute top-1/2 -left-20 w-60 h-60 rounded-full opacity-15 animate-float ${
-            theme === 'dark' ? 'bg-neon-500' : 'bg-neon-300'
-          }`} style={{ animationDelay: '2s' }} />
-          <div className={`absolute bottom-20 right-1/4 w-40 h-40 rounded-full opacity-10 animate-float ${
-            theme === 'dark' ? 'bg-skin-500' : 'bg-skin-300'
-          }`} style={{ animationDelay: '4s' }} />
+          <div className={`absolute top-1/3 -left-32 w-72 h-72 rounded-full blur-3xl animate-float ${
+            theme === 'dark' ? 'bg-magenta-500/10' : 'bg-magenta-300/20'
+          }`} style={{ animationDelay: '3s' }} />
+          <div className={`absolute bottom-20 right-1/4 w-48 h-48 rounded-full blur-3xl animate-float ${
+            theme === 'dark' ? 'bg-electric-500/5' : 'bg-electric-300/10'
+          }`} style={{ animationDelay: '5s' }} />
         </div>
-        
-        {/* Subtle Pattern Overlay */}
-        <div className={`absolute inset-0 opacity-5 ${
-          theme === 'dark' ? 'bg-[radial-gradient(circle_at_1px_1px,_white_1px,_transparent_0)]' : 'bg-[radial-gradient(circle_at_1px_1px,_black_1px,_transparent_0)]'
-        }`} style={{ backgroundSize: '20px 20px' }} />
+
+        {/* Grid Pattern Overlay */}
+        <div className={`absolute inset-0 ${
+          theme === 'dark' ? 'opacity-[0.02]' : 'opacity-[0.03]'
+        }`} style={{
+          backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+          backgroundSize: '50px 50px'
+        }} />
+
+        {/* Scanline effect - subtle */}
+        {theme === 'dark' && (
+          <div className="absolute inset-0 opacity-[0.015] pointer-events-none"
+            style={{
+              backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px)',
+            }}
+          />
+        )}
       </div>
 
       {/* Header - Always show but with different back button state */}

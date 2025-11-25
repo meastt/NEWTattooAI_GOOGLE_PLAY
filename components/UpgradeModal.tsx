@@ -57,142 +57,147 @@ const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose, theme, isS
   };
 
   return (
-    <div 
-      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto"
+    <div
+      className="fixed inset-0 bg-void-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4 overflow-y-auto"
       onClick={handleBackdropClick}
       style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 1rem)', paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 1rem)' }}
     >
-      <div className={`relative w-full max-w-md max-h-[90vh] rounded-3xl overflow-hidden shadow-2xl transform transition-all my-auto flex flex-col ${
-        theme === 'dark' 
-          ? 'bg-slate-900 border border-slate-700' 
-          : 'bg-white border border-slate-200'
-      }`}>
-        {/* Close Button - Always visible at top */}
+      <div className="relative w-full max-w-md max-h-[90vh] rounded-2xl overflow-hidden shadow-2xl shadow-electric-500/10 transform transition-all my-auto flex flex-col bg-void-900 border border-void-700">
+        {/* Close Button */}
         <button
           onClick={onClose}
-          className={`absolute top-4 right-4 z-10 p-2 rounded-full transition-colors shadow-lg ${
-            theme === 'dark' 
-              ? 'hover:bg-slate-800 text-slate-400 hover:text-slate-200 bg-slate-900/90' 
-              : 'hover:bg-slate-100 text-slate-600 hover:text-slate-900 bg-white/90'
-          }`}
+          className="absolute top-4 right-4 z-10 p-2 rounded-lg border border-void-600 hover:border-electric-500/50 text-steel-400 hover:text-white bg-void-800/90 transition-all duration-300"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
 
-        {/* Header - Fixed at top */}
-        <div className="flex-shrink-0 p-6 pb-4 border-b border-slate-200 dark:border-slate-700">
-          <div className="text-center mb-4">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-r from-ink-500 to-neon-500 flex items-center justify-center">
-              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        {/* Header */}
+        <div className="flex-shrink-0 p-6 pb-4 border-b border-void-700">
+          <div className="text-center">
+            <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-gradient-to-r from-electric-500/20 to-magenta-500/20 border border-electric-500/30 flex items-center justify-center">
+              <svg className="w-7 h-7 text-electric-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
             </div>
-            <h2 className="text-2xl font-display font-bold text-slate-900 dark:text-white mb-2">
-              Choose Your Plan
+            <h2 className="font-display text-2xl tracking-wider uppercase text-white mb-1">
+              UPGRADE
             </h2>
-            <p className="text-slate-600 dark:text-slate-400">
-              Unlock more AI generations and premium features
+            <p className="text-steel-400 text-sm">
+              Unlock more AI generations
             </p>
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="mb-6 p-4 rounded-2xl bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800">
-              <p className="text-red-600 dark:text-red-400 text-sm font-medium text-center">{error}</p>
+            <div className="mt-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30">
+              <p className="text-red-400 text-xs text-center">{error}</p>
             </div>
           )}
-
         </div>
-        
+
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto p-6 pt-4">
           {/* Subscription Plans */}
           <div className="space-y-4 mb-6">
-            {SUBSCRIPTION_PLANS.map((plan) => (
-              <div
-                key={plan.id}
-                className={`p-6 rounded-2xl border-2 transition-all duration-300 ${
-                  theme === 'dark'
-                    ? 'border-slate-700 bg-slate-800/50 hover:border-ink-500'
-                    : 'border-slate-200 bg-slate-50/50 hover:border-ink-400'
-                }`}
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1">
-                      {plan.name}
-                    </h3>
-                    <p className="text-slate-600 dark:text-slate-400 text-sm mb-2">
-                      {plan.description}
-                    </p>
-                    <div className="flex items-baseline">
-                      <span className="text-3xl font-bold text-slate-900 dark:text-white">
-                        ${plan.price}
-                      </span>
-                      <span className="text-slate-600 dark:text-slate-400 ml-1">
-                        /{plan.period}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-bold text-ink-500 dark:text-ink-400">
-                      {plan.credits}
-                    </div>
-                    <div className="text-sm text-slate-600 dark:text-slate-400">
-                      generations
-                    </div>
-                  </div>
-                </div>
+            {SUBSCRIPTION_PLANS.map((plan, index) => {
+              const isPopular = index === 1; // Mark second plan as popular
+              const accentColor = index === 0 ? 'electric' : 'magenta';
 
-                {/* Features */}
-                <div className="space-y-2 mb-4">
-                  {plan.features.map((feature, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <div className="w-4 h-4 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-                        <svg className="w-2 h-2 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                      <span className="text-sm text-slate-700 dark:text-slate-300">
-                        {feature}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Subscribe Button */}
-                <button
-                  onClick={() => handleUpgrade(plan.productId)}
-                  disabled={isProcessing || !isServicesReady}
-                  className={`w-full py-3 px-4 rounded-xl font-bold text-white transition-all duration-300 ${
-                    (isProcessing && selectedPlan === plan.productId) || !isServicesReady
-                      ? 'bg-slate-400 cursor-not-allowed'
-                      : 'bg-gradient-to-r from-ink-500 to-neon-500 hover:from-ink-600 hover:to-neon-600 transform hover:scale-105 shadow-lg hover:shadow-xl'
+              return (
+                <div
+                  key={plan.id}
+                  className={`relative p-5 rounded-xl border transition-all duration-300 ${
+                    isPopular
+                      ? 'border-magenta-500/50 bg-magenta-500/5'
+                      : 'border-void-600 bg-void-800/50 hover:border-electric-500/50'
                   }`}
                 >
-                  {isProcessing && selectedPlan === plan.productId ? (
-                    <div className="flex items-center justify-center space-x-2">
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                      <span>Processing...</span>
+                  {/* Popular badge */}
+                  {isPopular && (
+                    <div className="absolute -top-2.5 left-4 px-2 py-0.5 bg-magenta-500 rounded text-[10px] font-heading uppercase tracking-wider text-white">
+                      Popular
                     </div>
-                  ) : !isServicesReady ? (
-                    <div className="flex items-center justify-center space-x-2">
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                      <span>Initializing...</span>
-                    </div>
-                  ) : (
-                    `Subscribe to ${plan.name}`
                   )}
-                </button>
-              </div>
-            ))}
+
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <h3 className="font-heading text-lg font-bold text-white uppercase tracking-wide mb-1">
+                        {plan.name}
+                      </h3>
+                      <p className="text-steel-400 text-xs mb-2">
+                        {plan.description}
+                      </p>
+                      <div className="flex items-baseline">
+                        <span className="font-display text-3xl text-white">
+                          ${plan.price}
+                        </span>
+                        <span className="text-steel-500 text-sm ml-1">
+                          /{plan.period}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className={`font-display text-2xl ${accentColor === 'electric' ? 'text-electric-400' : 'text-magenta-400'}`}>
+                        {plan.credits}
+                      </div>
+                      <div className="text-xs text-steel-500 uppercase tracking-wider">
+                        credits
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Features */}
+                  <div className="space-y-1.5 mb-4">
+                    {plan.features.map((feature, featureIndex) => (
+                      <div key={featureIndex} className="flex items-center space-x-2">
+                        <div className={`w-3 h-3 rounded flex items-center justify-center ${accentColor === 'electric' ? 'bg-electric-500/20' : 'bg-magenta-500/20'}`}>
+                          <svg className={`w-2 h-2 ${accentColor === 'electric' ? 'text-electric-400' : 'text-magenta-400'}`} fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <span className="text-xs text-steel-300">
+                          {feature}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Subscribe Button */}
+                  <button
+                    onClick={() => handleUpgrade(plan.productId)}
+                    disabled={isProcessing || !isServicesReady}
+                    className={`w-full py-3 px-4 rounded-lg font-heading uppercase tracking-wider text-sm text-white transition-all duration-300 ${
+                      (isProcessing && selectedPlan === plan.productId) || !isServicesReady
+                        ? 'bg-void-700 text-steel-500 cursor-not-allowed'
+                        : isPopular
+                          ? 'bg-gradient-to-r from-electric-500 to-magenta-500 hover:shadow-neon-dual'
+                          : 'bg-electric-500/20 border border-electric-500/30 hover:border-electric-500/50 text-electric-400 hover:text-electric-300'
+                    }`}
+                  >
+                    {isProcessing && selectedPlan === plan.productId ? (
+                      <div className="flex items-center justify-center space-x-2">
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        <span>Processing...</span>
+                      </div>
+                    ) : !isServicesReady ? (
+                      <div className="flex items-center justify-center space-x-2">
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        <span>Loading...</span>
+                      </div>
+                    ) : (
+                      `Get ${plan.name}`
+                    )}
+                  </button>
+                </div>
+              );
+            })}
           </div>
 
           {/* Disclaimer */}
-          <p className="text-xs text-slate-500 dark:text-slate-400 text-center">
-            This is a demo purchase flow. In production, this would integrate with Apple In-App Purchase.
+          <p className="text-[10px] text-steel-500 text-center">
+            Subscriptions auto-renew. Cancel anytime in settings.
           </p>
         </div>
       </div>

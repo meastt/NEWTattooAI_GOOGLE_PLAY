@@ -9,111 +9,157 @@ interface HomeDashboardProps {
   onNavigate: (view: View) => void;
 }
 
-const ToolCard: React.FC<{
+const QuickActionCard: React.FC<{
   icon: React.ReactNode;
   title: string;
-  description: string;
   onClick: () => void;
-  delay?: number;
-}> = ({ icon, title, description, onClick, delay = 0 }) => {
+  accentColor: 'cyan' | 'magenta';
+}> = ({ icon, title, onClick, accentColor }) => {
+  const borderColor = accentColor === 'cyan'
+    ? 'border-electric-500/20 hover:border-electric-400/50'
+    : 'border-magenta-500/20 hover:border-magenta-400/50';
+  const iconColor = accentColor === 'cyan'
+    ? 'text-electric-400'
+    : 'text-magenta-400';
+  const glowColor = accentColor === 'cyan'
+    ? 'group-hover:shadow-[0_0_20px_rgba(0,212,255,0.3)]'
+    : 'group-hover:shadow-[0_0_20px_rgba(255,0,255,0.3)]';
+
   return (
-    <div 
-      className="animate-slide-up cursor-pointer group"
-      style={{ animationDelay: `${delay}ms` }}
+    <button
       onClick={onClick}
+      className={`group flex flex-col items-center p-4 rounded-xl bg-void-800/50 border ${borderColor} transition-all duration-300 hover:bg-void-800 ${glowColor}`}
     >
-      <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-105 border border-slate-200 dark:border-slate-700 h-full">
-        <div className="flex flex-col items-center text-center h-full">
-          <div className="w-16 h-16 bg-gradient-to-br from-ink-500 to-neon-500 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-            {icon}
-          </div>
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
-            {title}
-          </h3>
-          <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed flex-grow">
-            {description}
-          </p>
-        </div>
+      <div className={`w-10 h-10 rounded-lg bg-void-700 flex items-center justify-center ${iconColor} mb-2 group-hover:scale-110 transition-transform duration-300`}>
+        {icon}
       </div>
-    </div>
+      <span className="text-xs font-heading uppercase tracking-wider text-steel-300 group-hover:text-white transition-colors">
+        {title}
+      </span>
+    </button>
   );
 };
 
 const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
   return (
-    <div className="animate-fade-in">
-      {/* Quick Onboarding Card */}
-      <div className="bg-gradient-to-r from-ink-500 to-neon-500 rounded-2xl p-6 mb-8 text-white">
-        <div className="flex items-start space-x-4">
-          <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
-            <SparklesIcon />
+    <div className="animate-fade-in space-y-8">
+      {/* Hero Welcome Section */}
+      <div className="relative overflow-hidden rounded-2xl bg-void-900 border border-void-700 p-8">
+        {/* Background effects */}
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute top-0 left-0 w-64 h-64 bg-electric-500/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+          <div className="absolute bottom-0 right-0 w-64 h-64 bg-magenta-500/20 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
+        </div>
+
+        {/* Grid pattern overlay */}
+        <div className="absolute inset-0 opacity-5" style={{
+          backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+          backgroundSize: '20px 20px'
+        }} />
+
+        <div className="relative z-10">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-2 h-2 rounded-full bg-electric-400 animate-pulse" />
+            <span className="text-xs font-heading uppercase tracking-[0.2em] text-electric-400">
+              System Online
+            </span>
           </div>
-          <div className="flex-grow">
-            <h2 className="text-xl font-bold mb-2">Welcome to InkPreview</h2>
-            <p className="text-white/90 leading-relaxed mb-4">
-              Transform your tattoo ideas into reality with AI-powered tools. Choose from our four powerful features below to get started.
-            </p>
-            <div className="flex flex-wrap gap-2">
-              <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium">AI-Powered</span>
-              <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium">Realistic Previews</span>
-              <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium">Multiple Styles</span>
-            </div>
-          </div>
+
+          <h1 className="font-display text-4xl md:text-5xl tracking-wider uppercase mb-3">
+            <span className="text-white">WELCOME TO</span>
+            <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-electric-400 to-magenta-400">
+              INKPREVIEW
+            </span>
+          </h1>
+
+          <p className="text-steel-400 text-lg max-w-xl mb-6 leading-relaxed">
+            AI-powered tattoo visualization studio. Preview designs on your skin, generate custom art, or explore new ideas.
+          </p>
+
+          <button
+            onClick={() => onNavigate('create')}
+            className="group inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-electric-500 to-magenta-500 rounded-lg font-heading uppercase tracking-wider text-sm text-white hover:shadow-neon-dual transition-all duration-300 hover:scale-105"
+          >
+            <span>Start Creating</span>
+            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </button>
         </div>
       </div>
 
-      {/* Tools Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ToolCard
-          icon={<CameraIcon />}
-          title="Tattoo Try-On"
-          description="Upload a photo of yourself and describe your ideal tattoo. See a realistic preview on your own skin in seconds."
-          onClick={() => onNavigate('tryOn')}
-          delay={100}
-        />
-        
-        <ToolCard
-          icon={<SparklesIcon />}
-          title="Idea Generator"
-          description="Don't have a design yet? Describe your concept, style, and elements to generate unique, custom tattoo art from scratch."
-          onClick={() => onNavigate('generator')}
-          delay={200}
-        />
-        
-        <ToolCard
-          icon={<EraserIcon />}
-          title="Tattoo Removal"
-          description="See a preview of your skin without a specific tattoo. Perfect for visualizing a clean slate before making decisions."
-          onClick={() => onNavigate('removal')}
-          delay={300}
-        />
-        
-        <ToolCard
-          icon={<PaletteIcon />}
-          title="Cover-Up Designer"
-          description="Transform an old tattoo into something new. Upload your current tattoo and design a beautiful cover-up over it."
-          onClick={() => onNavigate('coverup')}
-          delay={400}
-        />
+      {/* Quick Actions Grid */}
+      <div>
+        <h2 className="font-heading text-sm uppercase tracking-wider text-steel-500 mb-4">
+          Quick Actions
+        </h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <QuickActionCard
+            icon={<CameraIcon />}
+            title="Try-On"
+            onClick={() => onNavigate('tryOn')}
+            accentColor="cyan"
+          />
+          <QuickActionCard
+            icon={<SparklesIcon />}
+            title="Generate"
+            onClick={() => onNavigate('generator')}
+            accentColor="magenta"
+          />
+          <QuickActionCard
+            icon={<EraserIcon />}
+            title="Remove"
+            onClick={() => onNavigate('removal')}
+            accentColor="cyan"
+          />
+          <QuickActionCard
+            icon={<PaletteIcon />}
+            title="Cover-Up"
+            onClick={() => onNavigate('coverup')}
+            accentColor="magenta"
+          />
+        </div>
       </div>
 
-      {/* Quick Stats or Tips */}
-      <div className="mt-8 bg-slate-100 dark:bg-slate-800 rounded-2xl p-6">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 text-center">
-          💡 Quick Tips
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-slate-600 dark:text-slate-300">
-          <div className="text-center">
-            <div className="font-medium text-slate-900 dark:text-white mb-1">Best Photos</div>
-            <div>Use well-lit, clear photos for best results</div>
+      {/* Pro Tips Section */}
+      <div className="bg-void-900/50 border border-void-700 rounded-xl p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <div className="w-1 h-4 bg-electric-500 rounded-full" />
+          <h3 className="font-heading text-sm uppercase tracking-wider text-white">
+            Pro Tips
+          </h3>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-lg bg-electric-500/10 flex items-center justify-center text-electric-400 flex-shrink-0">
+              <span className="font-display text-lg">01</span>
+            </div>
+            <div>
+              <div className="text-sm font-medium text-white mb-1">Clear Photos</div>
+              <div className="text-xs text-steel-400">Well-lit, high-res images get the best AI results</div>
+            </div>
           </div>
-          <div className="text-center">
-            <div className="font-medium text-slate-900 dark:text-white mb-1">Detailed Descriptions</div>
-            <div>Be specific about style, size, and placement</div>
+
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-lg bg-magenta-500/10 flex items-center justify-center text-magenta-400 flex-shrink-0">
+              <span className="font-display text-lg">02</span>
+            </div>
+            <div>
+              <div className="text-sm font-medium text-white mb-1">Be Specific</div>
+              <div className="text-xs text-steel-400">Detailed descriptions create better designs</div>
+            </div>
           </div>
-          <div className="text-center">
-            <div className="font-medium text-slate-900 dark:text-white mb-1">Save Your Ideas</div>
-            <div>Keep your favorite designs in "My Ideas"</div>
+
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-lg bg-electric-500/10 flex items-center justify-center text-electric-400 flex-shrink-0">
+              <span className="font-display text-lg">03</span>
+            </div>
+            <div>
+              <div className="text-sm font-medium text-white mb-1">Save Ideas</div>
+              <div className="text-xs text-steel-400">Build your collection in the Saved tab</div>
+            </div>
           </div>
         </div>
       </div>

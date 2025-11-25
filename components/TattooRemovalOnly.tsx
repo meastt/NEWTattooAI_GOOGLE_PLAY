@@ -75,42 +75,52 @@ const TattooRemovalOnly: React.FC<TattooRemovalOnlyProps> = ({ onNavigate, onUpg
   return (
     <div className="max-w-4xl mx-auto animate-fade-in" style={{ paddingBottom: 'calc(6rem + env(safe-area-inset-bottom, 0px))' }}>
       {/* Header */}
-      <div className="text-center mb-12 relative">
+      <div className="text-center mb-10 relative">
         <div className="absolute inset-0 -z-10">
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-red-500/10 to-orange-500/10 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-magenta-500/10 rounded-full blur-3xl" />
         </div>
-        
-        <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-500 to-orange-500">
-            Tattoo Removal
-          </span>
-          <br />
-          <span className="text-slate-900 dark:text-white">Visualizer</span>
-        </h2>
-        <p className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
-          See a preview of your skin without a specific tattoo.
+
+        <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full bg-magenta-500/10 border border-magenta-500/20">
+          <div className="w-1.5 h-1.5 rounded-full bg-magenta-400 animate-pulse" />
+          <span className="text-xs font-heading uppercase tracking-wider text-magenta-400">AI Removal</span>
+        </div>
+
+        <h1 className="font-display text-4xl md:text-5xl tracking-wider uppercase mb-3">
+          <span className="text-white neon-text-magenta">REMOVAL</span>
+          <span className="text-magenta-400"> VISUALIZER</span>
+        </h1>
+        <p className="text-lg text-steel-400 max-w-xl mx-auto leading-relaxed">
+          Preview your skin without a specific tattoo.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-8 rounded-3xl border border-slate-200/50 dark:border-slate-700/50 shadow-xl">
-          <h3 className="text-2xl font-display font-bold mb-6 text-slate-900 dark:text-white border-b border-slate-200 dark:border-slate-700 pb-4">1. Your Photo with Tattoo</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Photo Upload Card */}
+        <div className="bg-void-900/80 backdrop-blur-sm p-6 rounded-2xl border border-void-700">
+          <div className="flex items-center gap-3 mb-5 pb-4 border-b border-void-700">
+            <span className="font-display text-2xl text-magenta-500/50">01</span>
+            <h3 className="font-heading text-lg uppercase tracking-wider text-white">Your Photo</h3>
+          </div>
           <ImageUploader onImageReady={handleImageReady} />
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-8 rounded-3xl border border-slate-200/50 dark:border-slate-700/50 shadow-xl">
-          <h3 className="text-2xl font-display font-bold mb-6 text-slate-900 dark:text-white border-b border-slate-200 dark:border-slate-700 pb-4">2. Tattoo to Remove</h3>
-          <div className="space-y-6">
+        {/* Description Form Card */}
+        <form onSubmit={handleSubmit} className="bg-void-900/80 backdrop-blur-sm p-6 rounded-2xl border border-void-700">
+          <div className="flex items-center gap-3 mb-5 pb-4 border-b border-void-700">
+            <span className="font-display text-2xl text-magenta-500/50">02</span>
+            <h3 className="font-heading text-lg uppercase tracking-wider text-white">Tattoo to Remove</h3>
+          </div>
+          <div className="space-y-5">
             <div>
-              <label htmlFor="removalDescription" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                Describe the tattoo and its location *
+              <label htmlFor="removalDescription" className="block font-heading text-sm uppercase tracking-wider text-steel-300 mb-2">
+                Describe tattoo & location *
               </label>
               <textarea
                 id="removalDescription"
                 value={removalDescription}
                 onChange={(e) => setRemovalDescription(e.target.value)}
                 placeholder="e.g., The small rose tattoo on my right wrist"
-                className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:focus:border-red-400 transition-all duration-300 hover:border-red-300 dark:hover:border-red-600 resize-none"
+                className="w-full bg-void-800 border border-void-600 rounded-xl p-4 text-white placeholder-steel-500 focus:outline-none focus:border-magenta-500/50 transition-all duration-300 resize-none"
                 rows={5}
                 required
                 onFocus={() => {
@@ -131,24 +141,27 @@ const TattooRemovalOnly: React.FC<TattooRemovalOnlyProps> = ({ onNavigate, onUpg
                 }}
               />
             </div>
-            
-            <button 
-              type="submit" 
+
+            <button
+              type="submit"
               disabled={isLoading || !userImage}
-              className="w-full bg-gradient-to-r from-red-600 via-red-500 to-orange-500 hover:from-red-700 hover:via-red-600 hover:to-orange-600 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-300 disabled:bg-slate-400 disabled:cursor-not-allowed flex items-center justify-center group shadow-lg hover:shadow-xl hover:shadow-red-500/25 disabled:shadow-none"
+              className="w-full bg-gradient-to-r from-magenta-500 to-magenta-600 hover:shadow-neon-magenta text-white font-heading uppercase tracking-wider py-4 px-6 rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 group"
             >
               {isLoading ? (
-                <div className="flex items-center space-x-3">
+                <>
                   <div className="w-5 h-5 border-2 border-white/30 rounded-full animate-spin border-t-white" />
                   <span>Removing Tattoo...</span>
-                </div>
+                </>
               ) : (
-                <div className="flex items-center space-x-2">
-                  <span>🚫 Remove Tattoo</span>
-                  <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                  <span>Remove Tattoo</span>
+                  <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
-                </div>
+                </>
               )}
             </button>
           </div>
@@ -167,12 +180,15 @@ const TattooRemovalOnly: React.FC<TattooRemovalOnlyProps> = ({ onNavigate, onUpg
       />
 
       {(!isLoading && (resultImage || error)) && (
-        <div className="mt-6 text-center">
-          <button 
+        <div className="mt-8 text-center">
+          <button
             onClick={() => onNavigate('create')}
-            className="bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+            className="inline-flex items-center gap-2 bg-void-800 border border-void-600 hover:border-magenta-500/50 text-steel-300 hover:text-white font-heading uppercase tracking-wider text-sm py-3 px-6 rounded-xl transition-all duration-300"
           >
-            Back to Create Hub
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            <span>Back to Create Hub</span>
           </button>
         </div>
       )}
