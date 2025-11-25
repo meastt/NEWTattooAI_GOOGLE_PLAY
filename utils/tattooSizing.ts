@@ -76,35 +76,74 @@ export function generateSizedPrompt(
 ): string {
   const sizeGuidance = getSizeGuidance(bodyPart, size);
 
-  return `You are an expert tattoo artist and photo editor. Your task is to realistically visualize a tattoo on a person's body.
+  // Style-specific guidance
+  const styleGuidance = {
+    'Traditional': 'Bold, clean outlines with solid color fills and minimal shading. Classic tattoo aesthetic.',
+    'Realism': 'Photo-realistic detail with smooth gradients, fine shading, and lifelike depth.',
+    'Watercolor': 'Soft edges, color splashes, and minimal outlines. Artistic, painterly effect.',
+    'Geometric': 'Precise lines, perfect symmetry, and sharp angles. Mathematical precision.',
+    'Tribal': 'Bold black lines forming flowing patterns. Strong contrast and negative space.',
+    'Japanese': 'Traditional irezumi style with bold outlines, vibrant colors, and flowing composition.',
+    'Minimalist': 'Simple, clean lines with minimal detail. Elegant and understated.',
+    'Blackwork': 'Solid black ink with strong contrast. Bold and graphic.',
+  }[style] || `${style} style with appropriate techniques and aesthetics`;
+
+  return `You are an expert tattoo artist and photo editor specializing in realistic tattoo visualization. Your task is to create a photorealistic preview of how a tattoo would look on a person's body.
 
 INPUT:
 - Image: A photo of a person.
-- Request: Add a "${size.toLowerCase()}" tattoo of a "${subject}" in "${style}" style on the "${bodyPart}".
+- Request: Add a "${size.toLowerCase()}" tattoo of "${subject}" in "${style}" style on the "${bodyPart}".
 - Color: ${color}.
 
 STEP-BY-STEP INSTRUCTIONS:
-1. ANALYZE the body part (${bodyPart}) in the image. Identify the skin tone, lighting, shadows, and curvature.
-2. DESIGN the tattoo ("${subject}") specifically for this placement.
-   - Style: ${style} (Ensure the linework and shading match this style).
+
+1. ANALYZE the body part (${bodyPart}) in the image:
+   - Identify the exact skin tone, lighting direction, and shadow patterns.
+   - Note the body part's curvature, muscle contours, and bone structure.
+   - Observe skin texture details (pores, fine lines, freckles, blemishes).
+   - Account for any flexion or movement that affects the surface.
+
+2. DESIGN the tattoo ("${subject}") for this specific placement:
+   - Style: ${styleGuidance}
    - Size: ${sizeGuidance.dimensions} (${sizeGuidance.coverage}).
    - Placement: ${sizeGuidance.placement}.
-3. COMPOSITE the tattoo onto the skin.
-   - Warp the design to follow the body's curvature.
-   - Apply the skin's lighting and shadows to the tattoo so it looks like it's IN the skin, not floating on top.
-   - Adjust opacity slightly to mimic healed ink if appropriate for the style, or keep it vibrant for fresh ink.
-4. FINAL CHECK:
-   - Is there ONLY ONE tattoo?
-   - Is it on the correct body part?
-   - Is the rest of the image unchanged?
+   - Ensure the design is appropriate for the body part's shape and size.
+
+3. INK CHARACTERISTICS:
+   - Color: ${color === 'Black and Gray' ? 'Use pure black with gray wash shading. No color.' : color === 'Color' ? 'Use vibrant, saturated colors appropriate for fresh tattoo ink.' : color}.
+   - Depth: The tattoo must appear embedded in the dermis layer, not painted on the surface.
+   - Texture: Match the ink to the skin's natural texture—it should follow pores and fine lines.
+   - Finish: Keep the tattoo matte with subtle highlights only where skin naturally reflects light.
+
+4. SKIN TEXTURE INTEGRATION:
+   - The tattoo ink must appear UNDER the skin's surface layer, not floating on top.
+   - Preserve the skin's natural texture (pores, fine lines) over the tattoo area.
+   - For a fresh tattoo look: Keep edges crisp and colors vibrant.
+   - Ensure the tattoo follows every contour, wrinkle, and fold of the skin.
+
+5. COMPOSITE the tattoo onto the skin:
+   - Warp the design to follow the body's exact curvature and anatomy.
+   - Apply the scene's lighting and shadows to the tattoo so it integrates seamlessly.
+   - The tattoo should be affected by the same light source as the rest of the body.
+   - Adjust the tattoo's appearance based on skin stretching, bending, or flexing.
+
+6. FINAL QUALITY CHECK:
+   - Is there EXACTLY ONE tattoo, no more, no less?
+   - Is it on the correct body part (${bodyPart})?
+   - Does it match the requested size (${size})?
+   - Does the style match (${style})?
+   - Is the rest of the image completely unchanged?
+   - Does the tattoo look like it's IN the skin, not ON the skin?
 
 CRITICAL CONSTRAINTS (NEGATIVE PROMPT):
-- NO extra tattoos.
-- NO changes to the person's face, clothes, or background.
-- NO text unless explicitly asked for in the subject.
+- NO extra tattoos anywhere on the body.
+- NO changes to the person's face, hair, clothes, or background.
+- NO text unless explicitly part of the subject description.
 - NO nudity or inappropriate content.
-- DO NOT cover the entire body part if the size is "Small" or "Medium".
+- NO covering the entire body part if the size is "Small" or "Medium".
+- NO floating or painted-on appearance—the tattoo must be embedded in the skin.
+- NO unrealistic colors or glowing effects.
 
 OUTPUT:
-Return the modified image with the single tattoo applied.`;
+Return the modified image with the single, photorealistic tattoo seamlessly integrated into the skin.`;
 }

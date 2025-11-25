@@ -48,7 +48,7 @@ export const editImage = async (
       config: {
         responseModalities: [Modality.IMAGE, Modality.TEXT],
         imageConfig: {
-          imageSize: '1K',
+          imageSize: '4K',
         },
       },
     });
@@ -107,7 +107,7 @@ export const generateImage = async (prompt: string): Promise<string> => {
       config: {
         responseModalities: [Modality.IMAGE],
         imageConfig: {
-          imageSize: '1K',
+          imageSize: '4K',
         },
       },
     });
