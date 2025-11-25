@@ -33,6 +33,11 @@ android {
             buildConfigField "String", "REVENUECAT_API_KEY", "\"${System.getenv('VITE_REVENUECAT_API_KEY') ?: ''}\""
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
 }
 
 repositories {

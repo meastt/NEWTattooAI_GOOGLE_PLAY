@@ -1,7 +1,6 @@
-import { supabase } from './supabaseClient';
-import { 
-  getUserRemainingCredits, 
-  canGenerate as subscriptionCanGenerate, 
+import {
+  getUserRemainingCredits,
+  canGenerate as subscriptionCanGenerate,
   consumeCredit as subscriptionConsumeCredit,
   hasActiveSubscription,
   getCurrentSubscriptionPlan
@@ -36,7 +35,7 @@ const initializeUserCredits = (): UserCredits => {
     isPremium: false,
     lastUpdated: new Date().toISOString()
   };
-  
+
   localStorage.setItem(CREDITS_STORAGE_KEY, JSON.stringify(defaultCredits));
   return defaultCredits;
 };
@@ -47,24 +46,24 @@ export const getUserCredits = (): UserCredits => {
   if (!stored) {
     return initializeUserCredits();
   }
-  
+
   try {
     const credits = JSON.parse(stored);
-    
+
     // Safety check: Prevent users from having excessive credits from testing remnants
     if (credits.credits > 50 && !credits.isPremium) {
       console.warn('Detected excessive credits, resetting to default');
       credits.credits = DEFAULT_CREDITS;
       localStorage.setItem(CREDITS_STORAGE_KEY, JSON.stringify(credits));
     }
-    
+
     return credits;
   } catch {
     return initializeUserCredits();
   }
 };
 
-// Update user credits in localStorage and sync to Supabase
+// Update user credits in localStorage
 export const updateUserCredits = async (updates: Partial<UserCredits>): Promise<UserCredits> => {
   const current = getUserCredits();
   const updated: UserCredits = {
@@ -72,68 +71,16 @@ export const updateUserCredits = async (updates: Partial<UserCredits>): Promise<
     ...updates,
     lastUpdated: new Date().toISOString()
   };
-  
+
   // Save to localStorage
   localStorage.setItem(CREDITS_STORAGE_KEY, JSON.stringify(updated));
-  
-  // Sync to Supabase if available
-  if (supabase) {
-    try {
-      await supabase
-        .from('user_credits')
-        .upsert({
-          user_id: updated.userId,
-          credits: updated.credits,
-          is_premium: updated.isPremium,
-          last_updated: updated.lastUpdated
-        });
-    } catch (error) {
-      console.warn('Failed to sync credits to Supabase:', error);
-    }
-  }
-  
+
   return updated;
 };
 
-// Sync credits from Supabase to localStorage
+// Sync credits (Legacy: Supabase removed, just returns local)
 export const syncCreditsFromSupabase = async (): Promise<UserCredits> => {
-  const localCredits = getUserCredits();
-  
-  if (!supabase) {
-    return localCredits;
-  }
-  
-  try {
-    const { data, error } = await supabase
-      .from('user_credits')
-      .select('*')
-      .eq('user_id', localCredits.userId)
-      .single();
-    
-    if (error || !data) {
-      // If no record exists in Supabase, create one
-      await updateUserCredits({});
-      return localCredits;
-    }
-    
-    // If Supabase data is newer, update localStorage
-    const supabaseCredits: UserCredits = {
-      userId: data.user_id,
-      credits: data.credits,
-      isPremium: data.is_premium,
-      lastUpdated: data.last_updated
-    };
-    
-    if (new Date(supabaseCredits.lastUpdated) > new Date(localCredits.lastUpdated)) {
-      localStorage.setItem(CREDITS_STORAGE_KEY, JSON.stringify(supabaseCredits));
-      return supabaseCredits;
-    }
-    
-    return localCredits;
-  } catch (error) {
-    console.warn('Failed to sync credits from Supabase:', error);
-    return localCredits;
-  }
+  return getUserCredits();
 };
 
 // Check if user can generate (has credits) - now uses subscription system
@@ -162,7 +109,7 @@ export const getSubscriptionInfo = () => {
   const hasSubscription = hasActiveSubscription();
   const plan = getCurrentSubscriptionPlan();
   const totalCredits = getUserRemainingCredits();
-  
+
   return {
     hasSubscription,
     plan,
@@ -173,6 +120,6 @@ export const getSubscriptionInfo = () => {
 
 // Initialize credits on app start
 export const initializeCreditService = async (): Promise<UserCredits> => {
-  return await syncCreditsFromSupabase();
+  return getUserCredits();
 };
 

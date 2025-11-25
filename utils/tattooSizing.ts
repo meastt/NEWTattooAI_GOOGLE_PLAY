@@ -48,22 +48,22 @@ const BODY_PART_SIZE_MAP: Record<string, Record<TattooSize, SizeGuidance>> = {
 export function getSizeGuidance(bodyPart: string, size: TattooSize): SizeGuidance {
   // Normalize body part for matching
   const normalizedBodyPart = bodyPart.toLowerCase().trim();
-  
+
   // Find the best matching body part category
   if (normalizedBodyPart.includes('ankle') || normalizedBodyPart.includes('lower leg')) {
     return BODY_PART_SIZE_MAP.ankle[size];
   }
-  
+
   if (normalizedBodyPart.includes('foot') || normalizedBodyPart.includes('toe')) {
     return BODY_PART_SIZE_MAP.foot[size];
   }
-  
+
   if (normalizedBodyPart.includes('forearm') || normalizedBodyPart.includes('arm')) {
     return BODY_PART_SIZE_MAP.forearm[size];
   }
-  
+
   // Add more body parts as needed...
-  
+
   return BODY_PART_SIZE_MAP.default[size];
 }
 
@@ -75,24 +75,36 @@ export function generateSizedPrompt(
   size: TattooSize
 ): string {
   const sizeGuidance = getSizeGuidance(bodyPart, size);
-  
-  return `Using the provided image of a person, add a SINGLE realistic-looking tattoo. The tattoo is of a ${subject}. It should be in the ${style} style, located on the person's ${bodyPart}. The tattoo's color should be ${color}.
 
-CRITICAL REQUIREMENTS:
-- Add ONLY ONE tattoo - the one described above
-- Do NOT add any other tattoos, markings, or body art anywhere else on the person
-- Keep all existing skin clean and natural except for the single requested tattoo
-- The tattoo should be ${sizeGuidance.dimensions} in size (${sizeGuidance.coverage})
-- It should be positioned ${sizeGuidance.placement}
-- DO NOT cover the entire visible body part - keep the tattoo appropriately sized as a ${size.toLowerCase()} tattoo
-- The tattoo should look proportional to the body part, not overwhelming it
-- Leave plenty of natural skin visible around the tattoo
+  return `You are an expert tattoo artist and photo editor. Your task is to realistically visualize a tattoo on a person's body.
 
-ORIENTATION REQUIREMENTS:
-- Orient the tattoo so it looks correct when the person is standing upright in real life
-- If this is an arm/forearm photo, consider how the tattoo would appear to others looking at the person
-- The tattoo should read correctly from the viewer's perspective when the person is in normal standing position
-- For text or directional elements (like eagles, arrows, etc.), ensure they face the right way for real-world viewing
+INPUT:
+- Image: A photo of a person.
+- Request: Add a "${size.toLowerCase()}" tattoo of a "${subject}" in "${style}" style on the "${bodyPart}".
+- Color: ${color}.
 
-Make sure ONLY the requested tattoo appears on the person. Do not add any additional tattoos or body art anywhere else.`;
+STEP-BY-STEP INSTRUCTIONS:
+1. ANALYZE the body part (${bodyPart}) in the image. Identify the skin tone, lighting, shadows, and curvature.
+2. DESIGN the tattoo ("${subject}") specifically for this placement.
+   - Style: ${style} (Ensure the linework and shading match this style).
+   - Size: ${sizeGuidance.dimensions} (${sizeGuidance.coverage}).
+   - Placement: ${sizeGuidance.placement}.
+3. COMPOSITE the tattoo onto the skin.
+   - Warp the design to follow the body's curvature.
+   - Apply the skin's lighting and shadows to the tattoo so it looks like it's IN the skin, not floating on top.
+   - Adjust opacity slightly to mimic healed ink if appropriate for the style, or keep it vibrant for fresh ink.
+4. FINAL CHECK:
+   - Is there ONLY ONE tattoo?
+   - Is it on the correct body part?
+   - Is the rest of the image unchanged?
+
+CRITICAL CONSTRAINTS (NEGATIVE PROMPT):
+- NO extra tattoos.
+- NO changes to the person's face, clothes, or background.
+- NO text unless explicitly asked for in the subject.
+- NO nudity or inappropriate content.
+- DO NOT cover the entire body part if the size is "Small" or "Medium".
+
+OUTPUT:
+Return the modified image with the single tattoo applied.`;
 }

@@ -21,7 +21,7 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
   const [color, setColor] = useState<TattooColor>(TATTOO_COLORS[0]);
   const [size, setSize] = useState<TattooSize>(TATTOO_SIZES[1]); // Default to 'Small'
   const [prompt, setPrompt] = useState('');
-  
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [resultImage, setResultImage] = useState<string | null>(null);
@@ -38,7 +38,7 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
       setError("Please upload an image and fill out all required fields.");
       return;
     }
-    
+
     setIsLoading(true);
     setError(null);
     setResultImage(null);
@@ -65,8 +65,8 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
   };
 
   return (
-    <div className="max-w-4xl mx-auto animate-fade-in" style={{ 
-      overflowX: 'hidden', 
+    <div className="max-w-4xl mx-auto animate-fade-in" style={{
+      overflowX: 'hidden',
       maxWidth: '100%',
       minHeight: '100vh',
       paddingBottom: '2rem'
@@ -76,7 +76,7 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
         <div className="absolute inset-0 -z-10">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-ink-500/10 to-neon-500/10 rounded-full blur-3xl" />
         </div>
-        
+
         <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-ink-600 via-ink-500 to-neon-500">
             Tattoo Try-On
@@ -156,10 +156,10 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
             </div>
             <div>
               <label htmlFor="size" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Size *</label>
-              <select 
-                id="size" 
-                value={size} 
-                onChange={(e) => setSize(e.target.value as TattooSize)} 
+              <select
+                id="size"
+                value={size}
+                onChange={(e) => setSize(e.target.value as TattooSize)}
                 className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600"
                 required
                 onFocus={() => {
@@ -189,12 +189,12 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
                 Choose the size relative to your body part. For your ankle example, "Small" would be perfect for a 2-4 inch running shoe design.
               </p>
             </div>
-             <div>
+            <div>
               <label htmlFor="style" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Style</label>
-              <select 
-                id="style" 
-                value={style} 
-                onChange={(e) => setStyle(e.target.value as TattooStyle)} 
+              <select
+                id="style"
+                value={style}
+                onChange={(e) => setStyle(e.target.value as TattooStyle)}
                 className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600"
                 onFocus={() => {
                   setTimeout(() => {
@@ -219,7 +219,7 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
                   <option value="Neo-Traditional">Neo-Traditional</option>
                   <option value="Traditional Sailor">Traditional Sailor</option>
                 </optgroup>
-                
+
                 <optgroup label="Modern & Contemporary">
                   <option value="Fine Line">Fine Line</option>
                   <option value="Minimalist">Minimalist</option>
@@ -228,7 +228,7 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
                   <option value="Watercolor">Watercolor</option>
                   <option value="Sketch Style">Sketch Style</option>
                 </optgroup>
-                
+
                 <optgroup label="Black & Bold">
                   <option value="Blackwork">Blackwork</option>
                   <option value="Tribal">Tribal</option>
@@ -236,14 +236,14 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
                   <option value="Ornamental">Ornamental</option>
                   <option value="Mandala">Mandala</option>
                 </optgroup>
-                
+
                 <optgroup label="Realistic & Portrait">
                   <option value="Realism">Realism</option>
                   <option value="Photorealism">Photorealism</option>
                   <option value="Portrait">Portrait</option>
                   <option value="Biomechanical">Biomechanical</option>
                 </optgroup>
-                
+
                 <optgroup label="Text & Lettering">
                   <option value="Script/Cursive">Script/Cursive</option>
                   <option value="Old English">Old English</option>
@@ -254,7 +254,7 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
                   <option value="Graffiti Style">Graffiti Style</option>
                   <option value="Hand Lettered">Hand Lettered</option>
                 </optgroup>
-                
+
                 <optgroup label="Cultural & Spiritual">
                   <option value="Celtic">Celtic</option>
                   <option value="Norse/Viking">Norse/Viking</option>
@@ -263,7 +263,7 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
                   <option value="Hindu/Buddhist">Hindu/Buddhist</option>
                   <option value="Chinese">Chinese</option>
                 </optgroup>
-                
+
                 <optgroup label="Artistic & Unique">
                   <option value="Surrealism">Surrealism</option>
                   <option value="Pop Art">Pop Art</option>
@@ -272,7 +272,7 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
                   <option value="Art Nouveau">Art Nouveau</option>
                   <option value="Chicano">Chicano</option>
                 </optgroup>
-                
+
                 <optgroup label="Fun & Playful">
                   <option value="Cartoon">Cartoon</option>
                   <option value="Anime/Manga">Anime/Manga</option>
@@ -287,10 +287,10 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
             </div>
             <div>
               <label htmlFor="color" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Color</label>
-              <select 
-                id="color" 
-                value={color} 
-                onChange={(e) => setColor(e.target.value as TattooColor)} 
+              <select
+                id="color"
+                value={color}
+                onChange={(e) => setColor(e.target.value as TattooColor)}
                 className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600"
                 onFocus={() => {
                   setTimeout(() => {
@@ -312,19 +312,23 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
                 {TATTOO_COLORS.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={isLoading || !userImage}
-              className="w-full bg-gradient-to-r from-ink-600 via-ink-500 to-neon-500 hover:from-ink-700 hover:via-ink-600 hover:to-neon-600 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-300 disabled:bg-slate-400 disabled:cursor-not-allowed flex items-center justify-center group shadow-lg hover:shadow-xl hover:shadow-ink-500/25 disabled:shadow-none"
+              className="w-full bg-gradient-to-r from-ink-600 via-ink-500 to-neon-500 hover:from-ink-700 hover:via-ink-600 hover:to-neon-600 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-300 disabled:bg-slate-400 disabled:cursor-not-allowed flex items-center justify-center group shadow-lg hover:shadow-xl hover:shadow-ink-500/25 disabled:shadow-none relative overflow-hidden"
             >
+              {/* Pro Badge Background Effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] animate-[shimmer_2s_infinite]" />
+
               {isLoading ? (
                 <div className="flex items-center space-x-3">
                   <div className="w-5 h-5 border-2 border-white/30 rounded-full animate-spin border-t-white" />
-                  <span>Visualizing Tattoo...</span>
+                  <span className="animate-pulse">Designing with Nano Banana Pro...</span>
                 </div>
               ) : (
                 <div className="flex items-center space-x-2">
                   <span>Visualize Tattoo</span>
+                  <span className="bg-white/20 text-xs py-0.5 px-2 rounded-full border border-white/30 font-medium tracking-wide">PRO</span>
                   <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
@@ -348,7 +352,7 @@ const TattooTryOn: React.FC<TattooTryOnProps> = ({ onNavigate, onUpgradeClick })
 
       {(!isLoading && (resultImage || error)) && (
         <div className="mt-6 text-center">
-          <button 
+          <button
             onClick={() => onNavigate('create')}
             className="bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-6 rounded-lg transition-colors"
           >

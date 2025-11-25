@@ -31,7 +31,7 @@ export const editImage = async (
 
   try {
     const response: GenerateContentResponse = await ai.models.generateContent({
-      model: 'gemini-2.5-flash-image',
+      model: 'gemini-3-pro-image-preview',
       contents: {
         parts: [
           {
@@ -52,11 +52,17 @@ export const editImage = async (
         },
       },
     });
-    
+
     let imageUrl: string | null = null;
     let text: string | null = null;
 
-    for (const part of response.candidates[0].content.parts) {
+    const candidate = response.candidates?.[0];
+    if (!candidate?.content?.parts) {
+      console.error("Gemini API Response:", JSON.stringify(response, null, 2));
+      throw new Error("API returned an empty or malformed response. Check logs for details.");
+    }
+
+    for (const part of candidate.content.parts) {
       if (part.inlineData) {
         const base64ImageBytes: string = part.inlineData.data;
         imageUrl = `data:${part.inlineData.mimeType};base64,${base64ImageBytes}`;
@@ -66,7 +72,7 @@ export const editImage = async (
     }
 
     if (!imageUrl) {
-        throw new Error("API did not return an image.");
+      throw new Error("API did not return an image.");
     }
 
     return { imageUrl, text };
@@ -90,23 +96,29 @@ export const generateImage = async (prompt: string): Promise<string> => {
 
   try {
     const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash-image',
-        contents: {
-          parts: [
-            {
-              text: prompt,
-            },
-          ],
-        },
-        config: {
-          responseModalities: [Modality.IMAGE],
-          imageConfig: {
-            imageSize: '1K',
+      model: 'gemini-3-pro-image-preview',
+      contents: {
+        parts: [
+          {
+            text: prompt,
           },
+        ],
+      },
+      config: {
+        responseModalities: [Modality.IMAGE],
+        imageConfig: {
+          imageSize: '1K',
         },
+      },
     });
 
-    for (const part of response.candidates[0].content.parts) {
+    const candidate = response.candidates?.[0];
+    if (!candidate?.content?.parts) {
+      console.error("Gemini API Response:", JSON.stringify(response, null, 2));
+      throw new Error("API returned an empty or malformed response. Check logs for details.");
+    }
+
+    for (const part of candidate.content.parts) {
       if (part.inlineData) {
         const base64ImageBytes: string = part.inlineData.data;
         return `data:${part.inlineData.mimeType};base64,${base64ImageBytes}`;

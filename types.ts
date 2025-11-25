@@ -1,6 +1,6 @@
 export type View = 'home' | 'create' | 'saved' | 'tryOn' | 'generator' | 'removal' | 'coverup' | 'privacy' | 'disclaimer' | 'terms' | 'settings';
 
-export type TattooStyle = 
+export type TattooStyle =
   // Traditional & Classic
   | 'American Traditional' | 'Japanese Irezumi' | 'Neo-Traditional' | 'Traditional Sailor'
   // Modern & Contemporary  
@@ -23,10 +23,12 @@ export type TattooSize = 'Tiny' | 'Small' | 'Medium' | 'Large' | 'Extra Large';
 export type SubscriptionStatus = 'FREE' | 'QUICK_SPARK' | 'DEEP_DIVE' | 'EXPIRED';
 
 export interface Idea {
-  id: number;
+  id: number | string;
   image_url?: string;
   image_data_url?: string;
   prompt: string;
+  imagePath?: string;
+  createdAt?: string;
 }
 
 export interface SubscriptionPlan {

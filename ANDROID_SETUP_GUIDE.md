@@ -79,6 +79,36 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 
 ---
 
+## Securing Your API Keys (Crucial for Production!)
+
+Google will warn you about "Unrestricted API keys". You **MUST** restrict them to prevent unauthorized use and potential billing issues.
+
+### 1. Restrict by Application (Android)
+
+1. Go to **Google Cloud Console** > **APIs & Services** > **Credentials**.
+2. Click on your **Gemini API Key**.
+3. Under **Application restrictions**, select **Android apps**.
+4. Click **Add an item**.
+5. **Package name**: `com.inkpreview.app`
+6. **SHA-1 certificate fingerprint**:
+   - You need the fingerprint from your **release keystore** (the one you created in Android Studio).
+   - Run this command in your terminal (update path to your keystore):
+     ```bash
+     keytool -list -v -keystore ~/Documents/inkpreview-keystore.jks -alias inkpreview-key
+     ```
+   - Copy the **SHA1** fingerprint (it looks like `AA:BB:CC:11:22...`).
+7. Click **Done** and **Save**.
+
+### 2. Restrict by API
+
+1. In the same API key settings, under **API restrictions**, select **Restrict key**.
+2. Click the dropdown and select **Generative Language API** (this is the API for Gemini).
+3. Click **Save**.
+
+Now your key can ONLY be used by YOUR app to call Gemini.
+
+---
+
 ## Testing in Android Studio
 
 ### Quick Testing Steps
