@@ -88,7 +88,14 @@ export function generateSizedPrompt(
     'Blackwork': 'Solid black ink with strong contrast. Bold and graphic.',
   }[style] || `${style} style with appropriate techniques and aesthetics`;
 
-  return `You are an expert tattoo artist and photo editor specializing in realistic tattoo visualization. Your task is to create a photorealistic preview of how a tattoo would look on a person's body.
+  return `STRICT INSTRUCTION: EDIT THE INPUT IMAGE. DO NOT GENERATE A NEW IMAGE.
+You are an expert tattoo artist and photo editor. Your task is to digitally INK the requested tattoo onto the user's photo.
+
+CRITICAL: PRESERVE THE ORIGINAL IMAGE.
+- Keep the original arm/body part, angle, lighting, skin tone, and background EXACTLY as they are.
+- Do NOT replace the body part with a generic one.
+- Do NOT change the camera angle or zoom.
+- ONLY add the tattoo ink to the skin.
 
 INPUT:
 - Image: A photo of a person.
@@ -128,7 +135,8 @@ STEP-BY-STEP INSTRUCTIONS:
    - Adjust the tattoo's appearance based on skin stretching, bending, or flexing.
 
 6. FINAL QUALITY CHECK:
-   - Is there EXACTLY ONE tattoo, no more, no less?
+   - Is the original photo preserved? (CRITICAL)
+   - Is there EXACTLY ONE tattoo?
    - Is it on the correct body part (${bodyPart})?
    - Does it match the requested size (${size})?
    - Does the style match (${style})?
@@ -136,8 +144,9 @@ STEP-BY-STEP INSTRUCTIONS:
    - Does the tattoo look like it's IN the skin, not ON the skin?
 
 CRITICAL CONSTRAINTS (NEGATIVE PROMPT):
+- NO generating a new image.
+- NO changing the person's pose, body type, or background.
 - NO extra tattoos anywhere on the body.
-- NO changes to the person's face, hair, clothes, or background.
 - NO text unless explicitly part of the subject description.
 - NO nudity or inappropriate content.
 - NO covering the entire body part if the size is "Small" or "Medium".
@@ -145,5 +154,5 @@ CRITICAL CONSTRAINTS (NEGATIVE PROMPT):
 - NO unrealistic colors or glowing effects.
 
 OUTPUT:
-Return the modified image with the single, photorealistic tattoo seamlessly integrated into the skin.`;
+Return the ORIGINAL image with the single, photorealistic tattoo seamlessly integrated into the skin.`;
 }

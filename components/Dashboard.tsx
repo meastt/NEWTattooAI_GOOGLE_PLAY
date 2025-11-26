@@ -87,7 +87,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
   return (
     <div className="flex flex-col items-center animate-fade-in">
       {/* Hero Section */}
-      <div className="text-center mb-12 relative">
+      <div className="text-center mb-12 relative pt-8">
         {/* Background glow effects */}
         <div className="absolute inset-0 -z-10">
           <div className="absolute top-1/2 left-1/4 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-electric-500/10 rounded-full blur-3xl" />

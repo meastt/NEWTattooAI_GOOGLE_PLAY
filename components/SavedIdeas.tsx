@@ -8,10 +8,16 @@ interface SavedIdeasProps {
   onNavigate: (view: View) => void;
 }
 
+import { Share } from '@capacitor/share';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+
+// ... existing imports
+
 const SavedIdeas: React.FC<SavedIdeasProps> = ({ onNavigate }) => {
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null); // For lightbox
 
   useEffect(() => {
     const fetchIdeas = async () => {
@@ -29,37 +35,56 @@ const SavedIdeas: React.FC<SavedIdeasProps> = ({ onNavigate }) => {
   }, []);
 
   const handleExportClick = async (idea: Idea) => {
-    if (!idea.image_data_url) return;
-    
+    const imageSrc = idea.imageDataUrl || idea.image_data_url;
+    if (!imageSrc) return;
+
     try {
-      // Convert data URL to blob
-      const response = await fetch(idea.image_data_url);
-      const blob = await response.blob();
-      
-      // Create file from blob (use generic filename to avoid embedding prompt text)
-      const file = new File([blob], `tattoo-design-inkpreview.png`, { type: 'image/png' });
-      
-      if (navigator.share && navigator.canShare({ files: [file] })) {
-        // Use native share if available - share image only (no prompt/text)
-        await navigator.share({ files: [file] });
-      } else {
-        // Fallback: download the image
+      // If it's a base64 string, we need to write it to a file first to share it properly on some platforms,
+      // or use the base64 directly if supported. Capacitor Share supports sharing files via URI.
+      // Since we already have the file saved locally (idea.imagePath), we can try to get the full URI.
+
+      // However, for simplicity and cross-platform compatibility with base64 data:
+      // We will write to a temporary file in the cache directory and share that.
+
+      const fileName = `share_${Date.now()}.png`;
+
+      // Strip the data URL prefix to get just the base64 data
+      const base64Data = imageSrc.includes(',') ? imageSrc.split(',')[1] : imageSrc;
+
+      const savedFile = await Filesystem.writeFile({
+        path: fileName,
+        data: base64Data,
+        directory: Directory.Cache,
+      });
+
+      await Share.share({
+        title: 'My Tattoo Design',
+        text: 'Check out this tattoo design I created with InkPreview!',
+        url: savedFile.uri,
+        dialogTitle: 'Share your design',
+      });
+
+    } catch (error) {
+      console.error('Failed to share:', error);
+      // Fallback: try web share or download
+      try {
+        const response = await fetch(imageSrc);
+        const blob = await response.blob();
+        const file = new File([blob], 'tattoo-design.png', { type: 'image/png' });
+        if (navigator.share && navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file] });
+        } else {
+          throw new Error('Web share not supported');
+        }
+      } catch (e) {
+        // Final fallback: download
         const link = document.createElement('a');
-        link.href = idea.image_data_url;
-        link.download = `tattoo-design-inkpreview.png`;
+        link.href = imageSrc;
+        link.download = 'tattoo-design.png';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
       }
-    } catch (error) {
-      console.error('Failed to export:', error);
-      // Fallback to download
-      const link = document.createElement('a');
-      link.href = idea.image_data_url;
-      link.download = `tattoo-design-inkpreview.png`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
     }
   };
 
@@ -67,6 +92,17 @@ const SavedIdeas: React.FC<SavedIdeasProps> = ({ onNavigate }) => {
     <div className="animate-fade-in">
       {/* Header */}
       <div className="text-center mb-10 relative">
+        {/* Back Button */}
+        <button
+          onClick={() => onNavigate('home')}
+          className="absolute left-0 top-0 p-2 text-steel-400 hover:text-white transition-colors z-10"
+          aria-label="Back to Home"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+        </button>
+
         <div className="absolute inset-0 -z-10">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-electric-500/10 rounded-full blur-3xl" />
         </div>
@@ -129,39 +165,146 @@ const SavedIdeas: React.FC<SavedIdeasProps> = ({ onNavigate }) => {
       {!isLoading && !error && ideas.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {ideas.map((idea, index) => (
-            <div
+            <SavedIdeaCard
               key={idea.id}
-              className="group relative bg-void-900 rounded-xl overflow-hidden border border-void-700 hover:border-electric-500/50 transition-all duration-300 hover:scale-[1.02] animate-slide-up"
-              style={{ animationDelay: `${index * 0.05}s` }}
-            >
-              {/* Image */}
-              <div className="aspect-square overflow-hidden">
-                <img
-                  src={idea.image_data_url}
-                  alt={idea.prompt}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  loading="lazy"
-                />
-              </div>
-
-              {/* Hover overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-void-950 via-void-950/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-end p-4">
-                <button
-                  onClick={() => handleExportClick(idea)}
-                  className="bg-electric-500/20 border border-electric-500/30 hover:border-electric-500/50 text-electric-400 hover:text-electric-300 font-heading uppercase tracking-wider text-xs py-2 px-4 rounded-lg transition-all duration-300 flex items-center gap-2 mb-2"
-                >
-                  <ExportIcon />
-                  <span>Export</span>
-                </button>
-                <p className="text-steel-300 text-xs line-clamp-2 text-center">{idea.prompt}</p>
-              </div>
-
-              {/* Corner accent */}
-              <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-electric-500/50 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </div>
+              idea={idea}
+              index={index}
+              onExport={handleExportClick}
+              onImageClick={(img) => setSelectedImage(img)}
+            />
           ))}
         </div>
       )}
+
+      {/* Lightbox Modal */}
+      {selectedImage && (
+        <div
+          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 animate-fade-in"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div className="absolute top-4 right-4 flex items-center gap-4">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                // Find the idea associated with this image to share it
+                const idea = ideas.find(i => (i.imageDataUrl || i.image_data_url) === selectedImage);
+                if (idea) {
+                  console.log('Sharing from lightbox:', idea.id);
+                  handleExportClick(idea);
+                } else {
+                  console.error('Could not find idea for image in lightbox');
+                }
+              }}
+              className="text-electric-400 hover:text-electric-300 transition-colors p-2 rounded-full hover:bg-white/10"
+              title="Share"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+              </svg>
+            </button>
+            <button
+              className="text-white/50 hover:text-white transition-colors p-2"
+              onClick={() => setSelectedImage(null)}
+            >
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <img
+            src={selectedImage}
+            alt="Full screen view"
+            className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking image
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
+const SavedIdeaCard: React.FC<{
+  idea: Idea;
+  index: number;
+  onExport: (idea: Idea) => void;
+  onImageClick: (imageSrc: string) => void;
+}> = ({ idea, index, onExport, onImageClick }) => {
+  const [showPrompt, setShowPrompt] = useState(false);
+
+  // Handle both property names for backward compatibility
+  const imageSrc = idea.imageDataUrl || idea.image_data_url;
+
+  return (
+    <div
+      className="group relative bg-void-900 rounded-xl overflow-hidden border border-void-700 hover:border-electric-500/50 transition-all duration-300 hover:scale-[1.02] animate-slide-up"
+      style={{ animationDelay: `${index * 0.05}s` }}
+      onClick={() => imageSrc && onImageClick(imageSrc)}
+    >
+      {/* Image */}
+      <div className="aspect-square overflow-hidden bg-void-950 relative cursor-pointer">
+        {imageSrc ? (
+          <img
+            src={imageSrc}
+            alt="Tattoo design"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            loading="lazy"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-steel-500">
+            <span className="text-xs">Image not found</span>
+          </div>
+        )}
+
+        {/* Prompt Overlay (Hidden by default) */}
+        {showPrompt && (
+          <div className="absolute inset-0 bg-void-950/90 backdrop-blur-sm p-4 flex flex-col justify-center items-center text-center animate-fade-in z-20 cursor-default" onClick={(e) => e.stopPropagation()}>
+            <p className="text-white text-xs leading-relaxed overflow-y-auto max-h-full scrollbar-hide">
+              {idea.prompt}
+            </p>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowPrompt(false);
+              }}
+              className="mt-3 text-electric-400 text-xs font-bold uppercase tracking-wider hover:text-white"
+            >
+              Close
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Overlay actions - Always visible on mobile, gradient background for readability */}
+      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-void-950 via-void-950/80 to-transparent p-3 flex items-end justify-between gap-2 z-10 pointer-events-none h-24">
+        <div className="flex gap-2 w-full pointer-events-auto">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onExport(idea);
+            }}
+            className="flex-1 bg-electric-500/20 border border-electric-500/30 hover:border-electric-500/50 text-electric-400 hover:text-electric-300 font-heading uppercase tracking-wider text-[10px] py-2 rounded-lg transition-all duration-300 flex items-center justify-center gap-1"
+          >
+            <ExportIcon />
+            <span>Share</span>
+          </button>
+
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowPrompt(!showPrompt);
+            }}
+            className="w-8 h-8 bg-void-800/80 border border-void-600 hover:border-electric-500/50 text-steel-300 hover:text-white rounded-lg flex items-center justify-center transition-all duration-300"
+            title="View Prompt"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Corner accent */}
+      <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-electric-500/50 opacity-0 group-hover:opacity-100 transition-opacity" />
     </div>
   );
 };

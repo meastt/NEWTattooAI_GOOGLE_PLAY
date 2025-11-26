@@ -74,60 +74,64 @@ const OnboardingTour: React.FC<OnboardingTourProps> = ({ onComplete, onUpgradeCl
   const isLastStep = currentStep === TOUR_STEPS.length - 1;
 
   return (
-    <div className="fixed inset-0 z-[10000] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl max-w-md w-full mx-4 overflow-hidden animate-fade-in">
+    <div className="fixed inset-0 z-[10000] bg-void-950/90 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in">
+      <div className="bg-void-900 rounded-3xl shadow-2xl max-w-md w-full mx-4 overflow-hidden border border-void-700 relative">
+        {/* Background Effects */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-electric-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-magenta-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+
         {/* Progress Bar */}
-        <div className="h-1 bg-slate-200 dark:bg-slate-700">
-          <div 
-            className="h-full bg-gradient-to-r from-ink-500 to-neon-500 transition-all duration-500"
+        <div className="h-1 bg-void-800">
+          <div
+            className="h-full bg-gradient-to-r from-electric-500 to-magenta-500 transition-all duration-500"
             style={{ width: `${((currentStep + 1) / TOUR_STEPS.length) * 100}%` }}
           />
         </div>
 
         {/* Content */}
-        <div className="p-8 text-center">
+        <div className="p-8 text-center relative z-10">
           {/* Illustration */}
-          <div className="text-6xl mb-6 animate-bounce">
+          <div className="text-6xl mb-8 animate-float">
             {step.illustration}
           </div>
 
           {/* Title */}
-          <h2 className="text-2xl font-display font-bold mb-4 text-slate-900 dark:text-white">
+          <h2 className="text-2xl font-display font-bold mb-4 text-white uppercase tracking-wide">
             {step.title}
           </h2>
 
           {/* Description */}
-          <p className="text-lg text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
+          <p className="text-lg text-steel-300 mb-8 leading-relaxed font-light">
             {step.description}
           </p>
 
           {/* Benefit Badge */}
-          <div className="inline-block bg-gradient-to-r from-ink-100 to-neon-100 dark:from-ink-900 dark:to-neon-900 px-4 py-2 rounded-full mb-8">
-            <span className="text-sm font-semibold text-ink-600 dark:text-ink-400">
+          <div className="inline-block bg-void-800 border border-void-700 px-4 py-2 rounded-full mb-8">
+            <span className="text-sm font-medium text-electric-400 uppercase tracking-wider">
               {step.benefit}
             </span>
           </div>
 
           {/* Upgrade CTA for final step */}
           {isLastStep && onUpgradeClick && (
-            <div className="mb-6">
+            <div className="mb-8 animate-slide-up">
               <button
                 onClick={onUpgradeClick}
-                className="w-full bg-gradient-to-r from-neon-500 to-ink-500 hover:from-neon-600 hover:to-ink-600 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 border-2 border-neon-300/50"
+                className="w-full bg-gradient-to-r from-electric-500 to-magenta-500 hover:from-electric-400 hover:to-magenta-400 text-white px-8 py-4 rounded-xl font-heading uppercase tracking-wider text-sm transition-all duration-300 shadow-lg hover:shadow-neon-dual transform hover:scale-[1.02]"
               >
-                ✨ Start Your Premium Journey - $4.99/week ✨
+                Start Premium Journey
               </button>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
-                Less than your daily coffee ☕
+              <p className="text-xs text-steel-500 mt-3 font-medium uppercase tracking-wide">
+                Try it risk-free
               </p>
             </div>
           )}
 
           {/* Navigation */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mt-4">
             <button
               onClick={handleSkip}
-              className="text-slate-500 dark:text-slate-400 font-medium hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
+              className="text-steel-500 hover:text-white font-medium transition-colors text-sm uppercase tracking-wider"
             >
               Skip
             </button>
@@ -136,22 +140,21 @@ const OnboardingTour: React.FC<OnboardingTourProps> = ({ onComplete, onUpgradeCl
               {TOUR_STEPS.map((_, index) => (
                 <div
                   key={index}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    index === currentStep
-                      ? 'bg-ink-500 w-6'
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${index === currentStep
+                      ? 'bg-electric-500 w-6'
                       : index < currentStep
-                      ? 'bg-neon-400'
-                      : 'bg-slate-200 dark:bg-slate-600'
-                  }`}
+                        ? 'bg-electric-500/50'
+                        : 'bg-void-700'
+                    }`}
                 />
               ))}
             </div>
 
             <button
               onClick={handleNext}
-              className="bg-gradient-to-r from-ink-500 to-neon-500 hover:from-ink-600 hover:to-neon-600 text-white px-6 py-2 rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-xl"
+              className="bg-void-800 hover:bg-void-700 border border-void-600 hover:border-electric-500/50 text-white px-6 py-2 rounded-lg font-heading uppercase tracking-wider text-xs transition-all duration-300"
             >
-              {isLastStep ? "Let's Start!" : 'Next'}
+              {isLastStep ? "Let's Start" : 'Next'}
             </button>
           </div>
         </div>

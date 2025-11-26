@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import LoadingSpinner from './LoadingSpinner';
+import { Share } from '@capacitor/share';
+import { Filesystem, Directory } from '@capacitor/filesystem';
 import { SaveIcon } from './icons/SaveIcon';
 import { ShareIcon } from './icons/ShareIcon';
 
@@ -44,36 +46,43 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
 
   const handleShareClick = async () => {
     if (!resultImage) return;
-    
+
     try {
-      // Convert data URL to blob
-      const response = await fetch(resultImage);
-      const blob = await response.blob();
-      
-      // Create file from blob (generic name; no prompt)
-      const file = new File([blob], 'tattoo-design-inkpreview.png', { type: 'image/png' });
-      
-      if (navigator.share && navigator.canShare({ files: [file] })) {
-        // Use native share if available - share image only
-        await navigator.share({ files: [file] });
-      } else {
-        // Fallback: download the image
+      // For Capacitor Share, we need to write the file to the cache directory first
+      // to get a valid URI that can be shared.
+      const fileName = `share_${Date.now()}.png`;
+
+      // Strip the data URL prefix to get just the base64 data
+      const base64Data = resultImage.split(',')[1];
+
+      const savedFile = await Filesystem.writeFile({
+        path: fileName,
+        data: base64Data,
+        directory: Directory.Cache,
+      });
+
+      console.log('File written to cache:', savedFile.uri);
+
+      await Share.share({
+        title: 'My Tattoo Design',
+        text: 'Check out this tattoo design I created with InkPreview!',
+        url: savedFile.uri,
+        dialogTitle: 'Share your design',
+      });
+      console.log('Share dialog opened successfully');
+    } catch (error) {
+      console.error('Failed to share:', error);
+      // Fallback to download on error (e.g. share sheet cancelled or not supported)
+      try {
         const link = document.createElement('a');
         link.href = resultImage;
         link.download = 'tattoo-design-inkpreview.png';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+      } catch (e) {
+        console.error('Fallback download failed:', e);
       }
-    } catch (error) {
-      console.error('Failed to share:', error);
-      // Fallback to download
-      const link = document.createElement('a');
-      link.href = resultImage;
-      link.download = 'tattoo-design-inkpreview.png';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
     }
   };
 
@@ -100,7 +109,7 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
 
         {isLoading && (
           <div className="text-center">
-            <div className="relative mb-6">
+            <div className="relative mb-6 w-16 h-16 mx-auto">
               <div className="w-16 h-16 border-2 border-void-600 rounded-full animate-spin border-t-electric-500"></div>
               <div className="absolute inset-0 w-16 h-16 border-2 border-transparent rounded-full animate-ping border-t-magenta-500/30"></div>
             </div>
@@ -164,7 +173,7 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
                 className="bg-magenta-500/20 border border-magenta-500/30 hover:border-magenta-500/50 text-magenta-400 hover:text-magenta-300 font-heading uppercase tracking-wider text-xs py-3 px-5 rounded-xl transition-all duration-300 flex items-center gap-2"
               >
                 <ShareIcon />
-                <span>Export</span>
+                <span>Share</span>
               </button>
             </div>
           </div>

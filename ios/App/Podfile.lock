@@ -9,6 +9,8 @@ PODS:
     - IONFilesystemLib (~> 1.0.1)
   - CapacitorPreferences (7.0.2):
     - Capacitor
+  - CapacitorShare (7.0.2):
+    - Capacitor
   - CapacitorStatusBar (7.0.2):
     - Capacitor
   - IONFilesystemLib (1.0.1)
@@ -25,6 +27,7 @@ DEPENDENCIES:
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorFilesystem (from `../../node_modules/@capacitor/filesystem`)"
   - "CapacitorPreferences (from `../../node_modules/@capacitor/preferences`)"
+  - "CapacitorShare (from `../../node_modules/@capacitor/share`)"
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
   - "RevenuecatPurchasesCapacitor (from `../../node_modules/@revenuecat/purchases-capacitor`)"
 
@@ -45,23 +48,26 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/filesystem"
   CapacitorPreferences:
     :path: "../../node_modules/@capacitor/preferences"
+  CapacitorShare:
+    :path: "../../node_modules/@capacitor/share"
   CapacitorStatusBar:
     :path: "../../node_modules/@capacitor/status-bar"
   RevenuecatPurchasesCapacitor:
     :path: "../../node_modules/@revenuecat/purchases-capacitor"
 
 SPEC CHECKSUMS:
-  Capacitor: b4741ca7affb32c1b70debd03df92cbf522d8a80
-  CapacitorCamera: 6e18d54c8ab30d7dc7b8cd93d96f9b4f57e9202a
+  Capacitor: 28d6c01026a9a3f7156529498ec1f389a2a28dbc
+  CapacitorCamera: f9e54db0a18bb218a8dc360907d63aaefe9209ff
   CapacitorCordova: 435121e81a2df4d0034f0fb11fcefab5104cfdb5
-  CapacitorFilesystem: ac0a386949ed6c295a3dffa129ecd26b881ae5be
-  CapacitorPreferences: b583b5deb74e564c35968189d25d32c0fd41200d
-  CapacitorStatusBar: 5526833b87fa9c96a2a90c1322bb1f663c04505f
+  CapacitorFilesystem: f9bd850c41e048180e5dc0cbb90f2033ede9d2cc
+  CapacitorPreferences: 65107ed7437d96ee72583df5763985e3c0ff2bc2
+  CapacitorShare: be166411fa995ead2d39b104aa0aae56d8615c66
+  CapacitorStatusBar: e04d05e121d5a5979c29eb4249186a4e4a84cacb
   IONFilesystemLib: 89258b8e3e85465da93127d25d7ce37f977e8a6f
   PurchasesHybridCommon: 7d56bf25c61e2c8a62e5b23d7bf16b5060420fe9
   RevenueCat: fc4ad171bbfbfb974210f0b26ce470b007be111f
-  RevenuecatPurchasesCapacitor: f5e42aa9c590fc481ff19c518589abceb8020e8d
+  RevenuecatPurchasesCapacitor: db071ba6f8ad7dea18c2d040790077a133f44f47
 
-PODFILE CHECKSUM: aab59ba8088262eb7d44196681dc583757c5108e
+PODFILE CHECKSUM: bed11a31e153825a0d48c74e27d01f574097eafc
 
 COCOAPODS: 1.16.2

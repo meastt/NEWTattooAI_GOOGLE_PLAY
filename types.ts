@@ -25,7 +25,8 @@ export type SubscriptionStatus = 'FREE' | 'QUICK_SPARK' | 'DEEP_DIVE' | 'EXPIRED
 export interface Idea {
   id: number | string;
   image_url?: string;
-  image_data_url?: string;
+  image_data_url?: string; // Legacy support
+  imageDataUrl?: string;   // Correct property name
   prompt: string;
   imagePath?: string;
   createdAt?: string;
