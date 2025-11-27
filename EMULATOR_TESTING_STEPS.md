@@ -30,7 +30,7 @@ nano .env.production
 npm run build:android:prod
 
 # Open Android Studio
-npx cap open android
+
 ```
 
 ### Step 4: Create an Android Emulator (if you don't have one)
