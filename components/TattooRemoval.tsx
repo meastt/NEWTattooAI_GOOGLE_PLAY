@@ -17,14 +17,14 @@ const TattooRemoval: React.FC<TattooRemovalProps> = ({ onNavigate, onUpgradeClic
   const [userImage, setUserImage] = useState<{ base64: string; mimeType: string } | null>(null);
   const [actionType, setActionType] = useState<'remove' | 'coverup'>('remove');
   const [removalDescription, setRemovalDescription] = useState('');
-  
+
   // Cover-up specific fields
   const [coverupIdea, setCoverupIdea] = useState('');
   const [coverupStyle, setCoverupStyle] = useState<TattooStyle>(TATTOO_STYLES[0]);
   const [coverupColor, setCoverupColor] = useState<TattooColor>(TATTOO_COLORS[1]);
-  
+
   const [prompt, setPrompt] = useState('');
-  
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [resultImage, setResultImage] = useState<string | null>(null);
@@ -37,12 +37,12 @@ const TattooRemoval: React.FC<TattooRemovalProps> = ({ onNavigate, onUpgradeClic
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!userImage || !removalDescription) {
       setError("Please upload an image and describe the existing tattoo.");
       return;
     }
-    
+
     if (actionType === 'coverup' && !coverupIdea) {
       setError("Please describe your cover-up tattoo idea.");
       return;
@@ -56,26 +56,30 @@ const TattooRemoval: React.FC<TattooRemovalProps> = ({ onNavigate, onUpgradeClic
       setError("You need credits to generate images. Please upgrade or wait for your credits to reset.");
       return;
     }
-    
+
     setIsLoading(true);
     setError(null);
     setResultImage(null);
 
     let generatedPrompt = '';
-    
+
     if (actionType === 'remove') {
-      generatedPrompt = `Using the provided image of a person, realistically remove the tattoo described as: "${removalDescription}". Heal the skin where the tattoo was, making it look natural and as if the tattoo was never there. Do not add any new tattoos or markings.`;
+      generatedPrompt = `Using the provided image of a person, realistically remove the tattoo described as: "${removalDescription}". Heal the skin where the tattoo was, making it look natural and as if the tattoo was never there. Do not add any new tattoos or markings.
+      
+      IMPORTANT SAFETY INSTRUCTION: This image must be suitable for a general audience (PG-13). If the user's request implies nudity, sexual content, or inappropriate exposure (e.g., toplessness, exposed genitalia), you MUST modify the design to be age-appropriate. Do NOT refuse the request. Instead, creatively cover sensitive areas using clothing (e.g., bikinis, robes), natural elements (e.g., leaves, flowers, hair), or artistic composition (e.g., shadows, angles). Ensure the final image contains NO nudity and NO sexual content while still fulfilling the artistic intent of the user's request.`;
     } else {
-      generatedPrompt = `Using the provided image of a person, replace the existing tattoo described as "${removalDescription}" with a new tattoo design. The new tattoo should be: ${coverupIdea}. The new tattoo style should be ${coverupStyle}, ${coverupColor}. Make sure the new tattoo completely covers and replaces the old tattoo in the same location. The result should look like a professional cover-up tattoo.`;
+      generatedPrompt = `Using the provided image of a person, replace the existing tattoo described as "${removalDescription}" with a new tattoo design. The new tattoo should be: ${coverupIdea}. The new tattoo style should be ${coverupStyle}, ${coverupColor}. Make sure the new tattoo completely covers and replaces the old tattoo in the same location. The result should look like a professional cover-up tattoo.
+      
+      IMPORTANT SAFETY INSTRUCTION: This image must be suitable for a general audience (PG-13). If the user's request implies nudity, sexual content, or inappropriate exposure (e.g., toplessness, exposed genitalia), you MUST modify the design to be age-appropriate. Do NOT refuse the request. Instead, creatively cover sensitive areas using clothing (e.g., bikinis, robes), natural elements (e.g., leaves, flowers, hair), or artistic composition (e.g., shadows, angles). Ensure the final image contains NO nudity and NO sexual content while still fulfilling the artistic intent of the user's request.`;
     }
-    
+
     setPrompt(generatedPrompt);
 
     try {
       console.log('Starting image generation with prompt:', generatedPrompt);
       const result = await editImage(userImage.base64, userImage.mimeType, generatedPrompt);
       console.log('Image generation result:', result);
-      
+
       if (result.imageUrl) {
         setResultImage(result.imageUrl);
       } else {
@@ -100,7 +104,7 @@ const TattooRemoval: React.FC<TattooRemovalProps> = ({ onNavigate, onUpgradeClic
         <div className="absolute inset-0 -z-10">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-ink-500/10 to-neon-500/10 rounded-full blur-3xl" />
         </div>
-        
+
         <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-ink-600 via-ink-500 to-neon-500">
             Tattoo {actionType === 'remove' ? 'Removal' : 'Cover-Up'}
@@ -109,7 +113,7 @@ const TattooRemoval: React.FC<TattooRemovalProps> = ({ onNavigate, onUpgradeClic
           <span className="text-slate-900 dark:text-white">Visualizer</span>
         </h2>
         <p className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
-          {actionType === 'remove' 
+          {actionType === 'remove'
             ? "See a preview of your skin without a specific tattoo."
             : "See how a new tattoo design could cover up an existing one."
           }
@@ -132,22 +136,20 @@ const TattooRemoval: React.FC<TattooRemovalProps> = ({ onNavigate, onUpgradeClic
                 <button
                   type="button"
                   onClick={() => setActionType('remove')}
-                  className={`flex-1 px-4 py-3 rounded-xl font-bold transition-all duration-300 ${
-                    actionType === 'remove'
+                  className={`flex-1 px-4 py-3 rounded-xl font-bold transition-all duration-300 ${actionType === 'remove'
                       ? 'bg-red-500 text-white shadow-lg'
                       : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600'
-                  }`}
+                    }`}
                 >
                   🚫 I want it gone!
                 </button>
                 <button
                   type="button"
                   onClick={() => setActionType('coverup')}
-                  className={`flex-1 px-4 py-3 rounded-xl font-bold transition-all duration-300 ${
-                    actionType === 'coverup'
+                  className={`flex-1 px-4 py-3 rounded-xl font-bold transition-all duration-300 ${actionType === 'coverup'
                       ? 'bg-blue-500 text-white shadow-lg'
                       : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600'
-                  }`}
+                    }`}
                 >
                   🎨 I want a cover-up
                 </button>
@@ -222,10 +224,10 @@ const TattooRemoval: React.FC<TattooRemovalProps> = ({ onNavigate, onUpgradeClic
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="coverupStyle" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Cover-up Style</label>
-                    <select 
-                      id="coverupStyle" 
-                      value={coverupStyle} 
-                      onChange={(e) => setCoverupStyle(e.target.value as TattooStyle)} 
+                    <select
+                      id="coverupStyle"
+                      value={coverupStyle}
+                      onChange={(e) => setCoverupStyle(e.target.value as TattooStyle)}
                       className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600"
                     >
                       {TATTOO_STYLES.slice(0, 10).map(style => (
@@ -233,13 +235,13 @@ const TattooRemoval: React.FC<TattooRemovalProps> = ({ onNavigate, onUpgradeClic
                       ))}
                     </select>
                   </div>
-                  
+
                   <div>
                     <label htmlFor="coverupColor" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Color</label>
-                    <select 
-                      id="coverupColor" 
-                      value={coverupColor} 
-                      onChange={(e) => setCoverupColor(e.target.value as TattooColor)} 
+                    <select
+                      id="coverupColor"
+                      value={coverupColor}
+                      onChange={(e) => setCoverupColor(e.target.value as TattooColor)}
                       className="w-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-ink-500 focus:border-ink-500 dark:focus:border-ink-400 transition-all duration-300 hover:border-ink-300 dark:hover:border-ink-600"
                     >
                       {TATTOO_COLORS.map(color => (
@@ -250,8 +252,8 @@ const TattooRemoval: React.FC<TattooRemovalProps> = ({ onNavigate, onUpgradeClic
                 </div>
               </>
             )}
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={isLoading || !userImage}
               className="w-full bg-gradient-to-r from-ink-600 via-ink-500 to-neon-500 hover:from-ink-700 hover:via-ink-600 hover:to-neon-600 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-300 disabled:bg-slate-400 disabled:cursor-not-allowed flex items-center justify-center group shadow-lg hover:shadow-xl hover:shadow-ink-500/25 disabled:shadow-none"
             >
@@ -280,11 +282,11 @@ const TattooRemoval: React.FC<TattooRemovalProps> = ({ onNavigate, onUpgradeClic
         prompt={prompt}
         onSave={handleSave}
         onUpgradeClick={onUpgradeClick}
-        loadingText={actionType === 'remove' 
+        loadingText={actionType === 'remove'
           ? "Digitally removing your tattoo... This can take a moment."
           : "Creating your cover-up design... This can take a moment."
         }
-        initialText={actionType === 'remove' 
+        initialText={actionType === 'remove'
           ? "Your tattoo removal preview will appear here."
           : "Your cover-up tattoo preview will appear here."
         }
@@ -292,7 +294,7 @@ const TattooRemoval: React.FC<TattooRemovalProps> = ({ onNavigate, onUpgradeClic
 
       {(!isLoading && (resultImage || error)) && (
         <div className="mt-6 text-center">
-          <button 
+          <button
             onClick={() => onNavigate('create')}
             className="bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-6 rounded-lg transition-colors"
           >

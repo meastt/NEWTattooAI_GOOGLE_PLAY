@@ -15,7 +15,7 @@ const TattooRemovalOnly: React.FC<TattooRemovalOnlyProps> = ({ onNavigate, onUpg
   const [userImage, setUserImage] = useState<{ base64: string; mimeType: string } | null>(null);
   const [removalDescription, setRemovalDescription] = useState('');
   const [prompt, setPrompt] = useState('');
-  
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [resultImage, setResultImage] = useState<string | null>(null);
@@ -28,7 +28,7 @@ const TattooRemovalOnly: React.FC<TattooRemovalOnlyProps> = ({ onNavigate, onUpg
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!userImage || !removalDescription) {
       setError("Please upload an image and describe the tattoo to remove.");
       return;
@@ -42,19 +42,21 @@ const TattooRemovalOnly: React.FC<TattooRemovalOnlyProps> = ({ onNavigate, onUpg
       setError("You need credits to generate images. Please upgrade or wait for your credits to reset.");
       return;
     }
-    
+
     setIsLoading(true);
     setError(null);
     setResultImage(null);
 
-    const generatedPrompt = `Using the provided image of a person, realistically remove the tattoo described as: "${removalDescription}". Heal the skin where the tattoo was, making it look natural and as if the tattoo was never there. Do not add any new tattoos or markings. The result should show clean, natural skin in that area.`;
+    const generatedPrompt = `Using the provided image of a person, realistically remove the tattoo described as: "${removalDescription}". Heal the skin where the tattoo was, making it look natural and as if the tattoo was never there. Do not add any new tattoos or markings. The result should show clean, natural skin in that area.
+    
+    IMPORTANT SAFETY INSTRUCTION: This image must be suitable for a general audience (PG-13). If the user's request implies nudity, sexual content, or inappropriate exposure (e.g., toplessness, exposed genitalia), you MUST modify the design to be age-appropriate. Do NOT refuse the request. Instead, creatively cover sensitive areas using clothing (e.g., bikinis, robes), natural elements (e.g., leaves, flowers, hair), or artistic composition (e.g., shadows, angles). Ensure the final image contains NO nudity and NO sexual content while still fulfilling the artistic intent of the user's request.`;
     setPrompt(generatedPrompt);
 
     try {
       console.log('Starting tattoo removal with prompt:', generatedPrompt);
       const result = await editImage(userImage.base64, userImage.mimeType, generatedPrompt);
       console.log('Tattoo removal result:', result);
-      
+
       if (result.imageUrl) {
         setResultImage(result.imageUrl);
       } else {

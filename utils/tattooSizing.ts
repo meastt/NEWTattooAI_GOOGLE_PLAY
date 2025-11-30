@@ -154,5 +154,7 @@ CRITICAL CONSTRAINTS (NEGATIVE PROMPT):
 - NO unrealistic colors or glowing effects.
 
 OUTPUT:
-Return the ORIGINAL image with the single, photorealistic tattoo seamlessly integrated into the skin.`;
+Return the ORIGINAL image with the single, photorealistic tattoo seamlessly integrated into the skin.
+    
+IMPORTANT SAFETY INSTRUCTION: This image must be suitable for a general audience (PG-13). If the user's request implies nudity, sexual content, or inappropriate exposure (e.g., toplessness, exposed genitalia), you MUST modify the design to be age-appropriate. Do NOT refuse the request. Instead, creatively cover sensitive areas using clothing (e.g., bikinis, robes), natural elements (e.g., leaves, flowers, hair), or artistic composition (e.g., shadows, angles). Ensure the final image contains NO nudity and NO sexual content while still fulfilling the artistic intent of the user's request.`;
 }

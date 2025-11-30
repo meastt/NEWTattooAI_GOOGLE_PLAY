@@ -19,7 +19,7 @@ const TattooCoverup: React.FC<TattooCoverupProps> = ({ onNavigate, onUpgradeClic
   const [coverupStyle, setCoverupStyle] = useState<TattooStyle>(TATTOO_STYLES[0]);
   const [coverupColor, setCoverupColor] = useState<TattooColor>(TATTOO_COLORS[1]);
   const [prompt, setPrompt] = useState('');
-  
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [resultImage, setResultImage] = useState<string | null>(null);
@@ -32,7 +32,7 @@ const TattooCoverup: React.FC<TattooCoverupProps> = ({ onNavigate, onUpgradeClic
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!userImage || !existingTattooDescription || !coverupIdea) {
       setError("Please upload an image, describe the existing tattoo, and your cover-up idea.");
       return;
@@ -46,19 +46,21 @@ const TattooCoverup: React.FC<TattooCoverupProps> = ({ onNavigate, onUpgradeClic
       setError("You need credits to generate images. Please upgrade or wait for your credits to reset.");
       return;
     }
-    
+
     setIsLoading(true);
     setError(null);
     setResultImage(null);
 
-    const generatedPrompt = `Using the provided image of a person, replace the existing tattoo described as "${existingTattooDescription}" with a new tattoo design. The new tattoo should be: ${coverupIdea}. The new tattoo style should be ${coverupStyle}, ${coverupColor}. Make sure the new tattoo completely covers and replaces the old tattoo in the same location. The result should look like a professional cover-up tattoo that strategically hides the original tattoo underneath.`;
+    const generatedPrompt = `Using the provided image of a person, replace the existing tattoo described as "${existingTattooDescription}" with a new tattoo design. The new tattoo should be: ${coverupIdea}. The new tattoo style should be ${coverupStyle}, ${coverupColor}. Make sure the new tattoo completely covers and replaces the old tattoo in the same location. The result should look like a professional cover-up tattoo that strategically hides the original tattoo underneath.
+    
+    IMPORTANT SAFETY INSTRUCTION: This image must be suitable for a general audience (PG-13). If the user's request implies nudity, sexual content, or inappropriate exposure (e.g., toplessness, exposed genitalia), you MUST modify the design to be age-appropriate. Do NOT refuse the request. Instead, creatively cover sensitive areas using clothing (e.g., bikinis, robes), natural elements (e.g., leaves, flowers, hair), or artistic composition (e.g., shadows, angles). Ensure the final image contains NO nudity and NO sexual content while still fulfilling the artistic intent of the user's request.`;
     setPrompt(generatedPrompt);
 
     try {
       console.log('Starting tattoo cover-up with prompt:', generatedPrompt);
       const result = await editImage(userImage.base64, userImage.mimeType, generatedPrompt);
       console.log('Tattoo cover-up result:', result);
-      
+
       if (result.imageUrl) {
         setResultImage(result.imageUrl);
       } else {

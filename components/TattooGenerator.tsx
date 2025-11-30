@@ -33,7 +33,9 @@ const TattooGenerator: React.FC<TattooGeneratorProps> = ({ onNavigate, onUpgrade
     setError(null);
     setResultImage(null);
 
-    const generatedPrompt = `A tattoo design of a ${subject}. The style should be ${style}, ${color}. Additional details: ${details}. The design should be on a clean, white background.`;
+    const generatedPrompt = `A tattoo design of a ${subject}. The style should be ${style}, ${color}. Additional details: ${details}. The design should be on a clean, white background.
+    
+    IMPORTANT SAFETY INSTRUCTION: This image must be suitable for a general audience (PG-13). If the user's request implies nudity, sexual content, or inappropriate exposure (e.g., toplessness, exposed genitalia), you MUST modify the design to be age-appropriate. Do NOT refuse the request. Instead, creatively cover sensitive areas using clothing (e.g., bikinis, robes), natural elements (e.g., leaves, flowers, hair), or artistic composition (e.g., shadows, angles). Ensure the final image contains NO nudity and NO sexual content while still fulfilling the artistic intent of the user's request.`;
     setPrompt(generatedPrompt);
 
     try {
@@ -131,7 +133,7 @@ const TattooGenerator: React.FC<TattooGeneratorProps> = ({ onNavigate, onUpgrade
                   <option value="Neo-Traditional">Neo-Traditional</option>
                   <option value="Traditional Sailor">Traditional Sailor</option>
                 </optgroup>
-                
+
                 <optgroup label="Modern & Contemporary">
                   <option value="Fine Line">Fine Line</option>
                   <option value="Minimalist">Minimalist</option>
@@ -140,7 +142,7 @@ const TattooGenerator: React.FC<TattooGeneratorProps> = ({ onNavigate, onUpgrade
                   <option value="Watercolor">Watercolor</option>
                   <option value="Sketch Style">Sketch Style</option>
                 </optgroup>
-                
+
                 <optgroup label="Black & Bold">
                   <option value="Blackwork">Blackwork</option>
                   <option value="Tribal">Tribal</option>
@@ -148,14 +150,14 @@ const TattooGenerator: React.FC<TattooGeneratorProps> = ({ onNavigate, onUpgrade
                   <option value="Ornamental">Ornamental</option>
                   <option value="Mandala">Mandala</option>
                 </optgroup>
-                
+
                 <optgroup label="Realistic & Portrait">
                   <option value="Realism">Realism</option>
                   <option value="Photorealism">Photorealism</option>
                   <option value="Portrait">Portrait</option>
                   <option value="Biomechanical">Biomechanical</option>
                 </optgroup>
-                
+
                 <optgroup label="Text & Lettering">
                   <option value="Script/Cursive">Script/Cursive</option>
                   <option value="Old English">Old English</option>
@@ -166,7 +168,7 @@ const TattooGenerator: React.FC<TattooGeneratorProps> = ({ onNavigate, onUpgrade
                   <option value="Graffiti Style">Graffiti Style</option>
                   <option value="Hand Lettered">Hand Lettered</option>
                 </optgroup>
-                
+
                 <optgroup label="Cultural & Spiritual">
                   <option value="Celtic">Celtic</option>
                   <option value="Norse/Viking">Norse/Viking</option>
@@ -175,7 +177,7 @@ const TattooGenerator: React.FC<TattooGeneratorProps> = ({ onNavigate, onUpgrade
                   <option value="Hindu/Buddhist">Hindu/Buddhist</option>
                   <option value="Chinese">Chinese</option>
                 </optgroup>
-                
+
                 <optgroup label="Artistic & Unique">
                   <option value="Surrealism">Surrealism</option>
                   <option value="Pop Art">Pop Art</option>
@@ -184,7 +186,7 @@ const TattooGenerator: React.FC<TattooGeneratorProps> = ({ onNavigate, onUpgrade
                   <option value="Art Nouveau">Art Nouveau</option>
                   <option value="Chicano">Chicano</option>
                 </optgroup>
-                
+
                 <optgroup label="Fun & Playful">
                   <option value="Cartoon">Cartoon</option>
                   <option value="Anime/Manga">Anime/Manga</option>
