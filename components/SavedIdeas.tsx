@@ -3,6 +3,8 @@ import { getSavedIdeas } from '../services/tattooService';
 import type { View, Idea } from '../types';
 import LoadingSpinner from './LoadingSpinner';
 import { ExportIcon } from './icons/ExportIcon';
+import ContentReportModal from './ContentReportModal';
+import { submitContentReport } from '../services/reportingService';
 
 interface SavedIdeasProps {
   onNavigate: (view: View) => void;
@@ -18,6 +20,8 @@ const SavedIdeas: React.FC<SavedIdeasProps> = ({ onNavigate }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null); // For lightbox
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [reportingContentId, setReportingContentId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchIdeas = async () => {
@@ -86,6 +90,16 @@ const SavedIdeas: React.FC<SavedIdeasProps> = ({ onNavigate }) => {
         document.body.removeChild(link);
       }
     }
+  };
+
+  const handleReportClick = (ideaId: string) => {
+    setReportingContentId(ideaId);
+    setShowReportModal(true);
+  };
+
+  const handleReportSubmit = async (reason: string, additionalInfo: string) => {
+    await submitContentReport(reason, additionalInfo, 'saved', reportingContentId || undefined);
+    setReportingContentId(null);
   };
 
   return (
@@ -171,6 +185,7 @@ const SavedIdeas: React.FC<SavedIdeasProps> = ({ onNavigate }) => {
               index={index}
               onExport={handleExportClick}
               onImageClick={(img) => setSelectedImage(img)}
+              onReport={() => handleReportClick(idea.id.toString())}
             />
           ))}
         </div>
@@ -219,6 +234,17 @@ const SavedIdeas: React.FC<SavedIdeasProps> = ({ onNavigate }) => {
           />
         </div>
       )}
+
+      {/* Content Report Modal */}
+      <ContentReportModal
+        isOpen={showReportModal}
+        onClose={() => {
+          setShowReportModal(false);
+          setReportingContentId(null);
+        }}
+        onSubmit={handleReportSubmit}
+        contentType="saved"
+      />
     </div>
   );
 };
@@ -228,7 +254,8 @@ const SavedIdeaCard: React.FC<{
   index: number;
   onExport: (idea: Idea) => void;
   onImageClick: (imageSrc: string) => void;
-}> = ({ idea, index, onExport, onImageClick }) => {
+  onReport: () => void;
+}> = ({ idea, index, onExport, onImageClick, onReport }) => {
   const [showPrompt, setShowPrompt] = useState(false);
 
   // Handle both property names for backward compatibility
@@ -298,6 +325,19 @@ const SavedIdeaCard: React.FC<{
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </button>
+
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onReport();
+            }}
+            className="w-8 h-8 bg-red-500/20 border border-red-500/30 hover:border-red-500/50 text-red-400 hover:text-red-300 rounded-lg flex items-center justify-center transition-all duration-300"
+            title="Report content"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
           </button>
         </div>

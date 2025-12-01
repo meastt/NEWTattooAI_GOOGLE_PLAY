@@ -4,6 +4,8 @@ import { Share } from '@capacitor/share';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { SaveIcon } from './icons/SaveIcon';
 import { ShareIcon } from './icons/ShareIcon';
+import ContentReportModal from './ContentReportModal';
+import { submitContentReport } from '../services/reportingService';
 
 interface ResultDisplayProps {
   isLoading: boolean;
@@ -28,6 +30,7 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
 }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
 
   const handleSaveClick = async () => {
     if (!resultImage) return;
@@ -84,6 +87,10 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
         console.error('Fallback download failed:', e);
       }
     }
+  };
+
+  const handleReportSubmit = async (reason: string, additionalInfo: string) => {
+    await submitContentReport(reason, additionalInfo, 'generated');
   };
 
   return (
@@ -175,6 +182,17 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
                 <ShareIcon />
                 <span>Share</span>
               </button>
+
+              <button
+                onClick={() => setShowReportModal(true)}
+                className="bg-red-500/20 border border-red-500/30 hover:border-red-500/50 text-red-400 hover:text-red-300 font-heading uppercase tracking-wider text-xs py-3 px-5 rounded-xl transition-all duration-300 flex items-center gap-2"
+                title="Report inappropriate content"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                </svg>
+                <span>Report</span>
+              </button>
             </div>
           </div>
         )}
@@ -190,6 +208,14 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
           </div>
         )}
       </div>
+
+      {/* Content Report Modal */}
+      <ContentReportModal
+        isOpen={showReportModal}
+        onClose={() => setShowReportModal(false)}
+        onSubmit={handleReportSubmit}
+        contentType="generated"
+      />
     </div>
   );
 };
